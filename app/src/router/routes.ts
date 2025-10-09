@@ -1,0 +1,18 @@
+export const ROUTES_MAP = {
+  introduction: "/gaiseu",
+  initial: "/inyn/sangyntiau/sangmu",
+  final: "/inyn/sangyntiau/ynmu",
+  tone: "/inyn/sangyntiau/sangtiau",
+  rhymeTable: "/inyn/sangyntiau/yntu",
+  variations: "/inyn/sangyntiau/bienti",
+  diachronicTable: "/inyn/nienjiu/gujintu",
+  characteristics: "/inyn/nienjiu/tehdin",
+  strata: "/inyn/nienjiu/cenci",
+  compare: "/inyn/nienjiu/bigau",
+  predict: "/inyn/tuitauqi",
+  character: "/ifi/fongnienci",
+  vocabulary: "/ifi/tehsehcifi",
+  sentences: "/ifi/diun/diji",
+  poems: "/ifi/diun/xici",
+  articles: "/ifi/diun/qiun",
+} as const;

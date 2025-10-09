@@ -1,0 +1,148 @@
+h1 {
+  font-size: 1.5em;
+  font-weight: 500;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  position: relative;
+  display: inline-block;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: calc(100% + 2em);
+    background-color: var(--border-color);
+  }
+}
+
+h3 {
+  font-size: 1.3em;
+  font-weight: 500;
+  padding-top: 0.8em;
+}
+
+h4 {
+  font-size: 1.1em;
+  font-weight: 500;
+  padding-top: 0.3em;
+  margin-bottom: 0em;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+}
+
+ul,
+ol {
+  padding-left: 1.5em;
+}
+
+a {
+  color: var(--text-color);
+  display: inline;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+
+  &[href^="http"]:not(.n-button)::after {
+    text-decoration: none;
+    content: "";
+    display: inline-block;
+    width: 0.6em;
+    height: 0.6em;
+    margin: 0 0.1em;
+    vertical-align: super;
+    background-color: var(--text-color);
+    mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>')
+      no-repeat center;
+    -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>')
+      no-repeat center;
+    mask-size: contain;
+    -webkit-mask-size: contain;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+  }
+
+  &:hover {
+    color: var(--colescu-dark);
+  }
+}
+
+a[href^="http"]:not(.n-button),
+.external-link {
+  color: var(--colescu);
+}
+
+figure {
+  display: table;
+  margin: 2em auto;
+  text-align: center;
+}
+
+blockquote {
+  width: 100%;
+  margin: 0.5em 0 1em 3em;
+
+  > * {
+    position: relative;
+
+    &:before {
+      content: "例：";
+      position: absolute;
+      top: 0;
+      left: -2em;
+    }
+  }
+
+  p {
+    white-space: nowrap;
+  }
+}
+
+em {
+  font-style: normal;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0.3em;
+
+  &::after {
+    color: var(--char-color);
+    content: "·";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(45%);
+    font-size: 0.8em;
+    line-height: 1;
+    user-select: none;
+  }
+}
+
+strong {
+}
+
+ruby {
+  span.char {
+    width: fit-content;
+  }
+
+  rt {
+    font-size: 0.95em;
+    padding: 0 0.1em;
+    margin-bottom: 0.2em;
+  }
+}
+
+sub {
+  vertical-align: baseline;
+  display: inline-block;
+  transform: translateY(0.2em);
+}
+
+sup {
+  vertical-align: baseline;
+  display: inline-block;
+  transform: translateY(-0.4em);
+}

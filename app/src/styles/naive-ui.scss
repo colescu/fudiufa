@@ -1,0 +1,53 @@
+.n-config-provider {
+  min-height: 100vh;
+  font-family: var(--char-font-family);
+}
+
+/* FEATURE UI increase font size
+(problems: n-tag, anything in n-card)
+
+.n-layout-content,
+.n-tabs-tab__label,
+.n-input__textarea,
+.interlinear {
+  font-size: 1.2em;
+} */
+
+.n-layout-scroll-container,
+.n-tabs-pane-wrapper {
+  overflow: visible !important;
+}
+
+.n-tabs-nav--line-type {
+  .n-tabs-wrapper {
+    margin-top: 0.5em;
+    border: 0.5px solid var(--border-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .n-tabs-tab__label {
+    font-size: 1.1em;
+    /* font-weight: 500; */
+  }
+}
+
+.n-popover {
+  max-width: 90vw;
+}
+
+.n-float-button {
+  z-index: 10;
+}
+
+.n-switch {
+  display: flex;
+  align-items: center;
+}
+
+.n-radio-button {
+  user-select: text !important;
+
+  * {
+    color: inherit !important;
+  }
+}

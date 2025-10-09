@@ -1,0 +1,33 @@
+@use "./variables.scss" as *;
+
+@use "./elements.scss" as *;
+@use "./table.scss" as *;
+@use "./naive-ui.scss" as *;
+@use "./common.scss" as *;
+
+@import url("//fonts.googleapis.com/earlyaccess/notosanssc.css");
+@import url("//fonts.googleapis.com/earlyaccess/notosanstc.css");
+@import url("//fonts.googleapis.com/earlyaccess/notosansjp.css");
+@import url("//fonts.googleapis.com/earlyaccess/notosanskr.css");
+
+@font-face {
+  font-family: "Pinyin";
+  src: url("/fonts/Pinyin.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Charis SIL";
+  src: url("/fonts/Charis-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  src: url("/fonts/DejaVuSans.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Plangothic";
+  src: url("/fonts/Plangothic-Subset.woff2") format("woff2");
+}

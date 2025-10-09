@@ -1,0 +1,12 @@
+.vscode
+node_modules
+
+ignore
+
+__pycache__
+*.pyc
+*.sqbpro
+*.mjs
+template.*
+
+TODO.md

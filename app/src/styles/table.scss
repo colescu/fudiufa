@@ -1,0 +1,27 @@
+.scrollable {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  height: 100%;
+  width: 100%;
+  margin: 2em 0;
+  padding: 0;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 0 auto;
+  min-width: max-content;
+}
+
+th,
+td {
+  border: 1px solid var(--border-color);
+  text-align: center;
+  padding: 0.2em 0.5em;
+}
+
+th,
+.table-header {
+  background-color: var(--gray-background);
+  font-weight: bold;
+}
