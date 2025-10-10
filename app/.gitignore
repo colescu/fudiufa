@@ -21,5 +21,6 @@ dist
 
 # Temporary or test files
 **/__*
+public/data/*
 *.tsbuildinfo
 stats.html

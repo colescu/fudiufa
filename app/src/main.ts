@@ -1,5 +1,3 @@
-import { setupGoogleAnalytics } from "./analytics";
-
 import { createApp, type App as VueApp } from "vue";
 import App from "./components/wrapper/NaiveUIWrapper.vue";
 import "./styles/main.scss";
@@ -14,8 +12,6 @@ import { dictionaryCache } from "@shared/lang";
 import { rhymeTableCache } from "./modules/RhymeTable/cache";
 import { commentsCache } from "./modules/ReflexTable/cache";
 import { charactersCache } from "./views/Vocabulary/Character/cache";
-
-setupGoogleAnalytics();
 
 await Promise.all([
   initShared(),

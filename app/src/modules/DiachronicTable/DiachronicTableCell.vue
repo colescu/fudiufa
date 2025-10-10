@@ -15,6 +15,7 @@ const {
   indexMap,
   setStratum = false,
   showCount = false,
+  hidePronunciation = false,
   testException,
   highlightExceptions = false,
   language = "FG",
@@ -24,6 +25,7 @@ const {
   indexMap: Map<number, number[]>; // precomputed
   setStratum?: boolean;
   showCount?: boolean;
+  hidePronunciation?: boolean;
   testException?: (langEntry: LangEntry) => boolean;
   highlightExceptions?: boolean;
   language?: Language;
@@ -171,32 +173,45 @@ const characterMap = computed<
                 </div>
                 <div style="max-width: 8em">
                   <!-- characters sorted by frequency in fullLangIndexMap -->
-                  <ConstrainedPopover
+                  <template
                     v-for="[character, data] of Object.entries(characters)"
-                    trigger="hover"
                     :key="character"
-                    :base-z-index="baseZIndex ? baseZIndex + 200 : undefined"
                   >
-                    <template #trigger>
-                      <span
-                        class="char no-simplify"
-                        :class="{ exception: data.isException }"
-                      >
-                        {{ character }}
-                      </span>
-                    </template>
-
                     <span
-                      v-for="[pronunciation, stratum] of data.pronunciations"
-                      style="white-space: nowrap"
+                      v-if="hidePronunciation"
+                      class="char no-simplify"
+                      :class="{ exception: data.isException }"
                     >
-                      <Pronunciation
-                        :pronunciation="pronunciation"
-                        :language="language"
-                      /><sub v-if="stratum">{{ stratum }}</sub
-                      >&nbsp;
+                      {{ character }}
                     </span>
-                  </ConstrainedPopover>
+
+                    <ConstrainedPopover
+                      v-else
+                      trigger="hover"
+                      :base-z-index="baseZIndex ? baseZIndex + 200 : undefined"
+                    >
+                      <template #trigger>
+                        <span
+                          class="char no-simplify"
+                          :class="{ exception: data.isException }"
+                        >
+                          {{ character }}
+                        </span>
+                      </template>
+
+                      <span
+                        v-for="[pronunciation, stratum] of data.pronunciations"
+                        class="pronunciations"
+                        style="white-space: nowrap"
+                      >
+                        <Pronunciation
+                          :pronunciation="pronunciation"
+                          :language="language"
+                        /><sub v-if="stratum">{{ stratum }}</sub
+                        >&nbsp;
+                      </span>
+                    </ConstrainedPopover>
+                  </template>
                 </div>
               </template>
             </template>

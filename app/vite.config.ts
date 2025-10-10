@@ -28,6 +28,12 @@ export default (configEnv: ConfigEnv) => {
               }
               return "vendor";
             }
+            if (id.endsWith(".vue")) {
+              return "components";
+            }
+            if (id.includes("updates/")) {
+              return "updates";
+            }
           },
         },
       },

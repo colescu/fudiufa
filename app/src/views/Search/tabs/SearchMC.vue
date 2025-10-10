@@ -51,7 +51,7 @@ const searchMC = searchWrapper(() =>
   <Teleport to="#help">
     表單各項爲「且」關係，54篩選可選選項。<br />
     如需更精細的查詢，請直接用 SQL 查詢<a
-      href="https://github.com/colescu/fuzhou-gan-backend/blob/main/data/hanzi.sqlite3"
+      href="https://github.com/colescu/fudiufa/blob/master/data/manual/hanzi.sqlite3"
       target="_blank"
       rel="noopener noreferrer"
       >數據庫</a

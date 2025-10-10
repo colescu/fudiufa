@@ -149,14 +149,14 @@ useDraggable(header, [
 
 const isFullscreen = defineModel("isFullscreen", { type: Boolean });
 
-const { diachronicTableState } = useProvideDiachronicTableState();
-
 function testException(entry: LangEntry): boolean {
   return (
     entry.層 === "官" ||
     entry.記錄讀音!.slice(0, -1) !== entry.推導讀音!.slice(0, -1)
   );
 }
+
+const { diachronicTableState } = useProvideDiachronicTableState();
 </script>
 
 <template>
@@ -229,6 +229,7 @@ function testException(entry: LangEntry): boolean {
       :lang-indices="diachronicTableState.langIndices"
       show-count
       no-redundant
+      hide-pronunciation
       :test-exception="testException"
       :language="language"
       :blacklist="['.rhyme-table']"

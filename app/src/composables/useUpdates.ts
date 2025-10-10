@@ -23,13 +23,15 @@ export function useUpdates() {
       version: path.split("/").pop()!.replace(/\.md$/, ""),
       loader: loader as () => Promise<{ default: DefineComponent }>,
     }))
-    .sort(precomposeComparer(versionComparer, (module) => module.version))
-    .filter(
-      (update) =>
-        (lastVersion == undefined ||
-          versionComparer(lastVersion, update.version) < 0) &&
-        versionComparer(update.version, currentVersion) <= 0
-    );
+    .sort(precomposeComparer(versionComparer, (module) => module.version));
+  const filteredModules =
+    lastVersion == undefined
+      ? [modules.at(-1)!]
+      : modules.filter(
+          (update) =>
+            versionComparer(lastVersion, update.version) < 0 &&
+            versionComparer(update.version, currentVersion) <= 0
+        );
 
   async function getUpdate(module: (typeof modules)[number]) {
     const { version, loader } = module;
@@ -49,7 +51,9 @@ export function useUpdates() {
 
   async function next() {
     currentUpdate.value =
-      index < modules.length ? await getUpdate(modules[index]!) : null;
+      index < filteredModules.length
+        ? await getUpdate(filteredModules[index]!)
+        : null;
     index++;
   }
 

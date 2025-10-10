@@ -14,18 +14,17 @@ import type { RubyData } from "@/components/content/CharacterRuby.vue";
 // CLEANUP integrate into normalizeTone in @shared
 // ipaRaw format with ordinal tone notation
 function normalizePronunciation(pronunciation: string): string {
-  let tone = pronunciation.at(-1);
-  if (!isNaN(Number(tone))) {
-    if (tone === "6") {
-      tone = "1";
-    }
-    if (tone === "0") {
-      tone = "ptkʔ".includes(pronunciation.slice(-2, -1)) ? "7" : "1";
-    }
-    return pronunciation.slice(0, -1) + tone;
-  } else {
-    return pronunciation + "1"; // light tone as 1
+  if (isNaN(Number(pronunciation.at(-1)))) {
+    pronunciation += "0";
   }
+  let tone = pronunciation.at(-1);
+  if (tone === "6") {
+    tone = "1";
+  }
+  if (tone === "0") {
+    tone = "ptkʔ".includes(pronunciation.slice(-2, -1)) ? "7" : "1";
+  }
+  return pronunciation.slice(0, -1) + tone;
 }
 
 function getAudioUrl(syllable: string): string {
