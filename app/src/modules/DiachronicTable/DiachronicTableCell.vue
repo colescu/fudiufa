@@ -13,6 +13,7 @@ const {
   initials,
   final,
   indexMap,
+  ignoreVoicing = false,
   setStratum = false,
   showCount = false,
   hidePronunciation = false,
@@ -23,6 +24,7 @@ const {
   initials: string;
   final: string;
   indexMap: Map<number, number[]>; // precomputed
+  ignoreVoicing?: boolean;
   setStratum?: boolean;
   showCount?: boolean;
   hidePronunciation?: boolean;
@@ -48,7 +50,7 @@ const pronunciations = computed<string[] | undefined>(() =>
           initials[0]!,
           final,
           basePronunciation.value,
-          true,
+          ignoreVoicing,
           true
         )
       : [basePronunciation.value.replace(/\d/g, "")]

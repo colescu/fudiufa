@@ -88,7 +88,7 @@ const FINAL_OPTIONS = [
   },
   {
     label: "韻（分舒入）：東屋",
-    value: "韻系舒入",
+    value: "韻",
   },
   {
     label: "韻目：東董送屋",
@@ -121,7 +121,7 @@ watch(
 
 // 比較語言
 
-const comparedLanguages = ref<string[]>([...LANGUAGES]);
+const comparedLanguages = ref<string[]>([...settings.languages]);
 watch(comparedLanguages, (value) => {
   settings.languages = LANGUAGES.filter((language) => value.includes(language));
 });
@@ -181,7 +181,7 @@ watch(comparedLanguages, (value) => {
               v-model:value="settings.mcInfoStyle.final"
               :options="FINAL_OPTIONS"
             >
-              <rt>韻</rt>
+              <rt>{{ settings.mcInfoStyle.final }}</rt>
             </n-popselect>
             <rp>)</rp>
           </ruby>
@@ -221,7 +221,7 @@ watch(comparedLanguages, (value) => {
     </n-space>
 
     <n-space align="center">
-      <n-tag>比較語言</n-tag>
+      <n-tag>比較方言</n-tag>
       <n-checkbox-group v-model:value="comparedLanguages">
         <template v-for="[langEN, langCN] of Object.entries(LANGUAGE_MAP)">
           <n-checkbox

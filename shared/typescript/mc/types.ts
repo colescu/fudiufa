@@ -3,7 +3,7 @@ import { Language } from "../lang";
 export type MCInfoStyle = {
   ordering: Exclude<keyof MCInfo, "音韻地位">[];
   show: { 攝: boolean; 聲調: boolean };
-  final: "韻系" | "韻系舒入" | "韻目";
+  final: "韻系" | "韻" | "韻目";
 };
 
 export interface MCInfo {

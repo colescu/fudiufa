@@ -21,6 +21,7 @@ const route = useRoute();
     <DiachronicTable
       group-initials
       filter-codas
+      ignore-voicing
       set-stratum
       highlight-exceptions
       language="FG"

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch, nextTick } from "vue";
+import { useRoute } from "vue-router";
 import { usePopoverZIndex } from "@/composables/usePopoverZIndex";
 import { isMobile } from "@/library/config";
 
@@ -23,6 +24,14 @@ const showPopover = defineModel<boolean>("show", {
 });
 
 const target = ref<HTMLElement | null>(null);
+
+const route = useRoute();
+watch(
+  () => route.fullPath,
+  () => {
+    showPopover.value = false;
+  }
+);
 
 // do not trigger if click on whitelist
 
