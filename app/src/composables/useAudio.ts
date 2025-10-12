@@ -1,5 +1,6 @@
 import {
   computed,
+  h,
   onUnmounted,
   ref,
   shallowRef,
@@ -9,7 +10,8 @@ import {
 } from "vue";
 import { useRoute } from "vue-router";
 import { useSettingsStore } from "../stores/settings";
-import type { RubyData } from "@/components/content/CharacterRuby.vue";
+import { RubyData } from "@/components/content/CharacterRuby.vue";
+import { MessageApiInjection } from "naive-ui/es/message/src/MessageProvider";
 
 // CLEANUP integrate into normalizeTone in @shared
 // ipaRaw format with ordinal tone notation
@@ -46,7 +48,13 @@ function getAudio(pronunciation: string): HTMLAudioElement {
   return audio;
 }
 
-export function useAudio(pronunciation: string) {
+function showAudioError(pronunciation: string, message: MessageApiInjection) {
+  message.error(() =>
+    h("div", ["暫缺音頻 ", h("code", normalizePronunciation(pronunciation))])
+  );
+}
+
+export function useAudio(pronunciation: string, message: MessageApiInjection) {
   const isPlaying = ref(false);
 
   async function play() {
@@ -69,10 +77,7 @@ export function useAudio(pronunciation: string) {
         { once: true }
       );
     } catch (error) {
-      console.error(
-        `Failed to play audio for ${normalizePronunciation(pronunciation)}:`,
-        error
-      );
+      showAudioError(pronunciation, message);
       isPlaying.value = false;
     }
   }
@@ -85,7 +90,8 @@ export function useAudio(pronunciation: string) {
 function useSequentialAudio(
   pronunciations: string[],
   delay: number,
-  isPlaying: Ref<boolean>
+  isPlaying: Ref<boolean>,
+  message: MessageApiInjection
 ) {
   let stopped = false;
   const current = ref(-1);
@@ -125,9 +131,11 @@ function useSequentialAudio(
           audio.load();
         });
       } catch (err) {
-        console.error(`Failed to load audio for "${pronunciation}":`, err);
-        current.value++;
-        timer = setTimeout(playNext, delay); // skip failed audio
+        showAudioError(pronunciation, message);
+        timer = setTimeout(() => {
+          current.value++;
+          playNext();
+        }, delay); // skip failed audio
         return;
       }
     }
@@ -142,7 +150,7 @@ function useSequentialAudio(
       audio.currentTime = 0;
       await audio.play();
     } catch (err) {
-      console.error(`Failed to play audio for "${pronunciation}":`, err);
+      showAudioError(pronunciation, message);
     }
 
     if (!stopped) {
@@ -158,11 +166,7 @@ function useSequentialAudio(
     if (pronunciations.length === 0) return;
 
     current.value = 0;
-    try {
-      await playNext();
-    } catch {
-      console.error(`Failed to play audio`);
-    }
+    await playNext();
   }
 
   function stop() {
@@ -190,7 +194,10 @@ function useSequentialAudio(
   return { start, stop, toggleAudio, current };
 }
 
-export function useManagedSequentialAudio(phrase: Ref<RubyData[]>) {
+export function useManagedSequentialAudio(
+  phrase: Ref<RubyData[]>,
+  message: MessageApiInjection
+) {
   const route = useRoute();
   const settings = useSettingsStore();
 
@@ -209,7 +216,8 @@ export function useManagedSequentialAudio(phrase: Ref<RubyData[]>) {
     sequentialAudio.value = useSequentialAudio(
       pronunciations.value,
       settings.playSpeed,
-      isPlaying
+      isPlaying,
+      message
     );
 
     onCleanup(() => {

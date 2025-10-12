@@ -58,30 +58,7 @@ const { entry, ...rest } = defineProps<
         </n-space>
       </n-space>
 
-      <!-- MAYBE 廣韻釋義
-       Or better: link to website for comprehensive character info?
-       -->
-      <!-- <n-space v-if="entry.廣韻釋義" align="center" style="flex-wrap: nowrap">
-        <n-tag size="small" style="float: left"> 廣韻釋義 </n-tag>
-        <ConstrainedPopover trigger="hover">
-          <template #trigger>
-            <div
-              style="
-                max-width: 11em;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-              "
-            >
-              {{ entry.廣韻釋義 }}
-            </div>
-          </template>
-
-          <div style="max-width: 15em">
-            {{ entry.廣韻釋義 }}
-          </div>
-        </ConstrainedPopover>
-      </n-space> -->
+      <!-- FEATURE link to website for comprehensive character info? -->
     </n-space>
   </div>
 </template>

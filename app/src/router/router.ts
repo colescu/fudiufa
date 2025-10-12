@@ -4,7 +4,6 @@ import {
   createRouter,
   type RouteLocationNormalized,
 } from "vue-router";
-import { languageRouting } from "@/composables/useParamRouting";
 
 import Home from "@/views/Home.vue";
 import Introduction from "@/views/introduction.md";
@@ -36,15 +35,13 @@ const routes = [
     component: Vocabulary,
   },
   {
-    path: "/:language?",
+    path: "/",
     name: "LangWrapper",
     component: LangWrapper,
-    props: true,
-    beforeEnter: languageRouting,
     children: [
       { path: "caci", name: "Search", component: Search },
       { path: "duin", name: "Pronounce", component: Pronounce },
-      // { path: "yntu", component: RhymeTable },
+      { path: "yntu", component: RhymeTable },
       { path: "gujintu", component: DiachronicTable },
     ],
   },

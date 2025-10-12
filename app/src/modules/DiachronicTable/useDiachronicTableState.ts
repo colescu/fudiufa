@@ -44,25 +44,21 @@ export function useInjectDiachronicTableState(
   }
 
   function updateDiachronicTable() {
-    if (diachronicTableState.isFullscreen) {
-      resetDiachronicTable();
-    } else {
-      diachronicTableState.isFullscreen = true;
-      mcWatcher = watch(
-        mcIndices,
-        (value) => {
-          diachronicTableState.mcIndices = value;
-        },
-        { immediate: true }
-      );
-      langWatcher = watch(
-        langIndices,
-        (value) => {
-          diachronicTableState.langIndices = value;
-        },
-        { immediate: true }
-      );
-    }
+    diachronicTableState.isFullscreen = true;
+    mcWatcher = watch(
+      mcIndices,
+      (value) => {
+        diachronicTableState.mcIndices = value;
+      },
+      { immediate: true }
+    );
+    langWatcher = watch(
+      langIndices,
+      (value) => {
+        diachronicTableState.langIndices = value;
+      },
+      { immediate: true }
+    );
   }
 
   onBeforeUnmount(resetDiachronicTable);

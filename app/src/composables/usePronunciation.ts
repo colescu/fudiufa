@@ -68,7 +68,7 @@ export function usePronunciation(
 
     if (proto) {
       pronunciation = simulateProto(
-        showSyllable(pronunciation, format, toneNotation, "pinyin"),
+        pronunciation,
         mcInfo,
         history.pronounce.proto.settings
       );

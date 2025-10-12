@@ -7,7 +7,10 @@ import { separate } from "@shared/syllable";
 import { Language } from "@shared/lang";
 import { MCInfo } from "@shared/mc";
 
+import { useMessage } from "naive-ui";
+
 const settings = useSettingsStore();
+const message = useMessage();
 
 export type DefaultProps = {
   sourceFormat?: Format;
@@ -63,7 +66,7 @@ const audioControls = computed(() => {
     mcInfo,
     "ordinal"
   );
-  return useAudio(rawPronunciation);
+  return useAudio(rawPronunciation, message);
 });
 </script>
 

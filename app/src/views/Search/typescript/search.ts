@@ -1,6 +1,10 @@
 import { getLangQueryUtils, LangEntry, Language } from "@shared/lang";
-import { getVariants, isChineseCharacter } from "@shared/cjk";
-import { getComparer } from "@shared/common/sort";
+import {
+  characterComparer,
+  getVariants,
+  isChineseCharacter,
+} from "@shared/cjk";
+import { getComparer, precomposeComparer } from "@shared/common/sort";
 
 const langEntryComparer = getComparer((entry: LangEntry): number[] => {
   return [
@@ -73,8 +77,9 @@ export function getSearchResultsByFilter(
   filter: (entry: LangEntry) => boolean,
   language: Language
 ): number[] {
-  const { select } = getLangQueryUtils(language);
-  return select((entry) => searchFilter(entry) && filter(entry), true);
-  // FEATURE sorter in SearchLang, SearchMC
-  // currently using database order
+  const { entryAt, select } = getLangQueryUtils(language);
+  return select((entry) => searchFilter(entry) && filter(entry), true).sort(
+    precomposeComparer(characterComparer, (index) => entryAt(index)!.字頭)
+  );
+  // IMPROVE sorter in SearchLang, SearchMC
 }

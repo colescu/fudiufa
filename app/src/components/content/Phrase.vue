@@ -4,8 +4,10 @@ import { syllableUtils } from "@shared/syllable";
 import { useManagedSequentialAudio } from "@/composables/useAudio";
 
 import CharacterRuby, { RubyData } from "./CharacterRuby.vue";
-import { NButton, NIcon } from "naive-ui";
+import { NButton, NIcon, useMessage } from "naive-ui";
 import { PlayCircleOutline, StopCircleOutline } from "@vicons/ionicons5";
+
+const message = useMessage();
 
 // only for FG
 const { phrase } = defineProps<{
@@ -21,8 +23,10 @@ const rawPhrase = computed<RubyData[]>(() => {
       : "",
   }));
 });
-const { toggleAudio, isPlaying, current } =
-  useManagedSequentialAudio(rawPhrase);
+const { toggleAudio, isPlaying, current } = useManagedSequentialAudio(
+  rawPhrase,
+  message
+);
 
 const playingClass = computed(() => {
   return (index: number) => ({

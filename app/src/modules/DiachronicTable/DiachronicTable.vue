@@ -25,7 +25,8 @@ import { computeRowSpan } from "@/library/dom/pure";
 import StickyTable from "@/components/common/StickyTable.vue";
 import ConstrainedPopover from "@/components/common/ConstrainedPopover.vue";
 import DiachronicTableCell from "./DiachronicTableCell.vue";
-import { NGrid, NGridItem, NCheckbox } from "naive-ui";
+import { NSpace, NGrid, NGridItem, NCheckbox, NButton, NIcon } from "naive-ui";
+import { ArrowSwap20Regular as ArrowSwap } from "@vicons/fluent";
 
 const {
   mcIndices,
@@ -110,15 +111,13 @@ function getLangIndexMap(fullFinal: string, initials?: string): LangIndexMap {
     )
     .flat(); // MC indices sorted by initial, tone
   return new Map(
-    mcIndices
-      .map(
-        (mcIndex) =>
-          [mcIndex, fullLangIndexMap.value.get(mcIndex) ?? []] as [
-            number,
-            number[]
-          ]
-      )
-      .filter(([_, langIndices]) => langIndices.length > 0)
+    mcIndices.map(
+      (mcIndex) =>
+        [mcIndex, fullLangIndexMap.value.get(mcIndex) ?? []] as [
+          number,
+          number[]
+        ]
+    )
   );
 }
 
@@ -189,11 +188,18 @@ const initialsMap = computed(() =>
   )
 );
 const fullFinals = computed(() =>
-  ALL_FULL_FINALS.value.filter(
-    noRedundant
-      ? (final) => [...getLangIndexMap(final).values()].flat().length > 0
-      : (_) => true
-  )
+  ALL_FULL_FINALS.value
+    .filter(
+      noRedundant
+        ? (final) => [...getLangIndexMap(final).values()].flat().length > 0
+        : (_) => true
+    )
+    .filter(
+      filterCodas
+        ? (fullFinal) =>
+            history.phonology.diachronicTable.filterCodas[getCoda(fullFinal)]
+        : (_) => true
+    )
 );
 
 function getCoda(fullFinal: string): (typeof CODAS)[number] {
@@ -210,14 +216,9 @@ function getCoda(fullFinal: string): (typeof CODAS)[number] {
 }
 
 const rows = computed(() =>
-  fullFinals.value
-    .filter(
-      filterCodas
-        ? (fullFinal) =>
-            history.phonology.diachronicTable.filterCodas[getCoda(fullFinal)]
-        : (_) => true
-    )
-    .map((items) => ordering.value.map((index) => items[index] ?? ""))
+  fullFinals.value.map((items) =>
+    ordering.value.map((index) => items[index] ?? "")
+  )
 );
 const rowspans = computed(() => computeRowSpan(rows.value));
 
@@ -231,6 +232,13 @@ useDraggable(header, [
 ]);
 
 const isFullscreen = defineModel("isFullscreen", { type: Boolean });
+
+function invert() {
+  const filterCodas = history.phonology.diachronicTable.filterCodas;
+  for (const key in filterCodas) {
+    filterCodas[key] = !filterCodas[key];
+  }
+}
 </script>
 
 <template>
@@ -254,7 +262,12 @@ const isFullscreen = defineModel("isFullscreen", { type: Boolean });
             <ConstrainedPopover trigger="click">
               <template #trigger>攝</template>
 
-              <div style="margin-bottom: 0.5em">篩選韻尾：</div>
+              <n-space align="center" style="margin-bottom: 0.5em">
+                <span>篩選韻尾</span>
+                <n-button @click="invert" class="center" text>
+                  <n-icon size="medium" :component="ArrowSwap" />
+                </n-button>
+              </n-space>
               <n-grid cols="3" :x-gap="3">
                 <n-grid-item v-for="coda of CODAS">
                   <n-checkbox
@@ -268,6 +281,7 @@ const isFullscreen = defineModel("isFullscreen", { type: Boolean });
               </n-grid>
             </ConstrainedPopover>
           </template>
+
           <template v-else>{{ item }}</template>
         </th>
 

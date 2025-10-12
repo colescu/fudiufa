@@ -78,7 +78,7 @@ defineExpose({ hook });
           共查到 {{ resultCharacters.length }} 字、{{
             results.length
           }}
-          個字條（<n-button @click.stop="showRhymeTable = !showRhymeTable" text>
+          個字條（<n-button @click.stop="showRhymeTable = true" text>
             查看韻圖</n-button
           >）
         </template>

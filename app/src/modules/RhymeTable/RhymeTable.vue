@@ -232,7 +232,7 @@ const { diachronicTableState } = useProvideDiachronicTableState();
       hide-pronunciation
       :test-exception="testException"
       :language="language"
-      :blacklist="['.rhyme-table']"
+      :blacklist="['.rhyme-table', '.rhyme-table__popover']"
       :fullscreen-z-index="3000"
     />
   </div>

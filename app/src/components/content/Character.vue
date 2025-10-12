@@ -82,7 +82,6 @@ const isDev = __IS_DEV__;
 
   <ConstrainedPopover v-else v-bind="$attrs" style="min-width: max-content">
     <template #trigger>
-      <!-- MAYBE DESIGN 突出顯示例字 -->
       <span
         class="char clickable"
         :class="{ highlight: isDev && mcIndices.length !== 1 }"

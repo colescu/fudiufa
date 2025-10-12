@@ -11,7 +11,6 @@ export function getFullFinal(mcInfo: MCInfo): string {
 }
 
 // Everything is ad hoc for FG
-// IMPROVE predict strata
 
 const 梗攝_MAP = {
   en: "ang",
@@ -63,12 +62,15 @@ function predictStratum(
       // 日 ad hoc
       if (hasIntersection(initials, "日")) {
         for (const [key, value] of [
+          ["leu", "niau"],
           ["len", "nien"],
           ["let", "niet"],
           ["ien", "nien"],
           ["iet", "niet"],
           ["long", "niong"],
           ["loh", "nioh"],
+          ["iung", "niung"],
+          ["iuh", "niuh"],
         ] as const) {
           if (pronunciation === key) {
             pronunciation = value;
@@ -129,17 +131,15 @@ function predictStratum(
       // 蟹一合
       if (
         final[0] === "蟹" &&
-        final.slice(2) === "一合" &&
-        !hasIntersection(initials, "見溪羣疑")
+        final[2] === "一" &&
+        ((final[3] === "合" && !hasIntersection(initials, "見溪羣疑")) ||
+          hasIntersection(initials, "幫滂並明"))
       ) {
         pronunciation =
           pronunciation.slice(0, pronunciation.endsWith("ui") ? -2 : -1) + "oi";
         if (pronunciation === "oi") {
           pronunciation = "uoi";
         }
-      }
-      // 止合 loi di ?
-      if (final[0] === "止" && final[3] === "合") {
       }
       break;
     case "新":

@@ -98,7 +98,7 @@ const phrase = computed(() =>
   }))
 );
 const { toggleAudio, isPlaying, current } =
-  language === "FG" ? useManagedSequentialAudio(phrase) : {};
+  language === "FG" ? useManagedSequentialAudio(phrase, message) : {};
 
 async function copyToClipboard() {
   await window.navigator.clipboard.writeText(
