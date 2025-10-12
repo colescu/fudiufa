@@ -147,9 +147,17 @@ const characterMap = computed<
     >
       <ConstrainedPopover
         :base-z-index="baseZIndex ? baseZIndex + 100 : undefined"
+        style="max-width: 16em"
       >
         <template #trigger>
-          <span class="clickable" :class="{ exception: exceptions.length > 0 }">
+          <span
+            class="clickable"
+            :class="{
+              exception: showToneExceptions
+                ? otherExceptions.length > 0
+                : exceptions.length > 0,
+            }"
+          >
             <Pronunciation
               v-if="!showCount"
               :pronunciation="displayedPronunciation!"
@@ -256,16 +264,21 @@ const characterMap = computed<
                   :language="language"
                 />
               </div>
-              <div v-if="otherExceptions.length > 0" class="block">
+              <div
+                v-if="otherExceptions.length > 0"
+                class="block"
+                style="margin-top: 0.3em"
+              >
                 其他例外：<EntriesList
                   :entries="otherExceptions"
                   :language="language"
                 />
               </div>
             </template>
-            <template v-else>
+
+            <div v-else class="block">
               例外：<EntriesList :entries="exceptions" :language="language" />
-            </template>
+            </div>
           </template>
         </template>
 
@@ -276,6 +289,10 @@ const characterMap = computed<
 </template>
 
 <style scoped>
+.gray * {
+  color: var(--gray-text) !important;
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: max-content max-content;
@@ -287,7 +304,7 @@ const characterMap = computed<
 }
 
 .pronunciations sub {
-  margin-left: 0.15em;
+  margin-left: 0.1em;
 }
 
 .exception {

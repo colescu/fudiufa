@@ -39,7 +39,6 @@ watch(form, () => {
       v-bind="form"
       :key="key"
     />
-    <!-- FIXME suspense on change of props -->
   </SuspenseWrapper>
 
   <Teleport to="#help">

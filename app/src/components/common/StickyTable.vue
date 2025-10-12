@@ -118,6 +118,8 @@ const WHITELIST = [".n-popover", ".n-float-button", ".popover-target"];
 function handleClick(e: MouseEvent) {
   const clicked = e.target as HTMLElement;
 
+  if (clicked === document.body) return;
+
   let el = clicked.closest([...WHITELIST, ...whitelist].join(", "));
   if (!!el && (!blacklist.length || !el.matches(blacklist.join(", ")))) return;
 
@@ -282,6 +284,11 @@ onBeforeUnmount(() => window.removeEventListener("popstate", handleBack));
   position: fixed;
   inset: 0;
   margin: auto;
+  pointer-events: none;
+
+  > * {
+    pointer-events: auto;
+  }
 }
 
 .fullscreen-overlay {

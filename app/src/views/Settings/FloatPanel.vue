@@ -154,7 +154,6 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
           </n-radio-group>
         </n-space>
 
-        <!-- MAYBE 播放速度設置 -->
         <!-- <n-space v-if="hasPhrase" align="center">
           <n-tag>播放速度</n-tag>
           <n-slider

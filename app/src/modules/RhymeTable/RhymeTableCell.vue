@@ -149,12 +149,11 @@ const { updateDiachronicTable } = useInjectDiachronicTableState(
         style="margin-top: 0.5em"
       >
         <span>
-          （<n-button @click="updateDiachronicTable" text> 查看古今圖 </n-button
+          （<n-button @click.stop="updateDiachronicTable" text>
+            查看古今圖 </n-button
           >）
         </span>
       </n-space>
-
-      <!-- FIXME UI clicking when isFullscreen always closes popover (only on desktop) -->
     </ConstrainedPopover>
   </td>
 </template>

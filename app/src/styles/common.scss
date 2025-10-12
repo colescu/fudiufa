@@ -58,12 +58,17 @@ ruby.under {
 }
 
 .char {
-  font-family: "Noto Sans SC", "Noto Sans TC", "Plangothic", sans-serif;
+  font-family: var(--char-font-family);
 }
 
-/* .char:not(#phonetics table .char, .rhyme-table-popover .char, .diachronic-table-popover .char, #output .char) {
-  color: var(--char-color);
-} */
+// .markdown-wrapper .char {
+//   &:not(ruby .char, .phrase .char) {
+//     text-decoration: underline;
+//     text-decoration-style: dotted;
+//     text-underline-offset: 0.2em;
+//     text-decoration-thickness: 1px;
+//   }
+// }
 
 .pinyin {
   font-family: "Pinyin", sans-serif;

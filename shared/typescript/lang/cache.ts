@@ -14,12 +14,12 @@ function getReflex(
   let reflex = getMCEntry.call(row)?.reflex[language] ?? null;
 
   // Ad hoc smart match stratum for reflex
-  if (language === "FG" && row.小韻號 != null && row.層) {
+  if (language === "FG" && row.小韻號 != null) {
     let index = 0;
-    if (row.層.includes("白")) {
+    if (row.層 && row.層.includes("白")) {
       index = 1;
     }
-    if (row.層.includes("新") || row.層 === "官") {
+    if (row.層 && (row.層.includes("新") || row.層 === "官")) {
       index = 2;
     }
     const mcEntry = getMCQueryUtils().entryAt(row.小韻號);
@@ -27,11 +27,17 @@ function getReflex(
       const predictedPronunciations =
         getPredictedPronunciationsByEntry(mcEntry);
       reflex = predictedPronunciations[index]!;
-      if (
-        row.層.includes("文") &&
-        predictedPronunciations[2] === row.記錄讀音
-      ) {
-        reflex = row.記錄讀音;
+      if (row.記錄讀音) {
+        if (predictedPronunciations.includes(row.記錄讀音)) {
+          reflex = row.記錄讀音;
+        } else {
+          for (const pronunciation of predictedPronunciations) {
+            if (row.記錄讀音.slice(0, -1) === pronunciation.slice(0, -1)) {
+              reflex = pronunciation;
+              break;
+            }
+          }
+        }
       }
     }
   }

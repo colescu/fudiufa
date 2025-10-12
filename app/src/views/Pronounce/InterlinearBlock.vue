@@ -86,7 +86,11 @@ const showPopover = ref<boolean>(false);
                 :key="index"
                 :value="index"
               >
-                <EntryInline :entry="entryAt(index)!" v-bind="rest" />
+                <EntryInline
+                  :entry="entryAt(index)!"
+                  v-bind="rest"
+                  :class="{ inactive: choice !== index }"
+                />
               </n-radio-button>
             </div>
           </n-radio-group>
@@ -98,7 +102,7 @@ const showPopover = ref<boolean>(false);
           <span
             v-if="
               (settings.format === 'pinyin' || settings.displayBoth) &&
-              (!rest.proto || language !== 'FG')
+              !(rest.proto && language === 'FG')
             "
           >
             <Pronunciation
@@ -108,7 +112,13 @@ const showPopover = ref<boolean>(false);
               :mc-info="chosenEntry?.MC"
             />
           </span>
-          <span v-if="settings.format === 'ipaStrict' || settings.displayBoth">
+          <span
+            v-if="
+              settings.format === 'ipaStrict' ||
+              settings.displayBoth ||
+              (rest.proto && language === 'FG')
+            "
+          >
             <Pronunciation
               :pronunciation="chosenPronunciation"
               format="ipaStrict"
@@ -173,6 +183,10 @@ ruby rt {
   .n-radio-button {
     border: none;
     padding: 0 0.6em;
+  }
+
+  .inactive * {
+    pointer-events: none;
   }
 }
 </style>

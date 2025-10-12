@@ -100,9 +100,6 @@ const allRecordedFGPronunciations = computed<string[]>(() => [
                 </div>
               </n-space>
             </Tooltip>
-            <!-- MAYBE 顯示例外
-             But it could be misleading
-             -->
           </div>
         </n-space>
       </template>

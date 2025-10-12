@@ -266,6 +266,9 @@ class SWSyllable(TonedSyllable):
             tone = text[-1]
             text = text[:-1]
 
+        if text == "yi":
+            return cls("ɦ", "", "i", "", tone)
+
         if text in ["m", "n", "ng"]:
             return cls(text if text != "ng" else "ŋ", "", "", "", tone)
         if text == "r":
