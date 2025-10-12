@@ -161,7 +161,7 @@ function openZiTools() {
   display: flex;
   justify-content: left;
   align-items: start;
-  gap: 1.5em;
+  gap: 1em;
   margin-top: -1em;
 }
 

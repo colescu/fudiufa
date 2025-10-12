@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useSettingsStore } from "@/stores/settings";
-import { useHistoryStore } from "@/stores/history";
+import { usePronunciation } from "@/composables/usePronunciation";
 import { useAudio } from "@/composables/useAudio";
-import { syllableUtils, separate } from "@shared/syllable";
-import { simulateProtoPronunciation } from "@shared/fg/proto-fg";
-import { MCInfo } from "@shared/mc";
+import { separate } from "@shared/syllable";
 import { Language } from "@shared/lang";
+import { MCInfo } from "@shared/mc";
 
 const settings = useSettingsStore();
-const history = useHistoryStore();
 
 export type DefaultProps = {
   sourceFormat?: Format;
@@ -24,6 +22,7 @@ const {
   language = "FG",
   noAudio = false,
   separate: isSeparate = false,
+  variant = false,
   proto = false,
   mcInfo = null,
 } = defineProps<
@@ -31,64 +30,39 @@ const {
     pronunciation: string; // with ordinal tone notation (!)
     format?: Format; // of output
     separate?: boolean; // different colors for initial and final
-    proto?: boolean; // only for FG
-    mcInfo?: MCInfo | null; // for proto FG
+    // only for FG
+    variant?: boolean;
+    proto?: boolean;
+    mcInfo?: MCInfo | null;
   } & DefaultProps
 >();
+
+const show = computed(() => usePronunciation(language, variant, proto).show);
 
 const displayedFormat = computed<Format>(() =>
   proto ? "ipaStrict" : format ?? settings.format
 );
 
-const show = computed(() => syllableUtils[language].show);
-
-const displayedPronunciation = computed<string>(() => {
-  return proto && language === "FG" && mcInfo != undefined
-    ? simulateProtoPronunciation(
-        show.value(
-          pronunciation,
-          "ipaStrict",
-          settings.ipaToneNotation,
-          sourceFormat
-        ),
-        mcInfo,
-        history.pronounce.proto.settings
-      )
-    : show.value(
-        pronunciation,
-        displayedFormat.value,
-        displayedFormat.value === "pinyin"
-          ? ["FG", "PM"].includes(language)
-            ? settings.pinyinToneNotation
-            : "ordinal"
-          : settings.ipaToneNotation,
-        sourceFormat
-      );
-});
+const displayedPronunciation = computed<string>(() =>
+  show.value(pronunciation, displayedFormat.value, sourceFormat, mcInfo)
+);
 
 const parts = computed(() =>
   separate(displayedPronunciation.value, displayedFormat.value, language)
 );
 
-// for the moment, only for FG
+// only for FG for the moment
 const audioControls = computed(() => {
   if (noAudio || language !== "FG") {
     return { play: undefined, isPlaying: ref(false) };
   }
-
-  let rawPronunciation = show.value(
+  const rawPronunciation = show.value(
     pronunciation,
     "ipaRaw",
-    "ordinal",
-    sourceFormat
+    sourceFormat,
+    mcInfo,
+    "ordinal"
   );
-  if (proto && language === "FG" && mcInfo != undefined) {
-    rawPronunciation = simulateProtoPronunciation(
-      rawPronunciation,
-      mcInfo,
-      history.pronounce.proto.settings
-    );
-  }
   return useAudio(rawPronunciation);
 });
 </script>

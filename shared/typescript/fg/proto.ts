@@ -4,8 +4,9 @@ export type ProtoSettings = {
   閉口韻尾: boolean;
   尖團: boolean;
   陽去: boolean;
-  分泥來: boolean;
-  分疑影: boolean;
+  泥來: boolean;
+  疑影: boolean;
+  前後鼻音: boolean;
 };
 
 const 尖團_MAP = {
@@ -26,20 +27,26 @@ const 陽去_MAP = {
 } as const;
 
 // Ad hoc transformer for proto FG
-// pass this after syllableUtils.FG.show
-export function simulateProtoPronunciation(
-  pronunciation: string, // ipaRaw or ipaStrict, any tone notation
+// pass this on ipa form (any tone notation)
+export function simulateProto(
+  pronunciation: string,
   mcInfo: MCInfo | null | undefined,
   settings: ProtoSettings
 ) {
   if (!mcInfo) return pronunciation;
 
-  if (settings.分泥來 && mcInfo.聲母 === "泥" && pronunciation[0] === "l") {
-    pronunciation = "n" + pronunciation.slice(1);
-  }
-
-  if (settings.分疑影 && mcInfo.聲母 === "影" && pronunciation[0] === "ŋ") {
-    pronunciation = pronunciation.slice(1);
+  if (
+    settings.閉口韻尾 &&
+    "深咸".includes(mcInfo.攝) &&
+    !"pmf".split("").some((initial) => pronunciation.startsWith(initial))
+  ) {
+    for (const [newCoda, protoCoda] of Object.entries(閉口韻尾_MAP)) {
+      if (pronunciation.slice(1).includes(newCoda)) {
+        pronunciation =
+          pronunciation[0] + pronunciation.slice(1).replace(newCoda, protoCoda);
+        break;
+      }
+    }
   }
 
   if (
@@ -56,26 +63,28 @@ export function simulateProtoPronunciation(
   }
 
   if (
-    settings.閉口韻尾 &&
-    "深咸".includes(mcInfo.攝) &&
-    !"pmf".split("").some((initial) => pronunciation.startsWith(initial))
+    settings.陽去 &&
+    mcInfo.清濁.includes("濁") &&
+    "上去".includes(mcInfo.聲調)
   ) {
-    for (const [newCoda, protoCoda] of Object.entries(閉口韻尾_MAP)) {
-      if (pronunciation.slice(1).includes(newCoda)) {
-        pronunciation =
-          pronunciation[0] + pronunciation.slice(1).replace(newCoda, protoCoda);
-        break;
-      }
-    }
-  }
-
-  if (settings.陽去 && mcInfo.清濁.includes("濁") && mcInfo.聲調 === "去") {
     for (const [newTone, protoTone] of Object.entries(陽去_MAP)) {
       if (pronunciation.endsWith(newTone)) {
         pronunciation = pronunciation.replace(newTone, protoTone);
         break;
       }
     }
+  }
+
+  if (settings.泥來 && mcInfo.聲母 === "泥" && pronunciation[0] === "l") {
+    pronunciation = "n" + pronunciation.slice(1);
+  }
+
+  if (settings.疑影 && mcInfo.聲母 === "影" && pronunciation[0] === "ŋ") {
+    pronunciation = pronunciation.slice(1);
+  }
+
+  if (settings.前後鼻音 && "梗曾".includes(mcInfo.攝)) {
+    pronunciation = pronunciation.replace("ɛn", "ɛŋ");
   }
 
   if (mcInfo.聲母 === "日" && "止遇".includes(mcInfo.攝)) {

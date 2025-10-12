@@ -1,8 +1,9 @@
 import { useSettingsStore } from "@/stores/settings";
 import { useHistoryStore } from "@/stores/history";
+import { usePronunciation } from "@/composables/usePronunciation";
 import { getLangQueryUtils, Language } from "@shared/lang";
 import { syllableUtils } from "@shared/syllable";
-import { simulateProtoPronunciation } from "@shared/fg/proto-fg";
+import { simulateProto } from "@shared/fg/proto";
 import { getLangEntries } from "../Search/typescript/search";
 
 const OPPOSITE_STRATUM_MAP = {
@@ -95,32 +96,15 @@ export function usePronounce(language: Language) {
 
   function getDisplayedPronunciation(
     langIndex: number | null | undefined,
-    format: Format,
-    proto?: boolean
+    format: Format
   ) {
-    proto ??= history.pronounce.proto.enable;
-
     if (langIndex == null) return "";
 
     const entry = entryAt(langIndex);
     if (entry == null) return "";
 
-    let pronunciation = syllableUtils[language].show(
-      entry.讀音,
-      format,
-      "ordinal",
-      "pinyin"
-    );
-
-    if (language === "FG" && proto) {
-      pronunciation = simulateProtoPronunciation(
-        pronunciation,
-        entry.MC,
-        history.pronounce.proto.settings
-      );
-    }
-
-    return pronunciation;
+    const { show } = usePronunciation(language);
+    return show(entry.讀音, format, "pinyin", entry.MC, "ordinal");
   }
 
   return { getIndices, getPreferredIndex, getDisplayedPronunciation };

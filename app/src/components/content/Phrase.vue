@@ -2,25 +2,22 @@
 import { computed } from "vue";
 import { syllableUtils } from "@shared/syllable";
 import { useManagedSequentialAudio } from "@/composables/useAudio";
-import type { DefaultProps } from "./Pronunciation.vue";
 
-import CharacterRuby, { type RubyData } from "./CharacterRuby.vue";
+import CharacterRuby, { RubyData } from "./CharacterRuby.vue";
 import { NButton, NIcon } from "naive-ui";
 import { PlayCircleOutline, StopCircleOutline } from "@vicons/ionicons5";
 
 // only for FG
-const { phrase, ...rest } = defineProps<
-  {
-    phrase: RubyData[];
-  } & DefaultProps
->();
+const { phrase } = defineProps<{
+  phrase: RubyData[];
+}>();
 
 const rawPhrase = computed<RubyData[]>(() => {
   const { show } = syllableUtils.FG;
   return phrase.map(({ character, pronunciation }) => ({
     character,
     pronunciation: pronunciation
-      ? show(pronunciation, "ipaRaw", "ordinal", rest.sourceFormat)
+      ? show(pronunciation, "ipaRaw", "ordinal", "pinyin")
       : "",
   }));
 });
@@ -51,7 +48,7 @@ const playingClass = computed(() => {
         <CharacterRuby
           :character="phrase[0]!.character"
           :pronunciation="phrase[0]!.pronunciation"
-          v-bind="rest"
+          v-bind="$attrs"
         />
       </span>
     </span>
@@ -61,7 +58,7 @@ const playingClass = computed(() => {
         <CharacterRuby
           :character="ruby.character"
           :pronunciation="ruby.pronunciation"
-          v-bind="rest"
+          v-bind="$attrs"
         />
       </span>
     </template>

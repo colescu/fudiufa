@@ -3,16 +3,14 @@ import { computed } from "vue";
 import { useSettingsStore } from "@/stores/settings";
 
 import Character from "./Character.vue";
-import Pronunciation, { type DefaultProps } from "./Pronunciation.vue";
+import Pronunciation from "./Pronunciation.vue";
 
 export type RubyData = {
   character: string;
   pronunciation: string;
 };
 
-const { character, pronunciation, ...rest } = defineProps<
-  RubyData & DefaultProps
->();
+const { character, pronunciation } = defineProps<RubyData>();
 
 const settings = useSettingsStore();
 const isTranslate = computed(
@@ -26,13 +24,13 @@ const isTranslate = computed(
       <Character
         :character="character"
         :hint="pronunciation || undefined"
-        :language="rest.language"
+        :language="$attrs.language as any"
       />
     </rb>
     <template v-if="pronunciation">
       <rp>(</rp>
       <rt>
-        <Pronunciation :pronunciation="pronunciation" v-bind="rest" />
+        <Pronunciation :pronunciation="pronunciation" v-bind="$attrs" />
       </rt>
       <rp>)</rp>
     </template>

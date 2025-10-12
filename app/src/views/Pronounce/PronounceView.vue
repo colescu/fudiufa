@@ -3,7 +3,7 @@ import { computed, toRef, toRefs, watch } from "vue";
 import { useHistoryStore } from "@/stores/history";
 import { useManagedSequentialAudio } from "@/composables/useAudio";
 import { usePronounce } from "./usePronounce";
-import { Language } from "@shared/lang";
+import { getLangQueryUtils, Language } from "@shared/lang";
 
 import PronounceSettings from "./PronounceSettings.vue";
 import InterlinearBlock from "./InterlinearBlock.vue";
@@ -88,29 +88,30 @@ watch(
   { deep: true, immediate: true }
 );
 
-function getPhrase(...args: unknown[]) {
-  return [...input.value].map((character, index) => ({
+const phrase = computed(() =>
+  [...input.value].map((character, index) => ({
     character,
     pronunciation: getDisplayedPronunciation(
       outputChoices.value[index],
-      // @ts-expect-error
-      ...args
+      "ipaRaw"
     ),
-  }));
-}
-
-const phrase = computed(() => getPhrase("ipaRaw"));
+  }))
+);
 const { toggleAudio, isPlaying, current } =
   language === "FG" ? useManagedSequentialAudio(phrase) : {};
 
 async function copyToClipboard() {
   await window.navigator.clipboard.writeText(
-    getPhrase("pinyin", false)
-      .map((ruby) =>
-        ruby.character === "\n"
-          ? ruby.character
-          : `[${ruby.character}]{${ruby.pronunciation}}`
+    outputChoices.value
+      .map((choice) =>
+        choice === undefined
+          ? ""
+          : getLangQueryUtils(language).entryAt(choice)?.讀音 ?? ""
       )
+      .map((pronunciation, index) => {
+        const char = input.value[index];
+        return char === "\n" ? char : `[${char}]{${pronunciation}}`;
+      })
       .join("")
   );
   message.success("複製成功！");
@@ -153,6 +154,7 @@ const isDev = __IS_DEV__;
           v-model="outputChoices[index]!"
           :language="language"
           :display-style="history.pronounce.style as any"
+          :variant="history.pronounce.variant.enable"
           :proto="history.pronounce.proto.enable"
           :class="{ playing: current === index }"
           style="transition: color 0.3s"
