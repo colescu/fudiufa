@@ -2,7 +2,8 @@ import { defineStore } from "pinia";
 import { ValidPredictForm } from "@/views/Phonology/Predict/types";
 import { Language, LANGUAGES } from "@shared/lang";
 import { CODAS } from "@shared/mc";
-import { ProtoSettings } from "@shared/fg/proto-fg";
+import { VariantSettings } from "@shared/fg/variant";
+import { ProtoSettings } from "@shared/fg/proto";
 import { fromEntriesConst } from "@shared/common/object";
 
 export const useHistoryStore = defineStore("history", {
@@ -66,9 +67,12 @@ export const useHistoryStore = defineStore("history", {
           ɥon: false,
           jau: false,
           jo: false,
-          去: false,
-          灰: false,
-        },
+          kɛ: false,
+          tsɛ: false,
+          y: false,
+          ən: false,
+          fɿn: false,
+        } as VariantSettings,
       },
       proto: {
         enable: false,
@@ -76,8 +80,9 @@ export const useHistoryStore = defineStore("history", {
           閉口韻尾: true,
           尖團: true,
           陽去: true,
-          分泥來: true,
-          分疑影: true,
+          泥來: true,
+          疑影: true,
+          前後鼻音: true,
         } as ProtoSettings,
       },
     },

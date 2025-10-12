@@ -4,7 +4,7 @@ import json
 
 from env_setup import DATA_PATH
 from updater import Updater
-from phonology import SYLLABLE_MAP
+from phonology import SYLLABLE_MAP, Syllable
 
 
 session = Updater()
@@ -15,7 +15,7 @@ ALL_SYLLABLES = {}
 for lang_en, syllable_cls in SYLLABLE_MAP.items():
     lang_cn = syllable_cls.NAME
 
-    syllables = set()
+    syllables: set[Syllable] = set()
 
     session.cursor.execute(f"SELECT * FROM {lang_cn}")
     for row in session.data:
@@ -30,32 +30,55 @@ for lang_en, syllable_cls in SYLLABLE_MAP.items():
                 print(f"Error parsing {lang_cn} {pron}")
 
     if lang_en == "FG":
-        for initial in ["", "t", "n", "tɕ", "tɕʰ", "ɕ"]:
-            syllables.add(syllable_cls(initial, "", "y", "", "0"))
-        for initial in ["p", "pʰ", "m", "f"]:
-            syllables.add(syllable_cls(initial, "w", "i", "", "0"))
-        for initial in ["t", "tʰ", "ts", "tsʰ", "s"]:
-            syllables.add(syllable_cls(initial, "", "o", "i", "0"))
-        for syllable in [
-            ["ŋ", "", "ɛ", ""],
-            ["h", "", "ɛ", ""],
-            ["ŋ", "", "a", "ʔ"],
-            ["", "j", "a", "ʔ"],
-            ["m", "j", "a", "ʔ"],
-            ["", "w", "a", "ʔ"],
-            ["k", "w", "a", "ʔ"],
-            ["f", "", "ɛ", "t"],
-            ["m", "j", "ɛ", ""],
-            ["l", "w", "o", "i"],
-        ]:
-            syllables.add(syllable_cls(*syllable, "0"))
 
-        # URGENT variant syllables
-        VARIANT_MAP = {
-            "iau": "ieu",
-            "yo": "ye",
-            "io": "yo",
-        }
+        def add_syllables(tuples: set[tuple[str, str, str, str]]):
+            for tuple_ in tuples:
+                syllable = syllable_cls(*tuple_, "0")
+                syllables.add(syllable)
+            tuples.clear()
+
+        new_tuples = set(
+            [(initial, "", "y", "") for initial in ["", "t", "n", "tɕ", "tɕʰ", "ɕ"]]
+            + [(initial, "w", "i", "") for initial in ["p", "pʰ", "m", "f"]]
+            + [(initial, "", "o", "i") for initial in ["t", "tʰ", "ts", "tsʰ", "s"]]
+            + [
+                (initial, medial, "o", "")
+                for initial in ["tɕ", "tɕʰ", "ɕ"]
+                for medial in ["j", "ɥ"]
+            ]
+            + [
+                ("h", "", "ɛ", ""),
+                ("ŋ", "", "a", "ʔ"),
+                ("", "j", "a", "ʔ"),
+                ("m", "j", "a", "ʔ"),
+                ("", "w", "a", "ʔ"),
+                ("k", "w", "a", "ʔ"),
+                ("f", "", "ɛ", "t"),
+                ("m", "j", "ɛ", ""),
+                ("l", "w", "o", "i"),
+            ]
+        )
+        add_syllables(new_tuples)
+
+        for syllable in syllables:
+            if syllable.tuple[1:3] == tuple("ɥo") and syllable.coda != "":
+                new_tuples.add((syllable.initial, *tuple("ɥɛ"), syllable.coda))
+            if syllable.tuple[1:4] == tuple("jau"):
+                new_tuples.add((syllable.initial, *tuple("jɛu")))
+        add_syllables(new_tuples)
+
+        for syllable in syllables:
+            if (
+                syllable.initial == ""
+                and syllable.medial == ""
+                and syllable.nucleus not in "iɿuy"
+            ):
+                new_tuples.add(("ŋ", *syllable.tuple[1:4]))
+            if syllable.initial == "ŋ" and not syllable.is_syllabic_nasal:
+                new_tuples.add(("", *syllable.tuple[1:4]))
+            if syllable.initial == "l":
+                new_tuples.add(("n", *syllable.tuple[1:4]))
+        add_syllables(new_tuples)
 
     # order by pinyin
     syllables = sorted(list(syllables), key=lambda syl: syl.pinyin())
@@ -100,15 +123,20 @@ for lang_en, syllable_cls in SYLLABLE_MAP.items():
                 }
             )
         for initial in ["p", "pʰ", "m", "f"]:
-            rows.append(
-                {
-                    "tuple": [initial, "", "ɿ", "t"],
-                    "ipaRaw": initial + "ɿt",
-                    "ipaStrict": initial + "ɨt̚",
-                    "pinyin": ["b", "p", "m", "f"][["p", "pʰ", "m", "f"].index(initial)]
-                    + "iit",
-                }
-            )
+            for coda in ["n", "t"]:
+                coda_strict = coda if coda == "n" else "t̚"
+                rows.append(
+                    {
+                        "tuple": [initial, "", "ɿ", coda],
+                        "ipaRaw": initial + "ɿ" + coda,
+                        "ipaStrict": initial + "ɨ" + coda_strict,
+                        "pinyin": ["b", "p", "m", "f"][
+                            ["p", "pʰ", "m", "f"].index(initial)
+                        ]
+                        + "ii"
+                        + coda,
+                    }
+                )
 
     ALL_SYLLABLES[lang_en] = rows
 

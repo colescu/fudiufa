@@ -1,16 +1,11 @@
 <script setup lang="ts">
-import { DefaultProps } from "@/components/content/Pronunciation.vue";
 import { LangEntry } from "@shared/lang";
+import { PronounceProps } from "./types";
 
-const {
-  entry,
-  proto = false,
-  ...rest
-} = defineProps<
+const { entry, ...rest } = defineProps<
   {
     entry: LangEntry;
-    proto?: boolean;
-  } & DefaultProps
+  } & PronounceProps
 >();
 </script>
 
@@ -20,15 +15,15 @@ const {
     <span
       >&nbsp;<template v-if="!entry.記錄讀音">*</template>
       <DoublePronunciation
-        v-if="!proto || language !== 'FG'"
+        v-if="!rest.proto || language !== 'FG'"
         :pronunciation="entry.讀音"
         v-bind="rest"
+        :mc-info="entry.MC"
       />
       <Pronunciation
         v-else
         :pronunciation="entry.讀音"
         v-bind="rest"
-        :proto="proto"
         :mc-info="entry.MC"
       />
     </span>

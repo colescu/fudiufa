@@ -1,3 +1,4 @@
+from .syllable import Syllable
 from .fg import FGSyllable
 from .pm import PMSyllable
 from .gc import GCSyllable
@@ -9,7 +10,7 @@ from .vn import VNSyllable
 
 
 # 贛官粵吳客日朝越
-SYLLABLE_MAP = {
+SYLLABLE_MAP: dict[str, type[Syllable]] = {
     "FG": FGSyllable,
     "PM": PMSyllable,
     "GC": GCSyllable,

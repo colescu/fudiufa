@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import { useSettingsStore } from "@/stores/settings";
 import { getLangQueryUtils, LangEntry } from "@shared/lang";
 import { isChineseCharacter } from "@shared/cjk";
-import { DefaultProps } from "@/components/content/Pronunciation.vue";
+import { PronounceProps } from "./types";
 
 import ConstrainedPopover from "@/components/common/ConstrainedPopover.vue";
 import EntryInline from "./EntryInline.vue";
@@ -11,19 +11,12 @@ import { NRadioGroup, NRadioButton } from "naive-ui";
 
 const settings = useSettingsStore();
 
-const {
-  char,
-  indices,
-  displayStyle,
-  proto = false,
-  ...rest
-} = defineProps<
+const { char, indices, displayStyle, ...rest } = defineProps<
   {
     char: string;
     indices: number[]; // pass entries as indices
     displayStyle: "interlinear" | "ruby";
-    proto?: boolean;
-  } & DefaultProps
+  } & PronounceProps
 >();
 const isRuby = computed<boolean>(() => displayStyle === "ruby");
 
@@ -57,7 +50,7 @@ const showPopover = ref<boolean>(false);
     <component
       :is="isRuby ? 'ruby' : 'div'"
       class="interlinear"
-      :class="{ 'track-both': !isRuby && !proto }"
+      :class="{ 'track-both': !isRuby && !rest.proto }"
     >
       <span>
         <ConstrainedPopover v-model:show="showPopover" style="padding: 0.4em 0">
@@ -89,15 +82,11 @@ const showPopover = ref<boolean>(false);
           >
             <div class="vertical-radio-buttons">
               <n-radio-button
-                v-for="index in indices"
+                v-for="index of indices"
                 :key="index"
                 :value="index"
               >
-                <EntryInline
-                  :entry="entryAt(index)!"
-                  :proto="proto"
-                  v-bind="rest"
-                />
+                <EntryInline :entry="entryAt(index)!" v-bind="rest" />
               </n-radio-button>
             </div>
           </n-radio-group>
@@ -109,13 +98,14 @@ const showPopover = ref<boolean>(false);
           <span
             v-if="
               (settings.format === 'pinyin' || settings.displayBoth) &&
-              (!proto || language !== 'FG')
+              (!rest.proto || language !== 'FG')
             "
           >
             <Pronunciation
               :pronunciation="chosenPronunciation"
               format="pinyin"
               v-bind="rest"
+              :mc-info="chosenEntry?.MC"
             />
           </span>
           <span v-if="settings.format === 'ipaStrict' || settings.displayBoth">
@@ -123,7 +113,6 @@ const showPopover = ref<boolean>(false);
               :pronunciation="chosenPronunciation"
               format="ipaStrict"
               v-bind="rest"
-              :proto="proto"
               :mc-info="chosenEntry?.MC"
             />
           </span>
@@ -140,7 +129,6 @@ const showPopover = ref<boolean>(false);
             <Pronunciation
               :pronunciation="chosenPronunciation"
               v-bind="rest"
-              :proto="proto"
               :mc-info="chosenEntry?.MC"
             />
           </rt>
@@ -165,12 +153,16 @@ div.interlinear {
   > span {
     display: block;
     margin-bottom: 0.1em;
+
+    &:nth-child(3) {
+      margin-top: -0.1em;
+    }
   }
 }
 
 ruby rt {
   margin-top: 1em;
-  margin-bottom: 0em;
+  margin-bottom: 0;
   font-size: 1em;
 }
 
