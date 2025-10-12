@@ -11,7 +11,7 @@
     "update": "call scripts/update.bat",
     "update-v": "pnpm run update && pnpm version patch --no-git-tag-version",
     "deploy": "dotenv -e .env -- cmd /C \"tcb hosting deploy app/dist -e %TCB_ENV_ID%\"",
-    "all": "pnpm run update && pnpm run build && pnpm run deploy"
+    "all": "echo. | pnpm run update && pnpm run build && pnpm run deploy"
   },
   "dependencies": {
     "@vicons/ionicons5": "^0.13.0",

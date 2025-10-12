@@ -27,7 +27,8 @@ const settings = useSettingsStore();
 
 const helpDefault = `
   點擊注音可聽單字發音。<br />
-  點擊<span class="char">例字</span>可查看中古音韻。
+  點擊<span class="char">例字</span>可查看中古音韻。<br />
+  點擊中古音韻可查看各方言推導音。
 `;
 const helpHtml = ref<string>("");
 function getHelpHtml() {

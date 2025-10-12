@@ -81,7 +81,7 @@ function openZiTools() {
 <template>
   <n-card v-if="data">
     <div class="block">
-      <div @click="openZiTools" class="char clickable">
+      <div @click="openZiTools" class="char clickable no-simplify">
         {{ data.character }}
       </div>
 

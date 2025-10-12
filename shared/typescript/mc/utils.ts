@@ -14,7 +14,7 @@ export function showFinal(
   switch (finalStyle) {
     case "韻系":
       return mcInfo.韻系;
-    case "韻系舒入":
+    case "韻":
       return mcInfo.聲調 === "入"
         ? finals.at(-1)
         : [...finals].find((final) => final !== ".");
