@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useSettingsStore } from "@/stores/settings";
-import { getMCQueryUtils, MCEntry } from "@shared/mc";
-import { getPredictedPronunciationsByEntry } from "@shared/fg/predict";
-import { entriesConst } from "@shared/common/object";
+import { getMCQueryUtils, MCEntry, strataCache } from "@shared/mc";
 import { getLangQueryUtils, Language, LANGUAGE_MAP } from "@shared/lang";
+import { entriesConst } from "@shared/common/object";
 
 import ConstrainedPopover from "@/components/common/ConstrainedPopover.vue";
 import { NSpace, NTag, type PopoverTrigger } from "naive-ui";
@@ -27,12 +26,35 @@ const mcEntry = computed<MCEntry>(() =>
     : mcEntryProp
 );
 
-const otherPredictedPronunciations = computed<Record<string, string>>(() => {
-  const [默認, 白讀, 新派] = getPredictedPronunciationsByEntry(mcEntry.value);
-  return {
-    ...(白讀 !== 默認 && { 白讀 }),
-    ...(新派 !== 默認 && { 新派 }),
-  };
+const otherStrata = computed<
+  Partial<
+    Record<
+      Language,
+      // { stratum: pronunciation }
+      Record<string, string>
+    >
+  >
+>(() => {
+  const STRATA = strataCache.get();
+  const mcIndex = getMCQueryUtils().indexOf(mcEntry.value)!;
+  return Object.fromEntries(
+    ["FG", "SW"].map((language) => [
+      language,
+      ((STRATA[language][mcIndex] as [string, string][]) ?? []).reduce(
+        (acc, [stratum, pronunciation]) => {
+          if ("白文".includes(stratum)) {
+            stratum += "讀";
+          }
+          if ("新老".includes(stratum)) {
+            stratum += "派";
+          }
+          acc[stratum] = pronunciation;
+          return acc;
+        },
+        {} as Record<string, string>
+      ),
+    ])
+  );
 });
 
 const allRecordedFGPronunciations = computed<string[]>(() => [
@@ -68,33 +90,35 @@ const allRecordedFGPronunciations = computed<string[]>(() => [
           <n-tag size="small" style="margin-right: -0.5em">
             推導{{ langCN }}
           </n-tag>
+
           <div>
             <DoublePronunciation
               :pronunciation="mcEntry.reflex[langEN]!"
               :language="langEN"
             />
+
             <Tooltip
               v-if="
-                langEN === 'FG' &&
-                Object.keys(otherPredictedPronunciations).length > 0
+                otherStrata[langEN] &&
+                Object.keys(otherStrata[langEN]).length > 0
               "
               marker="…"
               :trigger-style="{ marginLeft: '0.3em' }"
             >
-              <n-space vertical style="gap: 0">
+              <n-space style="gap: 0" vertical>
                 <div
                   v-for="[stratum, pronunciation] of Object.entries(
-                    otherPredictedPronunciations
+                    otherStrata[langEN]
                   )"
                 >
                   {{ stratum }}
                   <DoublePronunciation
                     :pronunciation="pronunciation"
-                    language="FG"
+                    :language="langEN"
                     :class="{
-                      gray: !allRecordedFGPronunciations.includes(
-                        pronunciation
-                      ),
+                      gray:
+                        langEN === 'FG' &&
+                        !allRecordedFGPronunciations.includes(pronunciation),
                     }"
                   />
                 </div>

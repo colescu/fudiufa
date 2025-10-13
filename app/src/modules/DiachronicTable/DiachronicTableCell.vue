@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useHistoryStore } from "@/stores/history";
-import { getMCQueryUtils } from "@shared/mc";
-import { getPredictedPronunciations } from "@shared/fg/predict";
-import { getLangQueryUtils, LangEntry, Language } from "@shared/lang";
+import {
+  getLangQueryUtils,
+  getReflexMapByMC,
+  LangEntry,
+  Language,
+} from "@shared/lang";
+import { getReflexes as getFGReflexes } from "@shared/fg/predict";
 
 import ConstrainedPopover from "@/components/common/ConstrainedPopover.vue";
 import EntriesList from "./EntriesList.vue";
 
-// only implemented properly for FG
+// IMPROVE for other languages
 const {
   initials,
   final,
@@ -34,36 +38,43 @@ const {
   baseZIndex?: number;
 }>();
 
-// Ad hoc representative reflex
-const basePronunciation = computed<string | undefined>(() => {
+const reflexMap = computed<Record<string, string> | undefined>(() => {
   const mcIndices = [...indexMap.keys()];
   if (mcIndices.length === 0) return;
-  let pronunciation = getMCQueryUtils().entryAt(mcIndices[0])?.reflex[language];
-  if (pronunciation == null) return;
-  return pronunciation;
-});
+  const baseReflexes = getReflexMapByMC(
+    mcIndices[0], // representative MC entry
+    language
+  );
+  if (baseReflexes?.[""] === undefined) return;
 
-const pronunciations = computed<string[] | undefined>(() =>
-  basePronunciation.value
-    ? language === "FG"
-      ? getPredictedPronunciations(
-          initials[0]!,
-          final,
-          basePronunciation.value,
-          ignoreVoicing,
-          true
-        )
-      : [basePronunciation.value.replace(/\d/g, "")]
-    : undefined
-);
+  if (language === "FG") {
+    const reflexes = getFGReflexes(
+      initials[0]!,
+      final,
+      baseReflexes[""],
+      ignoreVoicing,
+      true
+    );
+    return Object.fromEntries(
+      ["", "白", "新"].map((stratum, index) => [stratum, reflexes[index]])
+    );
+  }
+
+  return Object.fromEntries(
+    Object.entries(baseReflexes).map(([key, value]) => [
+      key,
+      value.replace(/\d/g, ""), // only ignore tone
+    ])
+  );
+});
 
 const history = useHistoryStore();
 const displayedPronunciation = computed<string | undefined>(
   () =>
-    pronunciations.value?.[
+    reflexMap.value?.[
       language === "FG" && setStratum
-        ? ["", "白", "新"].indexOf(history.phonology.diachronicTable.stratum)
-        : 0
+        ? history.phonology.diachronicTable.stratum
+        : "" // default stratum
     ]
 );
 
@@ -82,7 +93,7 @@ const toneExceptions = computed<LangEntry[]>(() =>
   exceptions.value.filter(
     (entry) =>
       !isNaN(Number(entry.讀音.at(-1))) &&
-      entry.記錄讀音?.slice(0, -1) === entry.推導讀音?.slice(0, -1)
+      entry.記錄讀音?.replace(/\d/g, "") === entry.推導讀音?.replace(/\d/g, "")
   )
 );
 const otherExceptions = computed<LangEntry[]>(() =>
@@ -137,12 +148,13 @@ const characterMap = computed<
 <template>
   <td
     :class="{
+      // highlight cells different from default reflex
       'table-highlight':
-        highlightExceptions && displayedPronunciation !== pronunciations?.[0],
+        highlightExceptions && displayedPronunciation !== reflexMap?.[''],
     }"
   >
     <span
-      v-if="pronunciations"
+      v-if="reflexMap"
       :class="{ gray: [...indexMap.values()].flat().length === 0 }"
     >
       <ConstrainedPopover
@@ -229,29 +241,18 @@ const characterMap = computed<
 
           <hr />
           <div class="block pronunciations">
-            推導音：<Pronunciation
-              :pronunciation="pronunciations[0]"
-              :language="language"
-            />
-            <template
-              v-if="
-                pronunciations[1] && pronunciations[1] !== pronunciations[0]
-              "
+            推導音：<template
+              v-for="([stratum, pronunciation], index) of Object.entries(
+                reflexMap
+              )"
             >
-              &nbsp;<Pronunciation
-                :pronunciation="pronunciations[1]"
-                :language="language"
-              /><sub>白</sub>
-            </template>
-            <template
-              v-if="
-                pronunciations[2] && pronunciations[2] !== pronunciations[0]
-              "
-            >
-              &nbsp;<Pronunciation
-                :pronunciation="pronunciations[2]"
-                :language="language"
-              /><sub>新</sub>
+              <template v-if="index === 0 || pronunciation !== reflexMap['']">
+                <template v-if="index !== 0">&nbsp;&nbsp;</template
+                ><Pronunciation
+                  :pronunciation="pronunciation"
+                  :language="language"
+                /><sub v-if="stratum !== ''">{{ stratum }}</sub>
+              </template>
             </template>
           </div>
 

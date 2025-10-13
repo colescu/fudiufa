@@ -1,7 +1,7 @@
 import { loadCJKData } from "./cjk/cache";
 import { initSyllableModule } from "./syllable/init";
-import { mcCache } from "./mc";
+import { initMCModule } from "./mc/init";
 
 export async function init() {
-  await Promise.all([loadCJKData(), initSyllableModule(), mcCache.load()]);
+  await Promise.all([loadCJKData(), initSyllableModule(), initMCModule()]);
 }

@@ -1,48 +1,31 @@
 import { createCache, fetchFile } from "../cache";
 import { getMCQueryUtils, MCEntry } from "../mc";
+import { getReflexMapByMC } from "./strata";
 import { Language, LangEntry } from "./types";
-import { getPredictedPronunciationsByEntry } from "../fg/predict";
 
 function getMCEntry(this: Pick<LangEntry, "小韻號">): MCEntry | undefined {
   return getMCQueryUtils().entryAt(this.小韻號 ?? -1);
 }
 
+// smart matching stratum for reflex
 function getReflex(
   row: Pick<LangEntry, "小韻號" | "層" | "記錄讀音">,
   language: Language
 ): string | null {
-  let reflex = getMCEntry.call(row)?.reflex[language] ?? null;
+  if (row.小韻號 === null) return null;
+  const reflexes = Object.values(getReflexMapByMC(row.小韻號, language));
 
-  // Ad hoc smart match stratum for reflex
-  if (language === "FG" && row.小韻號 != null) {
-    let index = 0;
-    if (row.層 && row.層.includes("白")) {
-      index = 1;
-    }
-    if (row.層 && (row.層.includes("新") || row.層 === "官")) {
-      index = 2;
-    }
-    const mcEntry = getMCQueryUtils().entryAt(row.小韻號);
-    if (mcEntry) {
-      const predictedPronunciations =
-        getPredictedPronunciationsByEntry(mcEntry);
-      reflex = predictedPronunciations[index]!;
-      if (row.記錄讀音) {
-        if (predictedPronunciations.includes(row.記錄讀音)) {
-          reflex = row.記錄讀音;
-        } else {
-          for (const pronunciation of predictedPronunciations) {
-            if (row.記錄讀音.slice(0, -1) === pronunciation.slice(0, -1)) {
-              reflex = pronunciation;
-              break;
-            }
-          }
-        }
+  if (row.記錄讀音 !== null) {
+    if (reflexes.includes(row.記錄讀音)) return row.記錄讀音;
+
+    for (const reflex of reflexes) {
+      if (reflex.replace(/\d/g, "") === row.記錄讀音.replace(/\d/g, "")) {
+        return reflex;
       }
     }
   }
 
-  return reflex;
+  return reflexes[0] ?? null;
 }
 
 function toLangEntry(

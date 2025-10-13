@@ -307,13 +307,14 @@ const VOICING_MAP = {
   k: "g",
 } as const;
 
-export function getPredictedPronunciations(
+export function getReflexes(
   initials: string,
   final: string,
   pronunciation: string,
   ignoreVoicing: boolean,
   ignoreTone: boolean
-): [string, string, string] {
+): // 默認, 白, 新
+[string, string, string] {
   let tone = "";
   if (!isNaN(Number(pronunciation.at(-1)))) {
     tone = pronunciation.slice(-1);
@@ -352,8 +353,8 @@ export function getPredictedPronunciations(
   ];
 }
 
-export function getPredictedPronunciationsByEntry(entry: MCEntry) {
-  return getPredictedPronunciations(
+export function getReflexesByEntry(entry: MCEntry) {
+  return getReflexes(
     entry.MC.聲母,
     getFullFinal(entry.MC),
     entry.reflex.FG!,
