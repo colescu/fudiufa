@@ -17,3 +17,5 @@ export const mcCache = createCache<Record<number, MCEntry>>(
       ])
     )
 );
+
+export const strataCache = createCache(() => fetchFile("strata", "json"));

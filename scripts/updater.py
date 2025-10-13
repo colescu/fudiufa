@@ -1,6 +1,7 @@
 """Defines Updater class as API for hanzi.sqlite3."""
 
 import sqlite3
+import json
 import questionary
 from collections import defaultdict
 from functools import cached_property
@@ -20,6 +21,7 @@ class Updater:
         self._conn = sqlite3.connect(DATA_PATH / "manual" / db_name)
         self._conn.row_factory = sqlite3.Row
         self.cursor = self._conn.cursor()
+        self.lang_en = lang_en
         self.lang_cn = SYLLABLE_MAP[lang_en].NAME
         self.Syllable = SYLLABLE_MAP[lang_en]
         self.get_reflex = REFLEX_GETTER_MAP.get(lang_en, None)
@@ -51,8 +53,6 @@ class Updater:
             dictionary[row["字頭"]].append(row)
         return dictionary
 
-    # TODO check below
-
     def get_dictionary(self, language: str = "") -> dict[str, list[dict[str, Any]]]:
         """現代方言字典
 
@@ -63,7 +63,7 @@ class Updater:
         if language == "":
             lang_cn = self.lang_cn
         if language in SYLLABLE_MAP:
-            lang_cn = SYLLABLE_MAP[language]["name"]
+            lang_cn = SYLLABLE_MAP[language]["NAME"]
 
         self.cursor.execute(f"SELECT * FROM {lang_cn}")
         dictionary = defaultdict(list)
@@ -93,6 +93,8 @@ class Updater:
                 entry["釋義"] or "",
             ]
         )
+
+    """utility scripts"""
 
     def update_reflex(self) -> None:
         """推導所有小韻的現代音"""
@@ -131,6 +133,12 @@ class Updater:
             推導音 = 推導音[:-1] if 推導音[-1].isdigit() else 推導音  # 除去聲調
             推導音節.add(推導音)
 
+        with open(DATA_PATH / "generated" / "strata.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+            for strata in data.get(self.lang_en, {}).values():
+                for [_, pron] in strata:
+                    推導音節.add(pron[:-1])
+
         self.cursor.execute(f"SELECT * FROM {self.lang_cn}")
         收錄音節 = set()
         for row in self.data:
@@ -149,7 +157,9 @@ class Updater:
             )
         )
 
-    def _predict_MC(self, row: dict[str, Any]) -> list[dict[str, Any]]:
+    # recheck below
+
+    def _predict_mc(self, row: dict[str, Any]) -> list[dict[str, Any]]:
         """推導字條的廣韻字頭號"""
 
         def is_match(推導音: str, 收錄音: str) -> bool:
@@ -186,7 +196,7 @@ class Updater:
 
         return entries
 
-    def update_MC_index(self) -> None:
+    def update_mc_index(self) -> None:
         """推導所有字條的廣韻字頭號（慎用）"""
 
         self.cursor.execute(f"SELECT rowid, * FROM {self.lang_cn}")
@@ -194,7 +204,7 @@ class Updater:
         for row in self.data:
             if self.lang_cn == "撫州話" and row["訓作"] is not None:
                 continue
-            MC_entries = self._predict_MC(row)
+            MC_entries = self._predict_mc(row)
             if row["小韻號"] is None and len(MC_entries) == 1:
                 self.cursor.execute(
                     f"UPDATE {self.lang_cn} SET 小韻號 = ? WHERE rowid = ?",
@@ -212,7 +222,7 @@ class Updater:
 
     """以下專爲撫州話"""
 
-    def add_MC_index(self, 字: str) -> None:
+    def add_mc_index(self, 字: str) -> None:
         """手動選擇撫州話字條的廣韻小韻號"""
 
         self.cursor.execute("SELECT rowid, * FROM 撫州話 WHERE 字頭 = ?", (字,))
@@ -229,7 +239,7 @@ class Updater:
 
             print(f"{字} 收錄音：{Updater.show_syllable(row)}")
 
-            entries = self._predict_MC(row)
+            entries = self._predict_mc(row)
             if len(entries) == 0:
                 print("廣韻未收錄該字！")
                 return False, "廣韻未收錄"

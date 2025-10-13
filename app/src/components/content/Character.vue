@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { getMCQueryUtils } from "@shared/mc";
 import { getLangEntries } from "@/views/Search/typescript/search";
-import { getPredictedPronunciationsByEntry } from "@shared/fg/predict";
 import { isChineseCharacter } from "@shared/cjk/utils";
-import { Language } from "@shared/lang";
+import { getReflexMapByMC, Language } from "@shared/lang";
 
 import ConstrainedPopover from "@/components/common/ConstrainedPopover.vue";
 import MCInfo from "./MCInfo.vue";
@@ -22,8 +20,9 @@ const {
 
 const character = computed(() => [...characterProp][0] ?? "");
 
+// Ad hoc matching
 const mcIndices = computed<number[]>(() => {
-  // MAYBE CLEANUP hint in characterProp to avoid parsing in md
+  // CLEANUP hint in characterProp to avoid parsing in md
   // priortize this
   let character = characterProp,
     hint = hintProp;
@@ -47,16 +46,12 @@ const mcIndices = computed<number[]>(() => {
     if (hint === "N/A") {
       filteredMCIndices = [];
     } else if (typeof hint === "string") {
-      // filter by matching predicted pronunciations
-      const { entryAt } = getMCQueryUtils();
-      const matches = filteredMCIndices.filter((index) => {
-        const entry = entryAt(index)!;
-        const pronunciations =
-          language === "FG"
-            ? getPredictedPronunciationsByEntry(entry)
-            : [entry.reflex[language]];
-        return pronunciations.includes(hint as string);
-      });
+      // filter by matching predicted reflexes
+      const matches = filteredMCIndices.filter((index) =>
+        Object.values(getReflexMapByMC(index, language)).includes(
+          hint as string
+        )
+      );
       if (matches.length > 0) {
         filteredMCIndices = matches;
       }

@@ -1,6 +1,7 @@
 @echo off
 python "%~dp0update_date.py"
 echo -----
+call npx tsx "%~dp0export_strata.ts"
 python "%~dp0update_reflex.py"
 echo -----
 python "%~dp0update_ipa.py"
