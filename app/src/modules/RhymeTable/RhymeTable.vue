@@ -6,7 +6,12 @@ import { useDraggable } from "@/composables/useDraggable";
 import { useProvideDiachronicTableState } from "../DiachronicTable/useDiachronicTableState";
 import { rhymeTableCache } from "./cache";
 import { searchFilter } from "@/views/Search/typescript/search";
-import { dictionaryCache, LangEntry, Language } from "@shared/lang";
+import {
+  dictionaryCache,
+  getPhonologicalInventory,
+  LangEntry,
+  Language,
+} from "@shared/lang";
 import { syllableUtils } from "@shared/syllable";
 import { getPart, partsUtils, renderParts } from "@shared/syllable";
 import { computeOrdering } from "@shared/common/sort";
@@ -64,8 +69,6 @@ function showPart(value: string, part: any): string {
   return renderParts(show(value, part, settings.format), settings.format);
 }
 
-// LATERFIX only implemented for FG
-// can compute ALL_... from dictionary
 type Initial = string;
 type Final = string;
 const TABLE: Record<
@@ -73,11 +76,16 @@ const TABLE: Record<
   Record<Final, string | null>
 > = rhymeTableCache.get();
 const ALL_INITIALS = computed<Initial[]>(() =>
-  Object.keys(TABLE).sort(comparer("聲母"))
+  language === "FG"
+    ? Object.keys(TABLE).sort(comparer("聲母"))
+    : getPhonologicalInventory(language).get("聲母").sort(comparer("聲母"))
 );
 const ZERO_FINAL: Final = JSON.stringify(["", "", ""]);
 const ALL_FINALS = computed<Final[]>(() => [
-  ...Object.keys(TABLE[""]!)
+  ...(language === "FG"
+    ? Object.keys(TABLE[""]!)
+    : getPhonologicalInventory(language).get("韻母")
+  )
     .filter((final) => final != ZERO_FINAL)
     .sort(comparer("韻母", settings.finalOrdering as any)),
   ZERO_FINAL,
@@ -152,7 +160,7 @@ const isFullscreen = defineModel("isFullscreen", { type: Boolean });
 function testException(entry: LangEntry): boolean {
   return (
     entry.層 === "官" ||
-    entry.記錄讀音!.slice(0, -1) !== entry.推導讀音!.slice(0, -1)
+    entry.記錄讀音!.replace(/\d/g, "") !== entry.推導讀音!.replace(/\d/g, "")
   );
 }
 

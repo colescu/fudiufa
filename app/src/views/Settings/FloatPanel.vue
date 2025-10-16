@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useSettingsStore } from "@/stores/settings";
-import { hasBoth } from "@/composables/useTrack";
+import { hasBoth, hasPhrase } from "@/composables/useTrack";
 
 import FloatPopover from "@/components/common/FloatPopover.vue";
 import {
@@ -14,6 +14,7 @@ import {
   NRadioGroup,
   NRadioButton,
   NButton,
+  NSlider,
 } from "naive-ui";
 import {
   SettingsOutline,
@@ -154,7 +155,7 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
           </n-radio-group>
         </n-space>
 
-        <!-- <n-space v-if="hasPhrase" align="center">
+        <n-space v-if="hasPhrase" align="center">
           <n-tag>播放速度</n-tag>
           <n-slider
             v-model:value="settings.playSpeed"
@@ -164,7 +165,7 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
             :format-tooltip="(val) => val / 1000 + ' 秒/字'"
             style="width: 12em"
           />
-        </n-space> -->
+        </n-space>
       </n-space>
 
       <n-space align="center" justify="end" style="margin-bottom: 0.1em">

@@ -177,7 +177,7 @@ watch(
         <span style="margin-right: -0.2em">
           模擬墳派音
           <Tooltip marker="?" trigger-style="margin: -0.1em">
-            即復原一些晚近的合流。根據中古音反推而得，不完全可靠。僅支持音標。
+            即復原一些晚近的合流。根據中古音反推而得，不完全可靠。僅支持音標。陽去無音頻。
           </Tooltip>
         </span>
         <n-switch v-model:value="proto.enable" />

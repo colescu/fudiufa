@@ -9,7 +9,6 @@ import { getComparer, precomposeComparer } from "@shared/common/sort";
 const langEntryComparer = getComparer((entry: LangEntry): number[] => {
   return [
     entry.訓作 != null && entry.訓作 !== "？" ? -1 : 1,
-    entry.小韻號 ?? Infinity,
     [
       "老",
       null,
@@ -23,6 +22,7 @@ const langEntryComparer = getComparer((entry: LangEntry): number[] => {
       "變調",
       "官",
     ].indexOf(entry.層),
+    entry.小韻號 ?? Infinity,
     entry.記錄讀音 ? -1 : 1,
   ];
 });

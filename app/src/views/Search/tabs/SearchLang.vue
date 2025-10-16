@@ -2,13 +2,12 @@
 import { computed, h, inject, ref, toRef, watch } from "vue";
 import { useSettingsStore } from "@/stores/settings";
 import { useHistoryStore } from "@/stores/history";
-import { renderParts } from "@shared/syllable";
+import { renderParts, toneUtils } from "@shared/syllable";
 import {
   getFormLangUtils,
   ITEMS_MAP,
 } from "@/views/Search/typescript/form-lang";
 import { getSearchResultsByFilter } from "@/views/Search/typescript/search";
-import { normalizePinyin } from "@/views/Search/typescript/search-pron";
 import { computeGridOffset } from "@/library/dom/pure";
 import { Language } from "@shared/lang";
 
@@ -42,10 +41,16 @@ type LangMode = keyof typeof LANG_MODES;
 const formPinyin = ref<string>("");
 
 const searchPinyin = searchWrapper(() => {
-  const [syllable, tones] = normalizePinyin(formPinyin.value, "FG");
+  const { parse } = toneUtils[language];
+  const [syllable, tone] = parse(formPinyin.value);
+  // manually add in 6
+  const tones =
+    formPinyin.value.normalize("NFD").includes("̄") && tone === "1"
+      ? "16"
+      : tone;
   return getSearchResultsByFilter((entry) => {
     if (tones === "") {
-      return entry.讀音.slice(0, -1) === syllable;
+      return entry.讀音.replace(/\d/g, "") === syllable;
     } else {
       return tones.split("").some((tone) => syllable + tone === entry.讀音);
     }

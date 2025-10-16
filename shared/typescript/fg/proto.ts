@@ -84,7 +84,7 @@ export function simulateProto(
   }
 
   if (settings.前後鼻音 && "梗曾".includes(mcInfo.攝)) {
-    pronunciation = pronunciation.replace("ɛn", "ɛŋ");
+    pronunciation = pronunciation.replace("ɛn", "ɛŋ").replace("in", "iŋ");
   }
 
   if (mcInfo.聲母 === "日" && "止遇".includes(mcInfo.攝)) {

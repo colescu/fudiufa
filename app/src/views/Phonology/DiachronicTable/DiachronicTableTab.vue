@@ -23,7 +23,7 @@ const route = useRoute();
       filter-codas
       ignore-voicing
       set-stratum
-      highlight-exceptions
+      highlight-stratum
       language="FG"
     />
   </SuspenseWrapper>

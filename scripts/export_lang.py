@@ -25,6 +25,10 @@ for lang_en in SYLLABLE_MAP:
     seen = {}
 
     def to_entry(row: dict) -> dict:
+        # delete 廣韻釋義
+        if "讀音" not in row:
+            row["釋義"] = None
+
         row["記錄讀音"] = row["讀音"] if "讀音" in row else None
 
         if row["小韻號"] is not None:

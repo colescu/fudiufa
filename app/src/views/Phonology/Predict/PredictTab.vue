@@ -12,7 +12,6 @@ const ReflexTable = defineAsyncComponent(
 import SuspenseWrapper from "@/components/wrapper/SuspenseWrapper.vue";
 
 const route = useRoute();
-const PATH = ROUTES_MAP.predict;
 
 const history = useHistoryStore();
 const form = toRef(history.phonology.predict, "form");
@@ -42,7 +41,7 @@ watch(form, () => {
   </SuspenseWrapper>
 
   <Teleport to="#help">
-    <template v-if="route.path === PATH">
+    <template v-if="route.path === ROUTES_MAP.predict">
       推導器只考慮理論推導音，無視例外。<br />
       出現頻度依《廣韻》字數。<br />
       推導普通話、廣州話的數據來自
