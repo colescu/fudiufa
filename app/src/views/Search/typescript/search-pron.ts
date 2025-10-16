@@ -1,41 +1,5 @@
 import { createCache } from "@shared/cache";
-import { syllableDataCache } from "@shared/syllable/cache";
-import { Language } from "@shared/lang";
-
-// Ad hoc
-export function normalizePinyin(
-  pinyin: string,
-  language: Language
-): [string, string] {
-  if (!["FG", "PM"].includes(language) || !isNaN(Number(pinyin.slice(-1)))) {
-    return [pinyin.slice(0, -1).normalize("NFC"), pinyin.slice(-1)];
-  }
-
-  const TONE_DATA: Record<string, { diacritic: string }> =
-    syllableDataCache.get("tones")[language];
-  const DIACRITIC_MAP = Object.fromEntries(
-    Object.entries(TONE_DATA).map(([tone, data]) => [data["diacritic"], tone])
-  );
-
-  let text = pinyin.normalize("NFD");
-  let tone = "";
-  for (let i = 0; i < text.length; i++) {
-    if (text[i]! in DIACRITIC_MAP) {
-      tone = DIACRITIC_MAP[text[i]!]!;
-      text = text.slice(0, i) + text.slice(i + 1);
-      break;
-    }
-  }
-
-  if (language === "FG") {
-    if (text !== "" && !"th".includes(text.at(-1)!)) {
-      if (tone === "8") tone = "3";
-      if (tone === "7") tone = "16";
-    }
-  }
-
-  return [text.normalize("NFC"), tone];
-}
+import { toneUtils } from "@shared/syllable";
 
 const pmDictionaryCache = createCache(
   async () => {
@@ -61,17 +25,15 @@ const pmDictionaryCache = createCache(
 );
 
 export async function fetchCharsByPM(pinyin: string): Promise<string[]> {
-  const [syllable, tone] = normalizePinyin(pinyin, "PM");
+  const { parse } = toneUtils.PM;
+  const [syllable, tone] = parse(pinyin);
 
   const chars: string[] = [];
 
   const DICTIONARY = await pmDictionaryCache.getAsync();
   Object.entries(DICTIONARY).forEach(([character, pronunciations]) => {
     for (const pronunciation of pronunciations) {
-      const [currentSyllable, currentTone] = normalizePinyin(
-        pronunciation,
-        "PM"
-      );
+      const [currentSyllable, currentTone] = parse(pronunciation);
       if (
         currentSyllable === syllable &&
         (tone === "" || currentTone === tone)

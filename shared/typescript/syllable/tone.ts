@@ -1,14 +1,25 @@
 import { Language, LANGUAGES } from "../lang";
 import { syllableDataCache } from "./cache";
 
+// cases of identical diacritic or tone value
 function normalizeTone(
   tone: string,
   syllable: string,
   language: Language
 ): string {
   switch (language) {
-    // case "FG":
-    // FIXME cannot tell apart 1 6
+    case "FG":
+      if (
+        ["p", "p̚", "t", "t̚", "ʔ", "ʔ̚"].some((coda) => syllable.endsWith(coda))
+      ) {
+        for (const [舒, 入] of ["17", "38"]) {
+          if (tone === 舒) {
+            tone = 入;
+            break;
+          }
+        }
+      }
+    // CAUTION: cannot detect 6 from 1
     case "GC":
       if (
         ["p", "p̚", "t", "t̚", "k", "k̚"].some((coda) => syllable.endsWith(coda))

@@ -41,8 +41,22 @@ const routes = [
     children: [
       { path: "caci", name: "Search", component: Search },
       { path: "duin", name: "Pronounce", component: Pronounce },
-      { path: "yntu", component: RhymeTable },
-      { path: "gujintu", component: DiachronicTable },
+      // for personal use
+      {
+        path: "yntu",
+        component: RhymeTable,
+        props: {
+          partsColumns: true,
+          showCount: true,
+        },
+      },
+      {
+        path: "gujintu",
+        component: DiachronicTable,
+        props: {
+          filterCodas: true,
+        },
+      },
     ],
   },
   {

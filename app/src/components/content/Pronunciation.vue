@@ -65,7 +65,7 @@ const audioControls = computed(() => {
     sourceFormat,
     mcInfo,
     "ordinal"
-  );
+  ).replace(/^([pmf])ɿ/, "$1ɨ");
   return useAudio(rawPronunciation, message);
 });
 </script>

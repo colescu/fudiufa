@@ -103,7 +103,7 @@ const { updateDiachronicTable } = useInjectDiachronicTableState(
             <DoublePronunciation
               :pronunciation="pronunciation + tone"
               source-format="ipaRaw"
-              language="FG"
+              :language="language"
             />
           </div>
 

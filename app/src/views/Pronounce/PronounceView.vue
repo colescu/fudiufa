@@ -36,40 +36,36 @@ function resetChoices() {
   outputChoices.value = indicesArray.value.map(getPreferredIndex);
 }
 
-watch(
-  input,
-  (newValue, oldValue) => {
-    const indices = indicesArray.value.map(getPreferredIndex);
+watch(input, (newValue, oldValue) => {
+  const indices = indicesArray.value.map(getPreferredIndex);
 
-    if (oldValue) {
-      let left = 0,
-        right = 0;
-      while (left < newValue.length && newValue[left] === oldValue[left]) {
-        left += 1;
-      }
-      while (
-        right < Math.min(newValue.length, oldValue.length) - left &&
-        newValue[newValue.length - 1 - right] ===
-          oldValue[oldValue.length - 1 - right]
-      ) {
-        right += 1;
-      }
-
-      outputChoices.value = [
-        ...outputChoices.value.slice(0, left),
-        ...indices.slice(left, newValue.length - right),
-        ...outputChoices.value.slice(oldValue.length - right),
-      ];
-    } else {
-      outputChoices.value = indices;
+  if (oldValue) {
+    let left = 0,
+      right = 0;
+    while (left < newValue.length && newValue[left] === oldValue[left]) {
+      left += 1;
+    }
+    while (
+      right < Math.min(newValue.length, oldValue.length) - left &&
+      newValue[newValue.length - 1 - right] ===
+        oldValue[oldValue.length - 1 - right]
+    ) {
+      right += 1;
     }
 
-    if (newValue.length >= TEXT_LIMIT) {
-      message.warning("字数已达上限！");
-    }
-  },
-  { immediate: true }
-);
+    outputChoices.value = [
+      ...outputChoices.value.slice(0, left),
+      ...indices.slice(left, newValue.length - right),
+      ...outputChoices.value.slice(oldValue.length - right),
+    ];
+  } else {
+    outputChoices.value = indices;
+  }
+
+  if (newValue.length >= TEXT_LIMIT) {
+    message.warning("字数已达上限！");
+  }
+});
 
 watch(
   () => [indicesArray, outputChoices],

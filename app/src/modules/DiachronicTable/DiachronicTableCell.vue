@@ -22,7 +22,7 @@ const {
   showCount = false,
   hidePronunciation = false,
   testException,
-  highlightExceptions = false,
+  highlightStratum = false,
   language = "FG",
 } = defineProps<{
   initials: string;
@@ -33,7 +33,7 @@ const {
   showCount?: boolean;
   hidePronunciation?: boolean;
   testException?: (langEntry: LangEntry) => boolean;
-  highlightExceptions?: boolean;
+  highlightStratum?: boolean;
   language?: Language;
   baseZIndex?: number;
 }>();
@@ -150,7 +150,7 @@ const characterMap = computed<
     :class="{
       // highlight cells different from default reflex
       'table-highlight':
-        highlightExceptions && displayedPronunciation !== reflexMap?.[''],
+        highlightStratum && displayedPronunciation !== reflexMap?.[''],
     }"
   >
     <span

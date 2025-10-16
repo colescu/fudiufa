@@ -63,7 +63,7 @@ class Updater:
         if language == "":
             lang_cn = self.lang_cn
         if language in SYLLABLE_MAP:
-            lang_cn = SYLLABLE_MAP[language]["NAME"]
+            lang_cn = SYLLABLE_MAP[language].NAME
 
         self.cursor.execute(f"SELECT * FROM {lang_cn}")
         dictionary = defaultdict(list)
@@ -195,30 +195,6 @@ class Updater:
                 return matches
 
         return entries
-
-    def update_mc_index(self) -> None:
-        """推導所有字條的廣韻字頭號（慎用）"""
-
-        self.cursor.execute(f"SELECT rowid, * FROM {self.lang_cn}")
-        updated = []
-        for row in self.data:
-            if self.lang_cn == "撫州話" and row["訓作"] is not None:
-                continue
-            MC_entries = self._predict_mc(row)
-            if row["小韻號"] is None and len(MC_entries) == 1:
-                self.cursor.execute(
-                    f"UPDATE {self.lang_cn} SET 小韻號 = ? WHERE rowid = ?",
-                    (MC_entries[0]["小韻號"], row["rowid"]),
-                )
-                old = self.mc_entry_map.get(row["小韻號"], None)
-                old_info = f"{old['字']} {old['音韻地位']}" if old else "None"
-                new = self.mc_entry_map[MC_entries[0]["小韻號"]]
-                updated.append(
-                    f"{row['字頭']} {row['讀音']}: {old_info} -> {new['字']} {new['音韻地位']}"
-                )
-        print(f"推導{self.lang_cn}小韻號完成！共更新 {len(updated)} 個字條。")
-        for item in updated:
-            print("  " + item)
 
     """以下專爲撫州話"""
 
