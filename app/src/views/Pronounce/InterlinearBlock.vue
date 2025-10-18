@@ -30,7 +30,7 @@ const entries = computed<LangEntry[]>(() =>
 
 const choice = defineModel<number | undefined>({ required: true });
 const chosenEntry = computed<LangEntry | undefined>(() =>
-  choice.value ? entryAt.value(choice.value) : undefined
+  choice.value !== undefined ? entryAt.value(choice.value) : undefined
 );
 const chosenPronunciation = computed<string | undefined>(
   () => chosenEntry.value?.讀音

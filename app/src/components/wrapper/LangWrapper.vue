@@ -31,7 +31,12 @@ watch(
       justify="center"
       style="margin-bottom: 1.5em"
     >
-      <n-radio-group v-model:value="language" name="language" size="small">
+      <n-radio-group
+        v-model:value="language"
+        name="language"
+        size="small"
+        style="max-width: 21em"
+      >
         <n-radio
           v-for="(langCN, langEN) in LANGUAGE_MAP"
           :key="langEN"

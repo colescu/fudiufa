@@ -1,6 +1,6 @@
 import { MCInfo } from "../mc";
 
-export type Language = "FG" | "PM" | "GC" | "SW";
+export type Language = "FG" | "PM" | "GC" | "SW" | "MH" | "JP" | "KR" | "VN";
 
 // pronunciations all in pinyin
 export interface LangEntry {
@@ -14,4 +14,6 @@ export interface LangEntry {
   釋義: string | null;
   小韻號: number | null;
   MC: MCInfo | null; // property from 小韻號
+  // for JP
+  常用度?: "表內" | "表外" | "表外罕";
 }

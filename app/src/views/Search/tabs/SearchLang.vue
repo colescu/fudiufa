@@ -2,7 +2,7 @@
 import { computed, h, inject, ref, toRef, watch } from "vue";
 import { useSettingsStore } from "@/stores/settings";
 import { useHistoryStore } from "@/stores/history";
-import { renderParts, toneUtils } from "@shared/syllable";
+import { renderParts, syllableUtils, toneUtils } from "@shared/syllable";
 import {
   getFormLangUtils,
   ITEMS_MAP,
@@ -10,6 +10,7 @@ import {
 import { getSearchResultsByFilter } from "@/views/Search/typescript/search";
 import { computeGridOffset } from "@/library/dom/pure";
 import { Language } from "@shared/lang";
+import { deepEqual } from "@shared/common/object";
 
 import MultipleSelect from "@/components/common/MultipleSelect.vue";
 import {
@@ -41,19 +42,68 @@ type LangMode = keyof typeof LANG_MODES;
 const formPinyin = ref<string>("");
 
 const searchPinyin = searchWrapper(() => {
+  const { show } = syllableUtils[language];
+  let formats = ["pinyin"] as string[];
+  switch (language) {
+    case "JP":
+      formats = ["kata", "hira", "NR", "RR"];
+      break;
+    case "KR":
+      formats = ["hangul", "RR"];
+      break;
+  }
+
   const { parse } = toneUtils[language];
   const [syllable, tone] = parse(formPinyin.value);
-  // manually add in 6
-  const tones =
-    formPinyin.value.normalize("NFD").includes("̄") && tone === "1"
-      ? "16"
-      : tone;
+  let tones = [tone];
+  if (
+    language === "FG" &&
+    formPinyin.value.normalize("NFD").includes("̄") &&
+    tone === "1"
+  ) {
+    tones = ["1", "6"]; // manually add in 6
+  }
+  switch (language) {
+    case "GC":
+      for (const [舒, 入] of ["17", "38", "69"]) {
+        if (tones.includes(入)) {
+          tones.push(舒);
+        }
+      }
+      break;
+    case "VN":
+      for (const [舒, 入] of ["57", "68"]) {
+        if (tones.includes(入)) {
+          tones.push(舒);
+        }
+      }
+      break;
+  }
+
   return getSearchResultsByFilter((entry) => {
-    if (tones === "") {
-      return entry.讀音.replace(/\d/g, "") === syllable;
-    } else {
-      return tones.split("").some((tone) => syllable + tone === entry.讀音);
+    // FEATURE fuzzy search
+    const pronunciations = [entry.讀音];
+    if (formats.length > 1) {
+      for (const format of formats.slice(1)) {
+        try {
+          const pronunciation = show(
+            entry.讀音,
+            format,
+            "ordinal",
+            formats[0],
+            settings.pinyinSettings.JP.historical
+          );
+          pronunciations.push(pronunciation);
+        } catch {}
+      }
     }
+    return pronunciations
+      .filter(Boolean)
+      .some((pronunciation) =>
+        deepEqual(tones, [""])
+          ? pronunciation.replace(/\d/g, "") === syllable
+          : tones.some((tone) => syllable + tone === pronunciation)
+      );
   }, language);
 });
 
@@ -141,7 +191,7 @@ const offset = computed<string>(() => {
           v-model="formLang[item]"
           :options="optionsLang[item]"
           :get-label="FormLangUtils.getOptionLabel![item](settings.format)"
-          :render-label="(option) => h('div', {'innerHTML': renderParts(option.label as string, settings.format)})"
+          :render-label="(option) => h('div', {'innerHTML': renderParts(option.label as string, settings.format, language)})"
           select-all
         />
       </n-form-item-gi>

@@ -91,8 +91,24 @@
       "name": "陽去",
       "chinese": "重",
       "vietnamese": "nặng",
-      "number": "3ˀ2ʔ",
-      "letter": "˧ˀ˨ʔ",
+      "number": "3ˀ1",
+      "letter": "˧ˀ˩",
+      "diacritic": "̣"
+    },
+    "7": {
+      "name": "陰入",
+      "chinese": "銳",
+      "vietnamese": "sắc",
+      "number": "35",
+      "letter": "˧˥",
+      "diacritic": "́"
+    },
+    "8": {
+      "name": "陽入",
+      "chinese": "重",
+      "vietnamese": "nặng",
+      "number": "3ˀ1",
+      "letter": "˧ˀ˩",
       "diacritic": "̣"
     }
   }

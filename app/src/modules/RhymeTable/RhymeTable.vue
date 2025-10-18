@@ -66,7 +66,11 @@ const { parse } = syllableUtils[language];
 const { show, comparer } = partsUtils[language];
 
 function showPart(value: string, part: any): string {
-  return renderParts(show(value, part, settings.format), settings.format);
+  return renderParts(
+    show(value, part, settings.format),
+    settings.format,
+    language
+  );
 }
 
 type Initial = string;
@@ -88,7 +92,7 @@ const ALL_FINALS = computed<Final[]>(() => [
   )
     .filter((final) => final != ZERO_FINAL)
     .sort(comparer("韻母", settings.finalOrdering as any)),
-  ZERO_FINAL,
+  ...(!["PM", "JP", "KR", "VN"].includes(language) ? [ZERO_FINAL] : []),
 ]);
 
 // precompute once for all cells
@@ -105,7 +109,7 @@ const langIndicesMap = computed<Record<Initial, Record<Final, number[]>>>(
     const usedFilter = filter ?? rhymeTableFilter;
     dictionaryCache.get(language).forEach((entry, index) => {
       if (!usedFilter(entry, index)) return;
-      const syllable = parse(entry.讀音);
+      const syllable = parse(entry.讀音, "pinyin");
       result[syllable.聲母]![getPart(syllable, "韻母")]!.push(index);
     });
     return result;

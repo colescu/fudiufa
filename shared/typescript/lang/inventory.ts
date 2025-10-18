@@ -6,7 +6,12 @@ import { Language } from "./types";
 export function getPhonologicalInventory(language: Language) {
   const { parse } = syllableUtils[language];
   const ALL_SYLLABLES = [
-    ...new Set(dictionaryCache.get(language).map((entry) => entry.讀音)),
+    ...new Set(
+      dictionaryCache
+        .get(language)
+        .map((entry) => entry.讀音)
+        .filter(Boolean)
+    ),
   ];
 
   return {

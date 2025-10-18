@@ -92,7 +92,11 @@ export function getLangFeature(language: Language, field: LangField): Feature {
         getter,
         values,
         shower: (value, settings) =>
-          renderParts(show(value, field, settings.format), settings.format),
+          renderParts(
+            show(value, field, settings.format),
+            settings.format,
+            language
+          ),
       };
   }
 }

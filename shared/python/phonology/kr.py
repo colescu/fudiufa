@@ -241,6 +241,7 @@ class KRSyllable(Syllable):
     IPA_STRICT_MAP["initial"].update(
         {
             "l": "ɾ",
+            "s": "sʰ",
             "ss": "s͈",
             "kk": "k͈",
         }
@@ -257,6 +258,24 @@ class KRSyllable(Syllable):
                 raise ValueError(
                     f"Illegal {part} in Korean syllable {self.ipa_raw}: {getattr(self, part)}."
                 )
+
+    @property
+    def ipa_strict_no_tone(self) -> str:
+        lst = self._list_ipa_strict
+
+        if lst[1] == "j" or lst[2] == "i":
+            for [before, after] in [["sʰ", "ɕ"], ["s͈", "ɕ͈"], ["h", "ç"]]:
+                if lst[0] == before:
+                    lst[0] = after
+                    break
+        if lst[1] == "w" or lst[2] == "u":
+            if lst[0] == "h":
+                lst[0] = "ɸ"
+        if lst[2] == "ɯ":
+            if lst[0] == "h":
+                lst[0] = "x"
+
+        return "".join(lst)
 
     @property
     def hangul(self) -> str:

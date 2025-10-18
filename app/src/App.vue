@@ -54,10 +54,10 @@ trackHasPhrase();
       v-model:show="show"
       @update:show="nextUpdate"
       preset="card"
-      title="更新日誌"
+      :title="`更新 v${currentUpdate.version} (${currentUpdate.date})`"
       style="width: 22em"
     >
-      <div>版本 {{ currentUpdate.version }} ({{ currentUpdate.date }})</div>
+      <div></div>
       <component :is="currentUpdate.component" />
     </n-modal>
   </SimplifiedConverter>

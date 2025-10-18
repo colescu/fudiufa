@@ -86,7 +86,13 @@ const allRecordedFGPronunciations = computed<string[]>(() => [
         v-for="[langEN, langCN] of entriesConst(LANGUAGE_MAP)"
         :key="langEN"
       >
-        <n-space v-if="settings.languages.includes(langEN)" align="center">
+        <n-space
+          v-if="
+            settings.languages.includes(langEN) &&
+            mcEntry.reflex[langEN] != null
+          "
+          align="center"
+        >
           <n-tag size="small" style="margin-right: -0.5em">
             推導{{ langCN }}
           </n-tag>

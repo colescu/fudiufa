@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { DEFAULT_MC_INFO_STYLE } from "@shared/mc";
-import { LANGUAGES } from "@shared/lang";
+import { PARTIAL_LANGUAGES } from "@shared/lang";
 
 export const useSettingsStore = defineStore("settings", {
   state: () => ({
@@ -9,6 +9,15 @@ export const useSettingsStore = defineStore("settings", {
     displayBoth: true,
     pinyinToneNotation: "diacritic" as PinyinToneNotation,
     ipaToneNotation: "letter" as IpaToneNotation,
+    pinyinSettings: {
+      JP: {
+        historical: true,
+        format: "kata",
+      },
+      KR: {
+        format: "hangul",
+      },
+    },
     playSpeed: 500,
     colorizeChar: false,
     dictionary: {
@@ -19,7 +28,7 @@ export const useSettingsStore = defineStore("settings", {
     },
     mcInfoStyle: DEFAULT_MC_INFO_STYLE,
     finalOrdering: ["韻腹", "介音", "韻尾"],
-    languages: [...LANGUAGES],
+    languages: [...PARTIAL_LANGUAGES],
   }),
   persist: true,
 });

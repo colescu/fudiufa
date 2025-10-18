@@ -29,6 +29,14 @@ for lang_en, syllable_cls in SYLLABLE_MAP.items():
             except Exception:
                 print(f"Error parsing {lang_cn} {pron}")
 
+    if lang_en == "JP":
+        modern_syllables = set()
+        for syl in syllables:
+            modern_syl = syllable_cls.historical_to_modern(syl)
+            if modern_syl not in syllables:
+                modern_syllables.add(modern_syl)
+        syllables.update(modern_syllables)
+
     if lang_en == "FG":
 
         def add_syllables(tuples: set[tuple[str, str, str, str]]):
@@ -102,7 +110,17 @@ for lang_en, syllable_cls in SYLLABLE_MAP.items():
             match lang_en:
                 case "JP":
                     for format in ["hira", "kata", "NR", "HR"]:
-                        data[format] = syl.pinyin(format)
+                        data[format] = syl.pinyin(
+                            format,
+                            **(
+                                {"show_small_kana": False}
+                                if format in ["hira", "kata"]
+                                else {}
+                            ),
+                        )
+                    data["modern"] = syllable_cls.historical_to_modern(syl).pinyin(
+                        "kata", **{"show_small_kana": False}
+                    )
                 case "KR":
                     for format in ["hangul", "RR"]:
                         data[format] = syl.pinyin(format)

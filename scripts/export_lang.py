@@ -36,7 +36,10 @@ for lang_en in SYLLABLE_MAP:
                 seen[row["字頭"]] = set()
             seen[row["字頭"]].add(row["小韻號"])
 
-        return {key: row.get(key) for key in COLUMNS}
+        return {
+            key: row.get(key)
+            for key in COLUMNS + (["常見度"] if lang_en == "JP" else [])
+        }
 
     session.cursor.execute(f"SELECT * FROM {lang_cn}")
     dictionary = [to_entry(row) for row in session.data]

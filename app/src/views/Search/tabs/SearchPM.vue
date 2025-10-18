@@ -56,8 +56,7 @@ const searchPM = searchWrapper(async () => {
       target="_blank"
       rel="noopener noreferrer"
       >《現代漢語詞典》</a
-    >
-    。
+    >。
   </Teleport>
 </template>
 

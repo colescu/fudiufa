@@ -16,6 +16,25 @@ function tupleToSyllable([
   return { 聲母, 介音, 韻腹, 韻尾, 聲調 } as Syllable;
 }
 
+// normal for historical, small for modern
+const normalToNormalKana = {
+  や: "ゃ",
+  ゆ: "ゅ",
+  よ: "ょ",
+  ヤ: "ャ",
+  ユ: "ュ",
+  ヨ: "ョ",
+} as const;
+function convertKanaSize(kanas: string, to: "normal" | "small"): string {
+  for (const [normal, small] of Object.entries(normalToNormalKana)) {
+    const [before, after] = to === "small" ? [normal, small] : [small, normal];
+    if (kanas.slice(1).includes(before)) {
+      return kanas[0] + kanas.slice(1).replace(before, after);
+    }
+  }
+  return kanas;
+}
+
 export let syllableUtils: Record<
   Language,
   ReturnType<typeof createSyllableUtils>
@@ -31,7 +50,30 @@ function createSyllableUtils(
   const convert = createConverter(syllables);
   const langToneUtils = toneUtils[language];
 
+  let defaultPinyinFormat = "pinyin";
+  if (language === "JP") {
+    defaultPinyinFormat = "kata";
+  }
+  if (language === "KR") {
+    defaultPinyinFormat = "hangul";
+  }
+
+  const historicalToModernMap: Record<string, string> = {};
+  if (language === "JP") {
+    for (const syllableData of syllables) {
+      // only normal kanas in syllables.json
+      const historical = syllableData.kata as string;
+      const modern = syllableData.modern as string;
+      if (!(historical in historicalToModernMap) && historical !== modern) {
+        historicalToModernMap[historical] = modern;
+      }
+    }
+  }
+
   function parse(value: string, format: Format = "pinyin"): Syllable {
+    if (format === "pinyin") {
+      format = defaultPinyinFormat;
+    }
     try {
       const [syllable, tone] = langToneUtils.parse(value);
       return tupleToSyllable([...convert(syllable, format, "tuple"), tone]);
@@ -44,13 +86,23 @@ function createSyllableUtils(
     value: string,
     to: Format,
     toneNotation: ToneNotation = "ordinal",
-    from: Format = "pinyin"
+    from: Format = "pinyin",
+    historical?: boolean
   ): string {
+    if (from === "pinyin") {
+      from = defaultPinyinFormat;
+    }
     if (toneNotation === "diacritic" && to !== "pinyin") {
       throw new Error("Diacritic tone notation is only for pinyin.");
     }
 
     let [syllable, tone] = langToneUtils.parse(value);
+
+    if (language === "JP" && !historical && from !== "ipaStrict") {
+      syllable = show(syllable, "kata", undefined, from, true);
+      syllable = historicalToModernMap[syllable] ?? syllable;
+      syllable = show(syllable, from, undefined, "kata", true);
+    }
 
     if (to !== from) {
       try {
@@ -58,6 +110,10 @@ function createSyllableUtils(
       } catch (error) {
         console.error(error);
       }
+    }
+
+    if (language === "JP" && !historical) {
+      syllable = convertKanaSize(syllable, "small");
     }
 
     if (tone === "") return syllable;
@@ -77,6 +133,10 @@ function createSyllableUtils(
     format: Format = "pinyin",
     finalOrdering: PartNoTone[] = ["韻腹", "介音", "韻尾"]
   ): (a: string, b: string) => number {
+    if (format === "pinyin") {
+      format = defaultPinyinFormat;
+    }
+
     return getComparer((value: string): number[] => {
       const tuple = parse(value, format);
       return [

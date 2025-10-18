@@ -94,9 +94,10 @@ defineExpose({ hook });
       </p>
 
       <RhymeTable
-        v-if="language === 'FG' && showRhymeTable"
+        v-if="showRhymeTable"
         v-model:is-fullscreen="showRhymeTable"
         :filter="(_, index) => indices!.includes(index)"
+        :language="language"
         no-redundant
         show-count
       />

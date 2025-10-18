@@ -7,11 +7,10 @@ function normalizeTone(
   syllable: string,
   language: Language
 ): string {
+  syllable = syllable.normalize("NFD");
   switch (language) {
     case "FG":
-      if (
-        ["p", "p̚", "t", "t̚", "ʔ", "ʔ̚"].some((coda) => syllable.endsWith(coda))
-      ) {
+      if ("ptʔ̚".split("").some((coda) => syllable.endsWith(coda))) {
         for (const [舒, 入] of ["17", "38"]) {
           if (tone === 舒) {
             tone = 入;
@@ -19,11 +18,10 @@ function normalizeTone(
           }
         }
       }
+      break;
     // CAUTION: cannot detect 6 from 1
     case "GC":
-      if (
-        ["p", "p̚", "t", "t̚", "k", "k̚"].some((coda) => syllable.endsWith(coda))
-      ) {
+      if ("ptk̚".split("").some((coda) => syllable.endsWith(coda))) {
         for (const [舒, 入] of ["17", "38", "69"]) {
           if (tone === 舒) {
             tone = 入;
@@ -33,6 +31,20 @@ function normalizeTone(
       }
       break;
     // case 'MH':
+    case "VN":
+      if (
+        [..."ptkc̚".split(""), "k̟".normalize("NFD"), "ch"].some((coda) =>
+          syllable.endsWith(coda)
+        )
+      ) {
+        for (const [舒, 入] of ["57", "68"]) {
+          if (tone === 舒) {
+            tone = 入;
+            break;
+          }
+        }
+      }
+      break;
   }
   return tone;
 }
@@ -52,6 +64,8 @@ function createToneUtils(
   type ToneNotation = keyof (typeof TONES)[Tone];
 
   function parse(value: string): [string, string] {
+    if (TONES == null) return [value, ""];
+
     value = value.normalize("NFD");
     let tone = "";
     for (const [ordinal, data] of Object.entries(TONES)) {
@@ -70,6 +84,8 @@ function createToneUtils(
   }
 
   function show(value: string, toneNotation: ToneNotation): string {
+    if (TONES == null) return value;
+
     let [syllable, tone] = parse(value);
 
     if (toneNotation === "diacritic") {
@@ -84,11 +100,10 @@ function createToneUtils(
       }
 
       // Ad hoc algorithm for finding diacritic pivot
-      // priority of vowels to put the diacritic
-      // LATER fix for VN
-      const NUCLEUS = "aoêeüuiy";
-
       let position = syllable.length - 1;
+
+      // priority of vowels to put the diacritic
+      const NUCLEUS = "aâăoôơêeüưuiy";
       while (position >= 0 && !NUCLEUS.includes(syllable[position]!)) {
         position--;
       }
@@ -103,6 +118,22 @@ function createToneUtils(
           position--;
         }
       }
+
+      if (language === "VN") {
+        if (["oe"].some((final) => syllable.endsWith(final))) {
+          position = syllable.length - 1;
+        }
+        if (
+          ["eo", "ui", "ưa"].some((final) => syllable.endsWith(final)) ||
+          (syllable.endsWith("ia") && !syllable.includes("gia"))
+        ) {
+          position = syllable.length - 2;
+        }
+        if (syllable.includes("uy") && !syllable.includes("uyê")) {
+          position = syllable.lastIndexOf("y");
+        }
+      }
+
       return (
         syllable.slice(0, position + 1) +
         diacritic +
@@ -120,6 +151,9 @@ export function initToneUtils() {
   const TONES = syllableDataCache.get("tones");
 
   LANGUAGES.forEach((language) => {
-    toneUtils[language] = createToneUtils(TONES[language], language);
+    toneUtils[language] = createToneUtils(
+      TONES[language] ?? { "": {} },
+      language
+    );
   });
 }

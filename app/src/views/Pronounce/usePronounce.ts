@@ -2,8 +2,6 @@ import { useSettingsStore } from "@/stores/settings";
 import { useHistoryStore } from "@/stores/history";
 import { usePronunciation } from "@/composables/usePronunciation";
 import { getLangQueryUtils, Language } from "@shared/lang";
-import { syllableUtils } from "@shared/syllable";
-import { simulateProto } from "@shared/fg/proto";
 import { getLangEntries } from "../Search/typescript/search";
 
 const OPPOSITE_STRATUM_MAP = {
@@ -30,6 +28,7 @@ export function usePronounce(language: Language) {
     );
 
     if (entries.length === 0 && history.pronounce.includePredicted) {
+      // FEATURE add strata in predicted langEntries
       entries = allEntries.filter((entry) => entry.記錄讀音 == null);
     }
     return entries.map(indexOf) as number[];

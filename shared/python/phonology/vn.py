@@ -115,8 +115,8 @@ class VNSyllable(TonedSyllable):
     IPA_STRICT_MAP = deepcopy(TonedSyllable.IPA_STRICT_MAP)
     IPA_STRICT_MAP["initial"].update(
         {
-            "b": "ʔɓ",
-            "d": "ʔɗ",
+            "b": "ɓ",
+            "d": "ɗ",
             "ɕ": "s",
             "ʂ": "s",
             "ð": "z",
@@ -190,9 +190,9 @@ class VNSyllable(TonedSyllable):
             if lst[3] == "k̚":
                 lst[3] = "k͡p̚"  # k̚ʷ
 
-        return "".join(lst)  # TODO: strict IPA
+        return "".join(lst)
 
-    def pinyin(self, tone_diacritic: bool = True) -> str:
+    def pinyin(self, tone_diacritic: bool = False) -> str:
         """
         Example:
             VNSyllable("k", "w", "o", "k", "7") -> "quốc" or "quôc5"

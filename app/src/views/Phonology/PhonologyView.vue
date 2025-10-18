@@ -47,10 +47,14 @@ const modules = import.meta.glob(`./content/compare/*.md`, {
 const languageComponents = fromEntriesConst(
   [...LANGUAGES]
     .filter((language) => language !== "FG")
-    .map((language) => [
-      language,
-      modules[`./content/compare/${language}.md`]!.default,
-    ])
+    .map(
+      (language) =>
+        [
+          language,
+          modules[`./content/compare/${language}.md`]?.default,
+        ] as const
+    )
+    .filter(([language, module]) => module != undefined)
 );
 
 const route = useRoute();

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ValidPredictForm } from "@/views/Phonology/Predict/types";
-import { Language, LANGUAGES } from "@shared/lang";
+import { Language, LANGUAGES, PARTIAL_LANGUAGES } from "@shared/lang";
 import { CODAS } from "@shared/mc";
 import { VariantSettings } from "@shared/fg/variant";
 import { ProtoSettings } from "@shared/fg/proto";
@@ -86,7 +86,7 @@ export const useHistoryStore = defineStore("history", {
         } as ProtoSettings,
       },
     },
-    languageOrdering: [...LANGUAGES] as Language[],
+    languageOrdering: [...PARTIAL_LANGUAGES],
   }),
   persist: true,
 });

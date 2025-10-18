@@ -55,8 +55,7 @@ const searchGC = searchWrapper(async () => {
       target="_blank"
       rel="noopener noreferrer"
       >《廣州話正音字典》</a
-    >
-    。
+    >。
   </Teleport>
 </template>
 

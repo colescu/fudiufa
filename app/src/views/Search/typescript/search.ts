@@ -21,6 +21,11 @@ const langEntryComparer = getComparer((entry: LangEntry): number[] => {
       "異",
       "變調",
       "官",
+      // for JP
+      "慣",
+      "漢",
+      "吳",
+      "唐",
     ].indexOf(entry.層),
     entry.小韻號 ?? Infinity,
     entry.記錄讀音 ? -1 : 1,

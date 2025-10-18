@@ -6,7 +6,7 @@ import {
   getGroup,
   GROUP_OPTIONS,
 } from "@/views/Phonology/Predict/form";
-import { LANGUAGE_MAP } from "@shared/lang";
+import { LANGUAGE_MAP, PARTIAL_LANGUAGES } from "@shared/lang";
 import { FeatureKey, LangFeatureKey } from "@/modules/ReflexTable/types";
 
 import { NSpace, NSelect, NIcon } from "naive-ui";
@@ -23,9 +23,9 @@ const { includeLang } = defineProps<{
 const languageOptions = computed(() => {
   const options = [
     { value: "MC", label: "中古漢語" },
-    ...Object.entries(LANGUAGE_MAP).map(([langEN, langCN]) => ({
+    ...PARTIAL_LANGUAGES.map((langEN) => ({
       value: langEN,
-      label: langCN,
+      label: LANGUAGE_MAP[langEN],
     })),
   ];
   if (includeLang) {

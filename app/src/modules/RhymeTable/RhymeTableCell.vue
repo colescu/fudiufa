@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import { useInjectDiachronicTableState } from "../DiachronicTable/useDiachronicTableState";
 import { getLangQueryUtils, LangEntry, Language } from "@shared/lang";
-import { syllableDataCache } from "@shared/syllable";
+import { syllableDataCache, toneUtils } from "@shared/syllable";
 import { characterComparer } from "@shared/cjk";
 import { precomposeComparer } from "@shared/common/sort";
 
@@ -30,16 +30,16 @@ const entries = computed<LangEntry[]>(() => {
   return langIndices.map(entryAt).filter((entry) => entry != undefined);
 });
 
-// LATERFIX no tone for JP, KR
-const TonesMap = syllableDataCache.get("tones")[language];
+const TonesMap = syllableDataCache.get("tones")[language] ?? { "": {} };
 type Tone = keyof typeof TonesMap & string;
 const entriesByToneMap = computed<Partial<Record<Tone, LangEntry[]>>>(() => {
   const result: Record<Tone, LangEntry[]> = Object.fromEntries(
     Object.keys(TonesMap).map((tone) => [tone, []])
   );
+  const { parse } = toneUtils[language];
   entries.value.forEach((entry) => {
-    const tone = entry.讀音.at(-1) as Tone;
-    result[tone]!.push(entry);
+    const [syllable, tone] = parse(entry.讀音);
+    result[tone as Tone].push(entry);
   });
   Object.entries(result).forEach(([tone, entries]) => {
     if (entries.length === 0) {
@@ -71,7 +71,9 @@ const { updateDiachronicTable } = useInjectDiachronicTableState(
 <template>
   <td>
     <ConstrainedPopover
-      v-if="char && Object.keys(entriesByToneMap).length > 0"
+      v-if="
+        (language !== 'FG' || char) && Object.keys(entriesByToneMap).length > 0
+      "
       class-name="rhyme-table"
       :base-z-index="baseZIndex"
       :whitelist="['.rhyme-table-settings']"
@@ -99,7 +101,7 @@ const { updateDiachronicTable } = useInjectDiachronicTableState(
           :key="tone"
         >
           <div>
-            {{ TonesMap[tone].name }}
+            {{ TonesMap[tone]?.name ?? "" }}
             <DoublePronunciation
               :pronunciation="pronunciation + tone"
               source-format="ipaRaw"

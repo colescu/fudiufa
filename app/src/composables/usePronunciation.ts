@@ -28,10 +28,31 @@ export function usePronunciation(
   ): string {
     toneNotation ??=
       format === "pinyin" && !proto
-        ? ["FG", "PM"].includes(language)
+        ? ["FG", "PM", "VN"].includes(language)
           ? settings.pinyinToneNotation
           : "ordinal"
         : settings.ipaToneNotation;
+    const pinyinSettings = (settings.pinyinSettings as any)[language];
+
+    switch (language) {
+      case "FG":
+        break;
+      case "JP":
+        return showSyllable(
+          pronunciation,
+          format === "pinyin" ? pinyinSettings.format : format,
+          undefined,
+          sourceFormat,
+          pinyinSettings.historical
+        );
+      case "KR":
+        return showSyllable(
+          pronunciation,
+          format === "pinyin" ? pinyinSettings.format : format,
+          undefined,
+          sourceFormat
+        );
+    }
 
     if (language !== "FG") {
       return showSyllable(pronunciation, format, toneNotation, sourceFormat);

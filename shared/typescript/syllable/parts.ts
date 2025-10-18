@@ -27,12 +27,12 @@ export let partsUtils = {} as Record<
 >;
 
 function createPartsUtils(
-  language: Language,
   PARTS: any, // complicated
   ALL_PARTS: Record<PartNoTone, string[]>,
   TONES: {
     [tone: string]: { [label: string]: string };
-  }
+  },
+  language: Language
 ) {
   // CHECK Ad hoc with minimal parts.json
   // from = "ipaRaw"
@@ -40,10 +40,17 @@ function createPartsUtils(
     if (part !== "韻母") {
       if (part === "韻") {
         const tuple = JSON.parse(value);
+        if (language === "KR") {
+          const nucleus = show(tuple[0], "韻腹", format);
+          const coda = show(tuple[1], "韻尾", format);
+          return nucleus + (coda === "無" ? "" : coda);
+        }
         value = tuple.join("");
       }
       if (part === "聲調") {
-        return value + " " + TONES[value]!.name; // 例："0 輕聲"
+        return ["JP", "KR"].includes(language)
+          ? "無"
+          : value + " " + TONES[value]!.name; // 例："1 陰平"
       } else {
         const foundValue = PARTS[format]?.[part]?.[value];
         if (foundValue) {
@@ -64,15 +71,39 @@ function createPartsUtils(
       if (tuple[0] != "" || (language === "PM" && format === "pinyin")) {
         rhyme = rhyme.split(/ [([]/)[0]!;
       }
-      if (language === "PM" && format === "pinyin") {
-        // PM pinyin spelling rules
-        switch (medial + rhyme) {
-          case "uen":
-            return "un";
-          case "uei":
-            return "ui";
-          case "iou":
-            return "iu";
+      // pinyin spelling rules
+      if (format === "pinyin") {
+        switch (language) {
+          case "PM":
+            switch (medial + rhyme) {
+              case "uen":
+                return "un";
+              case "uei":
+                return "ui";
+              case "iou":
+                return "iu";
+            }
+          case "JP":
+            rhyme = rhyme.replace("ii", "ī").replace("uu", "ū");
+            break;
+          case "KR":
+            if (medial.includes("ɰ") && rhyme === "i") {
+              return "ui";
+            }
+            if (medial === "w" && rhyme.startsWith("eo")) {
+              rhyme = rhyme.replace("eo", "o");
+            }
+            break;
+          case "VN":
+            if (
+              medial === "u" &&
+              "aă".split("").some((nucleus) => rhyme.startsWith(nucleus))
+            ) {
+              return "o" + rhyme;
+            }
+            if (medial === "u" && rhyme.startsWith("i")) {
+              return "uy" + rhyme.slice(1);
+            }
         }
       }
       return (medial === "無" ? "" : medial) + rhyme;
@@ -115,27 +146,39 @@ export function initPartsUtils() {
 
   LANGUAGES.forEach((language) => {
     partsUtils[language] = createPartsUtils(
-      language,
       PARTS,
       ALL_PARTS,
-      TONES[language]
+      TONES[language] ?? { "": {} },
+      language
     );
   });
 }
 
 // Ad hoc HTML enriching
-export function renderParts(value: string, format: Format): string {
+export function renderParts(
+  value: string,
+  format: Format,
+  language: Language
+): string {
   if (isChineseCharacter(value.slice(-1))) {
     return value;
   }
 
-  const className = format === "pinyin" ? "pinyin" : "ipa";
+  const className =
+    format === "pinyin"
+      ? ["JP", "KR", "VN"].includes(language)
+        ? "pinyin-jkv"
+        : "pinyin"
+      : "ipa";
 
   // a (b)
   const regexParenthesis = /^([^\s]+) \(([^()]+)\)$/;
   const matchParenthesis = value.match(regexParenthesis);
   if (matchParenthesis) {
     const [, a, b] = matchParenthesis;
+    if (language === "VN" && format === "ipaStrict") {
+      return `<span class="${className}">${a}</span> (<span class="pinyin-vn">${b}</span>)`;
+    }
     return `<span class="${className}">${a}</span> (<span class="${className}">${b}</span>)`;
   }
 

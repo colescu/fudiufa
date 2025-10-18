@@ -3,12 +3,21 @@ import { watch, ref } from "vue";
 import { useSettingsStore } from "@/stores/settings";
 import { useHistoryStore } from "@/stores/history";
 import { getMCQueryUtils, MCInfoStyle, showFinal } from "@shared/mc";
-import { LANGUAGE_MAP, LANGUAGES } from "@shared/lang";
+import { LANGUAGE_MAP, LANGUAGES, PARTIAL_LANGUAGES } from "@shared/lang";
 import { deepCopy, deepEqual, entriesConst } from "@shared/common/object";
 
 import Sortable from "@/components/common/Sortable.vue";
 import CrossBox from "@/components/common/CrossBox.vue";
-import { NSpace, NTag, NCheckboxGroup, NCheckbox, NPopselect } from "naive-ui";
+import {
+  NSpace,
+  NTag,
+  NCheckboxGroup,
+  NCheckbox,
+  NRadioGroup,
+  NRadioButton,
+  NSwitch,
+  NPopselect,
+} from "naive-ui";
 
 const settings = useSettingsStore();
 const history = useHistoryStore();
@@ -198,7 +207,7 @@ watch(comparedLanguages, (value) => {
             @click="settings.mcInfoStyle = deepCopy(style)"
           >
             {{ label }}
-            <Tooltip v-if="comment" marker="?" trigger-style="margin: -0.1em">
+            <Tooltip v-if="comment" marker="?">
               <span v-html="comment" />
             </Tooltip>
             ：{{ mcExample.音韻地位(style) }}
@@ -220,16 +229,105 @@ watch(comparedLanguages, (value) => {
       </Sortable>
     </n-space>
 
-    <n-space align="center">
+    <n-space align="center" :wrap="false">
       <n-tag>比較方言</n-tag>
-      <n-checkbox-group v-model:value="comparedLanguages">
-        <template v-for="[langEN, langCN] of Object.entries(LANGUAGE_MAP)">
-          <n-checkbox
-            v-if="langEN !== 'FG'"
-            :value="langEN"
-            :label="langCN"
-            style="margin-right: 0.3em"
-          />
+      <n-checkbox-group v-model:value="comparedLanguages" style="width: 18em">
+        <template v-for="langEN of PARTIAL_LANGUAGES">
+          <n-checkbox v-if="langEN !== 'FG'" :value="langEN" style="width: 6em">
+            {{ LANGUAGE_MAP[langEN] }}
+
+            <span @click.stop>
+              <Tooltip v-if="!['PM'].includes(langEN)" marker="?">
+                <template v-if="langEN === 'GC'">
+                  拼音方案爲<a
+                    href="https://jyutping.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >粵拼</a
+                  >，但入聲單列。
+                </template>
+
+                <template v-if="langEN === 'SW'">
+                  拼音方案參考<a
+                    href="https://wu-chinese.com/romanization/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >吳語協會</a
+                  >，但標出聲調。本站標準爲中派上海話，不分尖團、不分衣煙、不分來蘭、不分襪麥，但分情琴、分打黨、分肉月、分國骨、分於園、分干官、分困孔、分羣窮。
+                </template>
+
+                <template v-if="langEN === 'MH'">
+                  拼音方案參考<a
+                    href="https://syndict.com/hakka/mandarin_to_hakka/letters.htm"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >薪典</a
+                  >，但統一了入聲韻尾的寫法。
+                </template>
+
+                <template v-if="langEN === 'JP'">
+                  <n-space vertical>
+                    <n-space
+                      align="center"
+                      justify="center"
+                      class="no-simplify"
+                    >
+                      歴史的仮名遣
+                      <n-switch
+                        v-model:value="settings.pinyinSettings.JP.historical"
+                        size="small"
+                        style=""
+                      />
+                    </n-space>
+
+                    <n-space style="gap: 0" vertical>
+                      <n-radio-group
+                        v-model:value="settings.pinyinSettings.JP.format"
+                        name="pinyinFormatJP"
+                        size="small"
+                      >
+                        <n-radio-button value="hira"> ひらがな </n-radio-button>
+                        <n-radio-button value="kata"> カタカナ </n-radio-button>
+                      </n-radio-group>
+                      <n-radio-group
+                        v-model:value="settings.pinyinSettings.JP.format"
+                        name="pinyinFormatJP"
+                        size="small"
+                      >
+                        <n-radio-button value="NR"> 日本式 </n-radio-button>
+                        <n-radio-button value="HR"> Hepburn 式 </n-radio-button>
+                      </n-radio-group>
+                    </n-space>
+
+                    <div class="center-text">
+                      示例：蝶
+                      <Pronunciation
+                        pronunciation="テフ"
+                        format="pinyin"
+                        language="JP"
+                      />
+                    </div>
+                  </n-space>
+                </template>
+
+                <template v-if="langEN === 'KR'">
+                  <n-radio-group
+                    v-model:value="settings.pinyinSettings.KR.format"
+                    name="pinyinFormatKR"
+                    size="small"
+                    style="margin: 0.3em 0"
+                  >
+                    <n-radio-button value="hangul"> 한글 </n-radio-button>
+                    <n-radio-button value="RR"> 羅馬字 </n-radio-button>
+                  </n-radio-group>
+                </template>
+
+                <template v-if="langEN === 'VN'">
+                  本站標準爲河內音。聲調序號依平上去入的順序，即平玄問跌銳重六聲，之後入聲單列。
+                </template>
+              </Tooltip>
+            </span>
+          </n-checkbox>
         </template>
       </n-checkbox-group>
     </n-space>
@@ -243,6 +341,10 @@ watch(comparedLanguages, (value) => {
 </template>
 
 <style scoped>
+:deep(.n-checkbox__label) .popover-target {
+  margin: -0.1em;
+}
+
 .transition {
   transition: color 0.3s ease;
 }

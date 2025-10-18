@@ -46,8 +46,14 @@ const displayedFormat = computed<Format>(() =>
   proto ? "ipaStrict" : format ?? settings.format
 );
 
-const displayedPronunciation = computed<string>(() =>
-  show.value(pronunciation, displayedFormat.value, sourceFormat, mcInfo)
+const displayedPronunciation = computed<string>(
+  () =>
+    show
+      .value(pronunciation, displayedFormat.value, sourceFormat, mcInfo)
+      .replace(
+        /([⁰¹²³⁴⁵⁶⁷⁸⁹])ˀ/g,
+        "$1<sup style='transform: translateY(-0.3em)'>ˀ</sup>"
+      ) // ˀ in sup
 );
 
 const parts = computed(() =>
@@ -59,13 +65,9 @@ const audioControls = computed(() => {
   if (noAudio || language !== "FG") {
     return { play: undefined, isPlaying: ref(false) };
   }
-  const rawPronunciation = show.value(
-    pronunciation,
-    "ipaRaw",
-    sourceFormat,
-    mcInfo,
-    "ordinal"
-  ).replace(/^([pmf])ɿ/, "$1ɨ");
+  const rawPronunciation = show
+    .value(pronunciation, "ipaRaw", sourceFormat, mcInfo, "ordinal")
+    .replace(/^([pmf])ɿ/, "$1ɨ");
   return useAudio(rawPronunciation, message);
 });
 </script>
@@ -73,16 +75,21 @@ const audioControls = computed(() => {
 <template>
   <span
     :class="[
-      displayedFormat === 'pinyin' ? 'pinyin' : 'ipa',
+      displayedFormat === 'pinyin'
+        ? ['JP', 'KR', 'VN'].includes(language)
+          ? 'pinyin-jkv'
+          : 'pinyin'
+        : 'ipa',
       { clickable: audioControls.play !== undefined },
       { playing: audioControls.isPlaying.value },
     ]"
     style="font-weight: normal; transition: color 0.3s"
     @click="audioControls.play"
   >
-    <template v-if="!isSeparate">
-      {{ displayedPronunciation }}
-    </template>
+    <span
+      v-if="!isSeparate || parts[0] === displayedPronunciation"
+      v-html="displayedPronunciation"
+    />
     <template v-else>
       <span class="initial">{{ parts[0] }}</span>
       <span class="final">{{ parts[1] }}</span>
