@@ -1,6 +1,7 @@
 from .syllable import Syllable
 from .fg import FGSyllable
 from .pm import PMSyllable
+from .nm import NMSyllable
 from .gc import GCSyllable
 from .sw import SWSyllable
 from .mh import MHSyllable
@@ -13,6 +14,7 @@ from .vn import VNSyllable
 SYLLABLE_MAP: dict[str, type[Syllable]] = {
     "FG": FGSyllable,
     "PM": PMSyllable,
+    "NM": NMSyllable,
     "GC": GCSyllable,
     "SW": SWSyllable,
     "MH": MHSyllable,
@@ -26,6 +28,7 @@ __all__ = [
     "SYLLABLE_MAP",
     "FGSyllable",
     "PMSyllable",
+    "NMSyllable",
     "GCSyllable",
     "SWSyllable",
     "MHSyllable",

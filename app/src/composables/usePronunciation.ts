@@ -28,7 +28,7 @@ export function usePronunciation(
   ): string {
     toneNotation ??=
       format === "pinyin" && !proto
-        ? ["FG", "PM", "VN"].includes(language)
+        ? ["FG", "NM", "PM", "VN"].includes(language)
           ? settings.pinyinToneNotation
           : "ordinal"
         : settings.ipaToneNotation;

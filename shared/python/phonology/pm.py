@@ -144,8 +144,6 @@ class PMSyllable(TonedSyllable):
         lst = self._list_ipa_strict
         if self.initial == "h":
             lst[0] = "x"
-        if self.nucleus == "u" and self.coda == "ŋ":
-            lst[2] = "ʊ"
         if "".join(lst[1:4]) in ["jen", "ɥen"]:
             lst[2] = "ɛ"
         return "".join(lst)

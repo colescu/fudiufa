@@ -44,19 +44,26 @@ watch(form, () => {
     <template v-if="route.path === ROUTES_MAP.predict">
       推導器只考慮理論推導音，無視例外。<br />
       出現頻度依《廣韻》字數。<br />
-      推導普通話、廣州話的數據來自
+      推導普通話、廣州話的數據主要來自
       <a
         href="https://en.wiktionary.org/wiki/Module:ltc-pron/predict"
         target="_blank"
         rel="noopener noreferrer"
         >Wiktionary</a
       >。<br />
-      推導上海話（主流層）的數據來自
+      推導上海話（中派）的數據來自
       <a
         href="https://zhuanlan.zhihu.com/p/386456940"
         target="_blank"
         rel="noopener noreferrer"
         >Nyoeghau</a
+      >。<br />
+      推導南京話（老派）的數據來自
+      <a
+        href="https://zhuanlan.zhihu.com/p/391166351"
+        target="_blank"
+        rel="noopener noreferrer"
+        >uliloewi</a
       >。<br />
       其餘推導數據爲筆者本人整理。<br />
       推導撫州話（老文讀）的規則見

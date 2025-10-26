@@ -12,7 +12,9 @@ export function createConverter<R extends Record<string, unknown>>(
   } = fromEntriesConst(
     (Object.keys(data[0]!) as Label[]).map((label) => [
       label,
-      // CAUTION: ipaStrict not unique for JP, VN
+      // CAUTION:
+      //   pinyin not unique for NM (checked tone)
+      //   ipaStrict not unique for JP, VN
       getStrictIndexFinder(
         data.map((item) => item[label]),
         keyGetter

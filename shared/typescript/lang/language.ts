@@ -3,6 +3,7 @@ import { Language } from "./types";
 export const LANGUAGE_MAP: Record<Language, string> = {
   FG: "撫州話",
   PM: "普通話",
+  NM: "南京話",
   GC: "廣州話",
   SW: "上海話",
   MH: "梅縣話",
@@ -15,4 +16,4 @@ export const LANGUAGES = Object.keys(LANGUAGE_MAP) as readonly Language[];
 export const PARTIAL_LANGUAGES =
   localStorage.getItem("user") === "colescu"
     ? LANGUAGES
-    : (["FG", "PM", "GC", "SW"] as readonly Language[]);
+    : (["FG", "PM", "NM", "GC", "SW"] as readonly Language[]);

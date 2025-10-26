@@ -1,6 +1,15 @@
 import { MCInfo } from "../mc";
 
-export type Language = "FG" | "PM" | "GC" | "SW" | "MH" | "JP" | "KR" | "VN";
+export type Language =
+  | "FG"
+  | "PM"
+  | "NM"
+  | "GC"
+  | "SW"
+  | "MH"
+  | "JP"
+  | "KR"
+  | "VN";
 
 // pronunciations all in pinyin
 export interface LangEntry {

@@ -238,6 +238,16 @@ watch(comparedLanguages, (value) => {
 
             <span @click.stop>
               <Tooltip v-if="!['PM'].includes(langEN)" marker="?">
+                <template v-if="langEN === 'NM'">
+                  拼音方案參考
+                  <a
+                    href="https://uliloewi.github.io/LangJinPinIn"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >uliloewi</a
+                  >。本站標準爲老南京話，分尖團，有撮口呼。
+                </template>
+
                 <template v-if="langEN === 'GC'">
                   拼音方案爲<a
                     href="https://jyutping.org"

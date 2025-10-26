@@ -83,6 +83,7 @@ function createPartsUtils(
               case "iou":
                 return "iu";
             }
+            break;
           case "JP":
             rhyme = rhyme.replace("ii", "ī").replace("uu", "ū");
             break;

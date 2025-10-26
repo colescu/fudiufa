@@ -99,11 +99,16 @@ function createToneUtils(
         return (syllable[0] + diacritic).normalize("NFC") + syllable.slice(1);
       }
 
+      // NM checked tone
+      if (language === "NM" && tone === "5") {
+        return syllable + "h";
+      }
+
       // Ad hoc algorithm for finding diacritic pivot
       let position = syllable.length - 1;
 
       // priority of vowels to put the diacritic
-      const NUCLEUS = "aâăoôơêeüưuiy";
+      const NUCLEUS = "aäâăoôơêeüưuiyr";
       while (position >= 0 && !NUCLEUS.includes(syllable[position]!)) {
         position--;
       }

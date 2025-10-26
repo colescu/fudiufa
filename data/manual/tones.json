@@ -17,6 +17,14 @@
     "4": { "name": "去聲", "number": "51", "letter": "˥˩", "diacritic": "̀" },
     "": { "name": "未知", "number": "", "letter": "", "diacritic": "" }
   },
+  "NM": {
+    "0": { "name": "輕聲", "number": "", "letter": "", "diacritic": "" },
+    "1": { "name": "陰平", "number": "31", "letter": "˧˩", "diacritic": "̀" },
+    "2": { "name": "陽平", "number": "13", "letter": "˩˧", "diacritic": "́" },
+    "3": { "name": "上聲", "number": "212", "letter": "˨˩˨", "diacritic": "̌" },
+    "4": { "name": "去聲", "number": "44", "letter": "˦", "diacritic": "̄" },
+    "5": { "name": "入聲", "number": "5", "letter": "˥", "diacritic": "" }
+  },
   "GC": {
     "0": { "name": "輕聲", "number": "", "letter": "" },
     "1": { "name": "陰平", "number": "55", "letter": "˥" },

@@ -112,6 +112,11 @@ function createSyllableUtils(
       }
     }
 
+    // fix NM duplicate pinyin
+    if (language === "NM" && tone !== "5") {
+      syllable = syllable.replace(/(ʔ|ʔ̚)$/, "");
+    }
+
     if (language === "JP" && !historical) {
       syllable = convertKanaSize(syllable, "small");
     }
