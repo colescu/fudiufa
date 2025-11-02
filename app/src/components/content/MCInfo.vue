@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useSettingsStore } from "@/stores/settings";
-import { getMCQueryUtils, MCEntry, strataCache } from "@shared/mc";
-import { getLangQueryUtils, Language, LANGUAGE_MAP } from "@shared/lang";
-import { entriesConst } from "@shared/common/object";
+import { getMCQueryUtils, MCEntry } from "@shared/mc";
+import {
+  getLangQueryUtils,
+  getReflexMapByMC,
+  Language,
+  LANGUAGE_MAP,
+  LANGUAGES,
+} from "@shared/lang";
+import { entriesConst, fromEntriesConst } from "@shared/common/object";
 
 import ConstrainedPopover from "@/components/common/ConstrainedPopover.vue";
 import { NSpace, NTag, type PopoverTrigger } from "naive-ui";
@@ -26,36 +32,20 @@ const mcEntry = computed<MCEntry>(() =>
     : mcEntryProp
 );
 
-const otherStrata = computed<
-  Partial<
-    Record<
-      Language,
-      // { stratum: pronunciation }
-      Record<string, string>
-    >
+const strataMap = computed<
+  Record<
+    Language,
+    // { stratum: pronunciation }
+    Record<string, string>
   >
->(() => {
-  const STRATA = strataCache.get();
-  const mcIndex = getMCQueryUtils().indexOf(mcEntry.value)!;
-  return Object.fromEntries(
-    ["FG", "SW"].map((language) => [
+>(() =>
+  fromEntriesConst(
+    LANGUAGES.map((language) => [
       language,
-      ((STRATA[language][mcIndex] as [string, string][]) ?? []).reduce(
-        (acc, [stratum, pronunciation]) => {
-          if ("白文".includes(stratum)) {
-            stratum += "讀";
-          }
-          if ("新老".includes(stratum)) {
-            stratum += "派";
-          }
-          acc[stratum] = pronunciation;
-          return acc;
-        },
-        {} as Record<string, string>
-      ),
+      getReflexMapByMC(mcEntry.value, language),
     ])
-  );
-});
+  )
+);
 
 const allRecordedFGPronunciations = computed<string[]>(() => [
   ...new Set(
@@ -67,6 +57,13 @@ const allRecordedFGPronunciations = computed<string[]>(() => [
       .map((langEntry) => langEntry.記錄讀音!)
   ),
 ]);
+
+const STRATA_LABEL_MAP = {
+  白: "白讀",
+  文: "文讀",
+  新: "新派",
+  老: "老派",
+} as const;
 </script>
 
 <template>
@@ -99,35 +96,40 @@ const allRecordedFGPronunciations = computed<string[]>(() => [
 
           <div>
             <DoublePronunciation
-              :pronunciation="mcEntry.reflex[langEN]!"
+              :pronunciation="mcEntry.reflex[langEN]"
               :language="langEN"
             />
 
             <Tooltip
               v-if="
-                otherStrata[langEN] &&
-                Object.keys(otherStrata[langEN]).length > 0
+                strataMap[langEN] && Object.keys(strataMap[langEN]).length > 1
               "
               marker="…"
               :trigger-style="{ marginLeft: '0.3em' }"
             >
               <n-space style="gap: 0" vertical>
-                <div
+                <template
                   v-for="[stratum, pronunciation] of Object.entries(
-                    otherStrata[langEN]
+                    strataMap[langEN]
                   )"
                 >
-                  {{ stratum }}
-                  <DoublePronunciation
-                    :pronunciation="pronunciation"
-                    :language="langEN"
-                    :class="{
-                      gray:
-                        langEN === 'FG' &&
-                        !allRecordedFGPronunciations.includes(pronunciation),
-                    }"
-                  />
-                </div>
+                  <div v-if="stratum !== ''">
+                    {{
+                      STRATA_LABEL_MAP[stratum as keyof typeof STRATA_LABEL_MAP]
+                    }}
+                    <DoublePronunciation
+                      :pronunciation="pronunciation"
+                      :language="langEN"
+                      :class="{
+                        // disabled
+                        gray:
+                          false &&
+                          langEN === 'FG' &&
+                          !allRecordedFGPronunciations.includes(pronunciation),
+                      }"
+                    />
+                  </div>
+                </template>
               </n-space>
             </Tooltip>
           </div>

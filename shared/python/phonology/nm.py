@@ -62,8 +62,8 @@ class NMSyllable(TonedSyllable):
             "iao": ("j", "ɔ", ""),
             "ou": ("", "ə", "u"),
             "iou": ("j", "ə", "u"),
-            "iän": ("j", "e", "ŋ"),
-            "üän": ("ɥ", "e", "ŋ"),
+            "iän": ("j", "ɛ", "ŋ"),
+            "üän": ("ɥ", "ɛ", "ŋ"),
             "en": ("", "ə", "ŋ"),
             "uen": ("w", "ə", "ŋ"),
             "in": ("", "i", "ŋ"),
@@ -152,6 +152,8 @@ class NMSyllable(TonedSyllable):
             lst[3] = "ɯ"
         if lst[3] == "ŋ":
             lst[3] = ""
+            if lst[2] == "ɛ":
+                lst[2] = "e"
             lst[2] = normalize("NFC", lst[2] + "̃")
         return "".join(lst)
 

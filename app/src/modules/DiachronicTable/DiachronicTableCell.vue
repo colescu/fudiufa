@@ -85,14 +85,25 @@ const exceptions = computed<LangEntry[]>(() =>
       .map(getLangQueryUtils(language).entryAt) as LangEntry[]
   ).filter(
     testException ??
-      ((entry) => entry.層 !== "官" && entry.記錄讀音 !== entry.推導讀音)
+      ((entry) =>
+        entry.層 !== "官" &&
+        entry.記錄讀音 !== entry.推導讀音 &&
+        !(
+          // PM 清入 reflex no tone
+          (
+            language === "PM" &&
+            isNaN(Number(entry.推導讀音?.at(-1))) &&
+            entry.記錄讀音?.slice(0, -1) === entry.推導讀音
+          )
+        ))
   )
 );
 
 const toneExceptions = computed<LangEntry[]>(() =>
   exceptions.value.filter(
     (entry) =>
-      !isNaN(Number(entry.讀音.at(-1))) &&
+      !isNaN(Number(entry.記錄讀音?.at(-1))) &&
+      !isNaN(Number(entry.推導讀音?.at(-1))) &&
       entry.記錄讀音?.replace(/\d/g, "") === entry.推導讀音?.replace(/\d/g, "")
   )
 );
@@ -150,7 +161,10 @@ const characterMap = computed<
     :class="{
       // highlight cells different from default reflex
       'table-highlight':
-        highlightStratum && displayedPronunciation !== reflexMap?.[''],
+        language === 'FG'
+          ? highlightStratum && displayedPronunciation !== reflexMap?.['']
+          : // for personal use
+            reflexMap && Object.keys(reflexMap).length > 1,
     }"
   >
     <span

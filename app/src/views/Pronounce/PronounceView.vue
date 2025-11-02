@@ -37,32 +37,36 @@ function resetChoices() {
 }
 
 watch(input, (newValue, oldValue) => {
+  // for utf-16
+  const newPoints = [...newValue];
+  const oldPoints = oldValue ? [...oldValue] : null;
+
   const indices = indicesArray.value.map(getPreferredIndex);
 
-  if (oldValue) {
+  if (oldPoints) {
     let left = 0,
       right = 0;
-    while (left < newValue.length && newValue[left] === oldValue[left]) {
+    while (left < newPoints.length && newPoints[left] === oldPoints[left]) {
       left += 1;
     }
     while (
-      right < Math.min(newValue.length, oldValue.length) - left &&
-      newValue[newValue.length - 1 - right] ===
-        oldValue[oldValue.length - 1 - right]
+      right < Math.min(newPoints.length, oldPoints.length) - left &&
+      newPoints[newPoints.length - 1 - right] ===
+        oldPoints[oldPoints.length - 1 - right]
     ) {
       right += 1;
     }
 
     outputChoices.value = [
       ...outputChoices.value.slice(0, left),
-      ...indices.slice(left, newValue.length - right),
-      ...outputChoices.value.slice(oldValue.length - right),
+      ...indices.slice(left, newPoints.length - right),
+      ...outputChoices.value.slice(oldPoints.length - right),
     ];
   } else {
     outputChoices.value = indices;
   }
 
-  if (newValue.length >= TEXT_LIMIT) {
+  if (newPoints.length >= TEXT_LIMIT) {
     message.warning("字数已达上限！");
   }
 });
@@ -143,7 +147,7 @@ const isDev = __IS_DEV__;
     <div style="position: relative">
       <n-card id="output">
         <InterlinearBlock
-          v-for="(char, index) in input"
+          v-for="(char, index) in [...input]"
           :key="index"
           :char="char"
           :indices="indicesArray[index]!"
