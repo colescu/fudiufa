@@ -31,22 +31,39 @@ function getReflex(
 function toLangEntry(
   row: Omit<LangEntry, "讀音" | "推導讀音" | "MC" | "language">,
   language: Language
-): LangEntry {
-  const 推導讀音 = getReflex(row, language);
-  return {
-    ...row,
-    推導讀音,
-    讀音: row.記錄讀音 ?? 推導讀音!,
-    釋義: row.釋義?.replace("~", "～") ?? null,
-    get MC() {
-      return getMCEntry.call(this)?.MC || null;
-    },
-    language,
-  };
+): LangEntry[] {
+  if (row["記錄讀音"] != null) {
+    const 推導讀音 = getReflex(row, language);
+    return [
+      {
+        ...row,
+        推導讀音,
+        讀音: row.記錄讀音,
+        釋義: row.釋義?.replace("~", "～") ?? null,
+        get MC() {
+          return getMCEntry.call(this)?.MC || null;
+        },
+        language,
+      },
+    ];
+  } else {
+    const reflexMap = getReflexMapByMC(row.小韻號!, language);
+    return Object.entries(reflexMap).map(([stratum, reflex]) => ({
+      ...row,
+      推導讀音: reflex,
+      讀音: reflex,
+      釋義: null,
+      層: stratum || null,
+      get MC() {
+        return getMCEntry.call(this)?.MC || null;
+      },
+      language,
+    }));
+  }
 }
 
 export const dictionaryCache = createCache(
   (language: Language) => fetchFile(language, "json"),
   (array: Omit<LangEntry, "讀音" | "MC">[], args) =>
-    array.map((row) => toLangEntry(row, args![0]))
+    array.map((row) => toLangEntry(row, args![0])).flat()
 );

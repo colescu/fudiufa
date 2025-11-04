@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { DEFAULT_MC_INFO_STYLE } from "@shared/mc";
+import { DEFAULT_MC_INFO_STYLE, MCPinyinFormat } from "@shared/mc";
 import { PARTIAL_LANGUAGES } from "@shared/lang";
 
 export const useSettingsStore = defineStore("settings", {
@@ -8,7 +8,10 @@ export const useSettingsStore = defineStore("settings", {
     format: "pinyin" as Format, // preferred representation
     displayBoth: true,
     pinyinToneNotation: "diacritic" as PinyinToneNotation,
+    unifyOrdinalTone: false,
     ipaToneNotation: "letter" as IpaToneNotation,
+    playSpeed: 500,
+    colorizeChar: false,
     pinyinSettings: {
       JP: {
         historical: true,
@@ -18,8 +21,6 @@ export const useSettingsStore = defineStore("settings", {
         format: "hangul",
       },
     },
-    playSpeed: 500,
-    colorizeChar: false,
     dictionary: {
       disable: {
         官: false,
@@ -27,6 +28,7 @@ export const useSettingsStore = defineStore("settings", {
       },
     },
     mcInfoStyle: DEFAULT_MC_INFO_STYLE,
+    mcPinyinFormat: "tshet-uinh" as MCPinyinFormat,
     finalOrdering: ["韻腹", "介音", "韻尾"],
     languages: [...PARTIAL_LANGUAGES],
   }),

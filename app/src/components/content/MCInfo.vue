@@ -79,6 +79,13 @@ const STRATA_LABEL_MAP = {
     </template>
 
     <n-space vertical style="gap: 0.2em">
+      <n-space align="center">
+        <n-tag size="small" style="margin-right: -0.5em">中古拼音</n-tag>
+        <span class="pinyin-mc">
+          {{ mcEntry.MC.拼音[settings.mcPinyinFormat] }}
+        </span>
+      </n-space>
+
       <template
         v-for="[langEN, langCN] of entriesConst(LANGUAGE_MAP)"
         :key="langEN"

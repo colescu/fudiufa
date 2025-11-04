@@ -1,12 +1,11 @@
-"""Updates 推導撫州話 in hanzi.sqlite3.
-
-LATER other langs
-"""
+"""Updates 推導{lang} in hanzi.sqlite3 using `shared/python/predict`."""
 
 from updater import Updater
 
 
-session = Updater()
-session.update_reflex()
-session.compare_inventories()
-del session
+for lang_en in ['FG', 'MH']:
+    session = Updater(lang_en=lang_en)
+    session.update_reflex()
+    if lang_en == 'FG':
+        session.compare_inventories()
+    del session

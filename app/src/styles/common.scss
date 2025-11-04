@@ -76,8 +76,12 @@ ruby.under {
   /* color: var(--light-black); */
 }
 
+.pinyin-mc,
 .pinyin-jkv {
   font-family: "Noto Sans", sans-serif;
+}
+.pinyin-mc {
+  font-style: italic;
 }
 
 .ipa {

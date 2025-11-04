@@ -55,6 +55,9 @@ export function usePronunciation(
     }
 
     if (language !== "FG") {
+      if (settings.unifyOrdinalTone && toneNotation === "ordinal") {
+        toneNotation = "unified_ordinal" as any;
+      }
       return showSyllable(pronunciation, format, toneNotation, sourceFormat);
     }
 

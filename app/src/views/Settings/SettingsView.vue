@@ -142,7 +142,7 @@ watch(comparedLanguages, (value) => {
     vertical
   >
     <n-space align="center">
-      <n-tag>禁用新派</n-tag>
+      <n-tag>禁用新派音</n-tag>
       <CrossBox v-model:checked="settings.dictionary.disable.官">
         普化音
       </CrossBox>
@@ -162,7 +162,7 @@ watch(comparedLanguages, (value) => {
 
     <n-space vertical>
       <n-space align="center">
-        <n-tag>音韻地位</n-tag>
+        <n-tag>中古音韻</n-tag>
         <Sortable v-model="settings.mcInfoStyle.ordering" v-slot="{ item }">
           <ruby
             class="under draggable transition"
@@ -207,12 +207,50 @@ watch(comparedLanguages, (value) => {
             @click="settings.mcInfoStyle = deepCopy(style)"
           >
             {{ label }}
-            <Tooltip v-if="comment" marker="?">
+            <Tooltip v-if="comment" marker="?" click-stop>
               <span v-html="comment" />
             </Tooltip>
             ：{{ mcExample.音韻地位(style) }}
           </n-checkbox>
         </n-space>
+      </n-space>
+
+      <n-space align="center" style="margin-left: 1em">
+        拼音方案
+        <n-radio-group
+          v-model:value="settings.mcPinyinFormat"
+          name="mcPinyinFormat"
+          size="small"
+        >
+          <n-radio-button value="tshet-uinh">
+            切韻拼音
+            <Tooltip marker="?" click-stop>
+              <a
+                href="https://phesoca.com/tupa/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >切韻拼音</a
+              >
+            </Tooltip>
+          </n-radio-button>
+          <n-radio-button value="baxter">
+            白一平轉寫
+            <Tooltip marker="?" click-stop>
+              <ul>
+                <li>
+                  W. H. Baxter,
+                  <i>A Handbook of Old Chinese Phonology</i>, De Gruyter Mouton
+                  (1992)
+                </li>
+                <li>
+                  W. H. Baxter & L. Sagart,
+                  <i>Old Chinese: A New Reconstruction</i>, Oxford University
+                  Press (2014)
+                </li>
+              </ul>
+            </Tooltip>
+          </n-radio-button>
+        </n-radio-group>
       </n-space>
     </n-space>
 
@@ -236,110 +274,120 @@ watch(comparedLanguages, (value) => {
           <n-checkbox v-if="langEN !== 'FG'" :value="langEN" style="width: 6em">
             {{ LANGUAGE_MAP[langEN] }}
 
-            <span @click.stop>
-              <Tooltip v-if="!['PM'].includes(langEN)" marker="?">
-                <template v-if="langEN === 'NM'">
-                  拼音方案參考
-                  <a
-                    href="https://uliloewi.github.io/LangJinPinIn"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    >uliloewi</a
-                  >。本站標準爲老南京話，分尖團，有撮口呼。
-                </template>
+            <Tooltip marker="?" click-stop>
+              <template v-if="langEN === 'PM'">
+                本站視作等同於北京話。
+              </template>
 
-                <template v-if="langEN === 'GC'">
-                  拼音方案爲<a
-                    href="https://jyutping.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    >粵拼</a
-                  >，但入聲單列。
-                </template>
+              <template v-if="langEN === 'NM'">
+                拼音方案參考
+                <a
+                  href="https://uliloewi.github.io/LangJinPinIn/PinInFangAng.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >uliloewi</a
+                >。本站標準爲老派音，分尖團、分平翹、有撮口呼。
+              </template>
 
-                <template v-if="langEN === 'SW'">
-                  拼音方案參考<a
-                    href="https://wu-chinese.com/romanization/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    >吳語協會</a
-                  >，但標出聲調。本站標準爲中派上海話，不分尖團、不分衣煙、不分來蘭、不分襪麥，但分情琴、分打黨、分肉月、分國骨、分於園、分干官、分困孔、分羣窮。
-                </template>
+              <template v-if="langEN === 'GC'">
+                拼音方案爲<a
+                  href="https://jyutping.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >粵拼</a
+                >，但入聲單列。
+              </template>
 
-                <template v-if="langEN === 'MH'">
-                  拼音方案參考<a
-                    href="https://syndict.com/hakka/mandarin_to_hakka/letters.htm"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    >薪典</a
-                  >，但統一了入聲韻尾的寫法。
-                </template>
+              <template v-if="langEN === 'SW'">
+                拼音方案參考<a
+                  href="https://wu-chinese.com/romanization/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >吳語協會</a
+                >，但標出聲調。本站標準爲中派音，不分尖團、不分衣煙、不分來蘭、不分襪麥，但分情琴、分打黨、分肉月、分國骨、分於園、分干官、分困孔、分羣窮。
+              </template>
 
-                <template v-if="langEN === 'JP'">
-                  <n-space vertical>
-                    <n-space
-                      align="center"
-                      justify="center"
-                      class="no-simplify"
-                    >
-                      歴史的仮名遣
-                      <n-switch
-                        v-model:value="settings.pinyinSettings.JP.historical"
-                        size="small"
-                        style=""
-                      />
-                    </n-space>
+              <template v-if="langEN === 'MH'">
+                拼音方案參考<a
+                  href="https://syndict.com/hakka/mandarin_to_hakka/letters.htm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >薪典</a
+                >，但統一了入聲韻尾的寫法。
+              </template>
 
-                    <n-space style="gap: 0" vertical>
-                      <n-radio-group
-                        v-model:value="settings.pinyinSettings.JP.format"
-                        name="pinyinFormatJP"
-                        size="small"
-                      >
-                        <n-radio-button value="hira"> ひらがな </n-radio-button>
-                        <n-radio-button value="kata"> カタカナ </n-radio-button>
-                      </n-radio-group>
-                      <n-radio-group
-                        v-model:value="settings.pinyinSettings.JP.format"
-                        name="pinyinFormatJP"
-                        size="small"
-                      >
-                        <n-radio-button value="NR"> 日本式 </n-radio-button>
-                        <n-radio-button value="HR"> Hepburn 式 </n-radio-button>
-                      </n-radio-group>
-                    </n-space>
-
-                    <div class="center-text">
-                      示例：蝶
-                      <Pronunciation
-                        pronunciation="テフ"
-                        format="pinyin"
-                        language="JP"
-                      />
-                    </div>
+              <template v-if="langEN === 'JP'">
+                <n-space vertical>
+                  <n-space align="center" justify="center" class="no-simplify">
+                    歴史的仮名遣
+                    <n-switch
+                      v-model:value="settings.pinyinSettings.JP.historical"
+                      size="small"
+                      style=""
+                    />
                   </n-space>
-                </template>
 
-                <template v-if="langEN === 'KR'">
-                  <n-radio-group
-                    v-model:value="settings.pinyinSettings.KR.format"
-                    name="pinyinFormatKR"
-                    size="small"
-                    style="margin: 0.3em 0"
-                  >
-                    <n-radio-button value="hangul"> 한글 </n-radio-button>
-                    <n-radio-button value="RR"> 羅馬字 </n-radio-button>
-                  </n-radio-group>
-                </template>
+                  <n-space style="gap: 0" vertical>
+                    <n-radio-group
+                      v-model:value="settings.pinyinSettings.JP.format"
+                      name="pinyinFormatJP"
+                      size="small"
+                    >
+                      <n-radio-button value="hira"> ひらがな </n-radio-button>
+                      <n-radio-button value="kata"> カタカナ </n-radio-button>
+                    </n-radio-group>
+                    <n-radio-group
+                      v-model:value="settings.pinyinSettings.JP.format"
+                      name="pinyinFormatJP"
+                      size="small"
+                    >
+                      <n-radio-button value="NR"> 日本式 </n-radio-button>
+                      <n-radio-button value="HR"> Hepburn 式 </n-radio-button>
+                    </n-radio-group>
+                  </n-space>
 
-                <template v-if="langEN === 'VN'">
-                  本站標準爲河內音。聲調序號依平上去入的順序，即平玄問跌銳重六聲，之後入聲單列。
-                </template>
-              </Tooltip>
-            </span>
+                  <div class="center-text">
+                    示例：蝶
+                    <Pronunciation
+                      pronunciation="テフ"
+                      format="pinyin"
+                      language="JP"
+                    />
+                  </div>
+                </n-space>
+              </template>
+
+              <template v-if="langEN === 'KR'">
+                <n-radio-group
+                  v-model:value="settings.pinyinSettings.KR.format"
+                  name="pinyinFormatKR"
+                  size="small"
+                  style="margin: 0.3em 0"
+                >
+                  <n-radio-button value="hangul"> 한글 </n-radio-button>
+                  <n-radio-button value="RR"> 羅馬字 </n-radio-button>
+                </n-radio-group>
+              </template>
+
+              <template v-if="langEN === 'VN'">
+                本站標準爲河內音。聲調序號依平上去入的順序，即平玄問跌銳重六聲，之後入聲單列。
+              </template>
+            </Tooltip>
           </n-checkbox>
         </template>
       </n-checkbox-group>
+    </n-space>
+
+    <n-space align="center" style="margin-left: 10em">
+      <span>
+        統一調號
+        <Tooltip marker="?">
+          即按照平上去入與陰陽的順序統一標號爲 1~8 ，例如廣州話九調分別爲 1, 3,
+          5, 2, 4, 6, 7a, 7b, 8
+          。撫州話、上海話、越南音的調號已經如此。該設置僅影響拼音顯示。
+        </Tooltip>
+      </span>
+      <n-switch v-model:value="settings.unifyOrdinalTone" />
     </n-space>
 
     <Teleport to="#help">

@@ -28,7 +28,6 @@ export function usePronounce(language: Language) {
     );
 
     if (entries.length === 0 && history.pronounce.includePredicted) {
-      // FEATURE add strata in predicted langEntries
       entries = allEntries.filter((entry) => entry.記錄讀音 == null);
     }
     return entries.map(indexOf) as number[];

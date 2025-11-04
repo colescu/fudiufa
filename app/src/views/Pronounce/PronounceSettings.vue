@@ -170,7 +170,7 @@ watch(
             >&nbsp;<Reference to="variations#脣音-ɿt-ɿn" @click.stop />
           </n-checkbox>
         </div>
-        <!-- LATER 貝類字 變讀 -->
+        <!-- LATER 貝類字 變讀 分止 & 蟹三四 -->
       </n-space>
 
       <n-space align="center">

@@ -1,64 +1,285 @@
 {
   "FG": {
-    "0": { "name": "輕聲", "number": "", "letter": "", "diacritic": "" },
-    "1": { "name": "陰平", "number": "22", "letter": "˨", "diacritic": "̄" },
-    "2": { "name": "陽平", "number": "24", "letter": "˨˦", "diacritic": "́" },
-    "3": { "name": "上聲", "number": "45", "letter": "˦˥", "diacritic": "̂" },
-    "5": { "name": "陰去", "number": "52", "letter": "˥˨", "diacritic": "̀" },
-    "6": { "name": "陽去", "number": "22", "letter": "˨", "diacritic": "̄" },
-    "7": { "name": "陰入", "number": "2", "letter": "˨", "diacritic": "̄" },
-    "8": { "name": "陽入", "number": "5", "letter": "˥", "diacritic": "̂" }
+    "0": {
+      "name": "輕聲",
+      "unified_ordinal": "0",
+      "number": "",
+      "letter": "",
+      "diacritic": ""
+    },
+    "1": {
+      "name": "陰平",
+      "unified_ordinal": "1",
+      "number": "22",
+      "letter": "˨",
+      "diacritic": "̄"
+    },
+    "2": {
+      "name": "陽平",
+      "unified_ordinal": "2",
+      "number": "24",
+      "letter": "˨˦",
+      "diacritic": "́"
+    },
+    "3": {
+      "name": "上聲",
+      "unified_ordinal": "3",
+      "number": "45",
+      "letter": "˦˥",
+      "diacritic": "̂"
+    },
+    "5": {
+      "name": "陰去",
+      "unified_ordinal": "5",
+      "number": "52",
+      "letter": "˥˨",
+      "diacritic": "̀"
+    },
+    "6": {
+      "name": "陽去",
+      "unified_ordinal": "6",
+      "number": "22",
+      "letter": "˨",
+      "diacritic": "̄"
+    },
+    "7": {
+      "name": "陰入",
+      "unified_ordinal": "7",
+      "number": "2",
+      "letter": "˨",
+      "diacritic": "̄"
+    },
+    "8": {
+      "name": "陽入",
+      "unified_ordinal": "8",
+      "number": "5",
+      "letter": "˥",
+      "diacritic": "̂"
+    }
   },
   "PM": {
-    "0": { "name": "輕聲", "number": "", "letter": "", "diacritic": "" },
-    "1": { "name": "陰平", "number": "55", "letter": "˥", "diacritic": "̄" },
-    "2": { "name": "陽平", "number": "35", "letter": "˧˥", "diacritic": "́" },
-    "3": { "name": "上聲", "number": "214", "letter": "˨˩˦", "diacritic": "̌" },
-    "4": { "name": "去聲", "number": "51", "letter": "˥˩", "diacritic": "̀" },
-    "": { "name": "未知", "number": "", "letter": "", "diacritic": "" }
+    "0": {
+      "name": "輕聲",
+      "unified_ordinal": "0",
+      "number": "",
+      "letter": "",
+      "diacritic": ""
+    },
+    "1": {
+      "name": "陰平",
+      "unified_ordinal": "1",
+      "number": "55",
+      "letter": "˥",
+      "diacritic": "̄"
+    },
+    "2": {
+      "name": "陽平",
+      "unified_ordinal": "2",
+      "number": "35",
+      "letter": "˧˥",
+      "diacritic": "́"
+    },
+    "3": {
+      "name": "上聲",
+      "unified_ordinal": "3",
+      "number": "214",
+      "letter": "˨˩˦",
+      "diacritic": "̌"
+    },
+    "4": {
+      "name": "去聲",
+      "unified_ordinal": "5",
+      "number": "51",
+      "letter": "˥˩",
+      "diacritic": "̀"
+    },
+    "": {
+      "name": "未知",
+      "unified_ordinal": "",
+      "number": "",
+      "letter": "",
+      "diacritic": ""
+    }
   },
   "NM": {
-    "0": { "name": "輕聲", "number": "", "letter": "", "diacritic": "" },
-    "1": { "name": "陰平", "number": "31", "letter": "˧˩", "diacritic": "̀" },
-    "2": { "name": "陽平", "number": "13", "letter": "˩˧", "diacritic": "́" },
-    "3": { "name": "上聲", "number": "212", "letter": "˨˩˨", "diacritic": "̌" },
-    "4": { "name": "去聲", "number": "44", "letter": "˦", "diacritic": "̄" },
-    "5": { "name": "入聲", "number": "5", "letter": "˥", "diacritic": "" }
+    "0": {
+      "name": "輕聲",
+      "unified_ordinal": "0",
+      "number": "",
+      "letter": "",
+      "diacritic": ""
+    },
+    "1": {
+      "name": "陰平",
+      "unified_ordinal": "1",
+      "number": "31",
+      "letter": "˧˩",
+      "diacritic": "̀"
+    },
+    "2": {
+      "name": "陽平",
+      "unified_ordinal": "2",
+      "number": "13",
+      "letter": "˩˧",
+      "diacritic": "́"
+    },
+    "3": {
+      "name": "上聲",
+      "unified_ordinal": "3",
+      "number": "212",
+      "letter": "˨˩˨",
+      "diacritic": "̌"
+    },
+    "4": {
+      "name": "去聲",
+      "unified_ordinal": "5",
+      "number": "44",
+      "letter": "˦",
+      "diacritic": "̄"
+    },
+    "5": {
+      "name": "入聲",
+      "unified_ordinal": "7",
+      "number": "5",
+      "letter": "˥",
+      "diacritic": ""
+    }
   },
   "GC": {
-    "0": { "name": "輕聲", "number": "", "letter": "" },
-    "1": { "name": "陰平", "number": "55", "letter": "˥" },
-    "2": { "name": "陰上", "number": "35", "letter": "˧˥" },
-    "3": { "name": "陰去", "number": "33", "letter": "˧" },
-    "4": { "name": "陽平", "number": "21", "letter": "˨˩" },
-    "5": { "name": "陽上", "number": "23", "letter": "˩˧" },
-    "6": { "name": "陽去", "number": "22", "letter": "˨" },
-    "7": { "name": "上陰入", "number": "5", "letter": "˥" },
-    "8": { "name": "下陰入", "number": "3", "letter": "˧" },
-    "9": { "name": "陽入", "number": "2", "letter": "˨" }
+    "0": { "name": "輕聲", "unified_ordinal": "0", "number": "", "letter": "" },
+    "1": {
+      "name": "陰平",
+      "unified_ordinal": "1",
+      "number": "55",
+      "letter": "˥"
+    },
+    "2": {
+      "name": "陰上",
+      "unified_ordinal": "3",
+      "number": "35",
+      "letter": "˧˥"
+    },
+    "3": {
+      "name": "陰去",
+      "unified_ordinal": "5",
+      "number": "33",
+      "letter": "˧"
+    },
+    "4": {
+      "name": "陽平",
+      "unified_ordinal": "2",
+      "number": "21",
+      "letter": "˨˩"
+    },
+    "5": {
+      "name": "陽上",
+      "unified_ordinal": "4",
+      "number": "23",
+      "letter": "˩˧"
+    },
+    "6": {
+      "name": "陽去",
+      "unified_ordinal": "6",
+      "number": "22",
+      "letter": "˨"
+    },
+    "7": {
+      "name": "上陰入",
+      "unified_ordinal": "7a",
+      "number": "5",
+      "letter": "˥"
+    },
+    "8": {
+      "name": "下陰入",
+      "unified_ordinal": "7b",
+      "number": "3",
+      "letter": "˧"
+    },
+    "9": {
+      "name": "陽入",
+      "unified_ordinal": "8",
+      "number": "2",
+      "letter": "˨"
+    }
   },
   "SW": {
-    "0": { "name": "輕聲", "number": "", "letter": "" },
-    "1": { "name": "陰平", "number": "53", "letter": "˥˧" },
-    "5": { "name": "陰去", "number": "334", "letter": "˧˧˦" },
-    "6": { "name": "陽去", "number": "23", "letter": "˨˧" },
-    "7": { "name": "陰入", "number": "55", "letter": "˥" },
-    "8": { "name": "陽入", "number": "12", "letter": "˩˨" }
+    "0": { "name": "輕聲", "unified_ordinal": "0", "number": "", "letter": "" },
+    "1": {
+      "name": "陰平",
+      "unified_ordinal": "1",
+      "number": "53",
+      "letter": "˥˧"
+    },
+    "5": {
+      "name": "陰去",
+      "unified_ordinal": "5",
+      "number": "334",
+      "letter": "˧˧˦"
+    },
+    "6": {
+      "name": "陽去",
+      "unified_ordinal": "6",
+      "number": "23",
+      "letter": "˨˧"
+    },
+    "7": {
+      "name": "陰入",
+      "unified_ordinal": "7",
+      "number": "55",
+      "letter": "˥"
+    },
+    "8": {
+      "name": "陽入",
+      "unified_ordinal": "8",
+      "number": "12",
+      "letter": "˩˨"
+    }
   },
   "MH": {
-    "0": { "name": "輕聲", "number": "", "letter": "" },
-    "1": { "name": "陰平", "number": "44", "letter": "˦" },
-    "2": { "name": "陽平", "number": "11", "letter": "˩" },
-    "3": { "name": "上聲", "number": "31", "letter": "˧˩" },
-    "4": { "name": "去聲", "number": "53", "letter": "˥˧" },
-    "5": { "name": "陰入", "number": "1", "letter": "˩" },
-    "6": { "name": "陽入", "number": "5", "letter": "˥" }
+    "0": { "name": "輕聲", "unified_ordinal": "0", "number": "", "letter": "" },
+    "1": {
+      "name": "陰平",
+      "unified_ordinal": "1",
+      "number": "44",
+      "letter": "˦"
+    },
+    "2": {
+      "name": "陽平",
+      "unified_ordinal": "2",
+      "number": "11",
+      "letter": "˩"
+    },
+    "3": {
+      "name": "上聲",
+      "unified_ordinal": "3",
+      "number": "31",
+      "letter": "˧˩"
+    },
+    "4": {
+      "name": "去聲",
+      "unified_ordinal": "5",
+      "number": "53",
+      "letter": "˥˧"
+    },
+    "5": {
+      "name": "陰入",
+      "unified_ordinal": "7",
+      "number": "1",
+      "letter": "˩"
+    },
+    "6": {
+      "name": "陽入",
+      "unified_ordinal": "8",
+      "number": "5",
+      "letter": "˥"
+    }
   },
   "VN": {
     "1": {
       "name": "陰平",
       "chinese": "平",
       "vietnamese": "ngang",
+      "unified_ordinal": "1",
       "number": "33",
       "letter": "˧",
       "diacritic": ""
@@ -67,6 +288,7 @@
       "name": "陽平",
       "chinese": "玄",
       "vietnamese": "huyền",
+      "unified_ordinal": "2",
       "number": "21",
       "letter": "˨˩",
       "diacritic": "̀"
@@ -75,6 +297,7 @@
       "name": "陰上",
       "chinese": "問",
       "vietnamese": "hỏi",
+      "unified_ordinal": "3",
       "number": "313",
       "letter": "˧˩˧",
       "diacritic": "̉"
@@ -83,6 +306,7 @@
       "name": "陽上",
       "chinese": "跌",
       "vietnamese": "ngã",
+      "unified_ordinal": "4",
       "number": "3ˀ5",
       "letter": "˧ˀ˥",
       "diacritic": "̃"
@@ -91,6 +315,7 @@
       "name": "陰去",
       "chinese": "銳",
       "vietnamese": "sắc",
+      "unified_ordinal": "5",
       "number": "35",
       "letter": "˧˥",
       "diacritic": "́"
@@ -99,6 +324,7 @@
       "name": "陽去",
       "chinese": "重",
       "vietnamese": "nặng",
+      "unified_ordinal": "6",
       "number": "3ˀ1",
       "letter": "˧ˀ˩",
       "diacritic": "̣"
@@ -107,6 +333,7 @@
       "name": "陰入",
       "chinese": "銳",
       "vietnamese": "sắc",
+      "unified_ordinal": "7",
       "number": "35",
       "letter": "˧˥",
       "diacritic": "́"
@@ -115,6 +342,7 @@
       "name": "陽入",
       "chinese": "重",
       "vietnamese": "nặng",
+      "unified_ordinal": "8",
       "number": "3ˀ1",
       "letter": "˧ˀ˩",
       "diacritic": "̣"

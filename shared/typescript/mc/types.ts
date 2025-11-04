@@ -6,6 +6,8 @@ export type MCInfoStyle = {
   final: "韻系" | "韻" | "韻目";
 };
 
+export type MCPinyinFormat = "tshet-uinh" | "baxter";
+
 export interface MCInfo {
   字: string; // 代表字
   反切: string | null; // 例：德紅切
@@ -20,6 +22,7 @@ export interface MCInfo {
   呼: "開" | "合" | "";
   重紐: "A" | "B" | null;
   聲調: string; // 例：平
+  拼音: Record<MCPinyinFormat, string>;
 }
 
 export interface MCEntry {

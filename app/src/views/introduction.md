@@ -63,13 +63,22 @@ import Weixin from "@/assets/weixin.jpg";
 
 # 對應中古音
 
-本站爲幾乎所有字條提供對應的**中古音韻**，點擊例字即可查看。中古音以《廣韻》小韻爲準，例如「[話]」爲「<MCInfo :mc-entry="2494" v-bind="{ '反切': true }" />」。音韻地位的格式可點擊右下角設置。
+本站爲幾乎所有字條提供對應的**中古音**，點擊例字即可查看。中古音韻以《廣韻》小韻爲準，例如「[話]」爲「<MCInfo :mc-entry="2494" v-bind="{ '反切': true }" />」。音韻地位的格式與中古拼音方案可點擊右下角設置。
 
 有時撫州話讀音難以用《廣韻》音解釋，說明今音繼承自其他中古音。筆者試着對這類字條做了手動修改。試舉一例：「[廁:2263]」字《廣韻》僅「<MCInfo :mc-entry="2263" v-bind="{ '反切': true }" />」一音，撫州話理應讀 {ci5}D ，而今音 {ceh7}D 解釋爲來自「[測]」的讀音「<MCInfo :mc-entry="3707" v-bind="{ '反切': true }" />」更爲合理，故作修正。囿於筆者的音韻學水平，這類修改難免有不正確的地方，歡迎讀者批評指正。
 
 # 對應其他方言
 
-爲了方便比較撫州話與其他方言，本站爲幾乎所有字條提供對應到各個方言的**理論推導音**，點擊中古音韻即可查看。筆者希望收錄所有漢語一級方言的代表點，但目前只有普通話、南京話、廣州話、上海話的數據，歡迎讀者補充。
+爲了方便比較撫州話與其他方言，本站爲幾乎所有字條提供對應到各方言的**理論推導音**<Tooltip>之所以用推導音而非實際讀音，理由有二：一是筆者無意越俎代庖地維護其他方言的字表；二是無視例外的推導音能更直接地體現系統性的音韻差別。</Tooltip>，點擊中古音即可查看。各方言詳情可點擊右下角查看或設置。
+
+該功能依賴於從《廣韻》小韻到目標方言現代音的映射（有多個層次時可能一對多）。本站目前收錄了以下數據：
+
+- 推導撫州話的數據爲筆者本人整理，規則見 <a href="https://github.com/colescu/fudiufa/blob/master/shared/python/predict/fg.py" target="\_blank" rel="noopener noreferrer">Python 脚本</a>。
+- 推導普通話、廣州話的數據來自 <a href="https://en.wiktionary.org/wiki/Module:ltc-pron/predict" target="_blank" rel="noopener noreferrer">Wiktionary</a>，筆者在此基礎上補充了一些文白異讀的數據。
+- 推導上海話的數據來自 <a href="https://zhuanlan.zhihu.com/p/386456940" target="_blank" rel="noopener noreferrer">Nyoeghau</a>。
+- 推導南京話的數據來自 <a href="https://zhuanlan.zhihu.com/p/391166351" target="_blank" rel="noopener noreferrer">uliloewi</a>。
+
+筆者希望至少收錄所有漢語一級方言的代表點，歡迎讀者補充。
 
 # 關於本站
 
@@ -86,6 +95,8 @@ import Weixin from "@/assets/weixin.jpg";
   </n-popover>
   。
 </p>
+
+由於筆者離鄉多年，製作撫州話字表時多有拿不準的字，只得請教父母，因此他們也爲此付出了不少時間。此外，本站首頁題字亦爲家父親筆，筆者在此一並致謝。
 
 <style scoped>
 ruby.under rt {

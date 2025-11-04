@@ -26,7 +26,9 @@ COLUMNS = [
 def to_mc_entry(row: dict) -> dict:
     上, 下 = row["上字"], row["下字"]
     row["反切"] = f"{上}{下}切" if 上 and 下 else None
-    return {key: row.get(key) for key in COLUMNS}
+    return {key: row.get(key) for key in COLUMNS} | {
+        "拼音": {"tshet-uinh": row["切韻拼音"], "baxter": row["白一平拼音"]}
+    }
 
 
 session = Updater()

@@ -69,7 +69,8 @@ function createToneUtils(
     value = value.normalize("NFD");
     let tone = "";
     for (const [ordinal, data] of Object.entries(TONES)) {
-      for (const toneValue of [ordinal, ...Object.values(data)]) {
+      const { unified_ordinal, ...rest } = data;
+      for (const toneValue of [ordinal, ...Object.values(rest)]) {
         if (toneValue === "") continue;
         const index = value.lastIndexOf(toneValue);
         if (index !== -1) {
@@ -118,7 +119,7 @@ function createToneUtils(
         if (
           NUCLEUS.includes(previous) &&
           NUCLEUS.indexOf(previous) < NUCLEUS.indexOf(current) &&
-          !(previous === "u" && current === "i")
+          !("uü".includes(previous) && current === "i")
         ) {
           position--;
         }
