@@ -9,7 +9,7 @@ import FuIcon from "@/assets/撫.svg";
     <div class="icon">
       <RouterLink to="/">
         <n-button :focusable="false" text icon>
-          <FuIcon style="width: 2.5em" />
+          <FuIcon width="42" />
         </n-button>
       </RouterLink>
     </div>

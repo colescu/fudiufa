@@ -4,7 +4,7 @@ import { getLangQueryUtils } from "@shared/lang";
 import { lastUpdateCache } from "@shared/cache";
 import { toChineseDate } from "@shared/common/date";
 
-import Fuzhouhua from "@/assets/撫州話.svg";
+import Fudiufa from "@/assets/撫州話.svg";
 
 const counts = computed(() => {
   const { select } = getLangQueryUtils("FG");
@@ -30,7 +30,7 @@ onBeforeMount(() => {
 
 <template>
   <div id="home" class="center center-text">
-    <Fuzhouhua width="300" />
+    <Fudiufa width="180" />
     <div class="caption">
       歡迎來到苦芋頭嗰
       <Phrase
@@ -62,7 +62,7 @@ onBeforeMount(() => {
 
 .caption {
   font-size: 1.5em;
-  margin-top: -0.4em;
+  margin-top: -1em;
   white-space: nowrap;
 
   :deep(.phrase) {

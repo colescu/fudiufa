@@ -1,11 +1,11 @@
 {
   "name": "fuzhou-gan",
-  "version": "2.4.5",
+  "version": "2.4.6",
   "private": true,
   "homepage": "https://fudiufa.cn",
   "type": "module",
   "scripts": {
-    "dev": "vite dev --host",
+    "dev": "vite dev --host --open",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
   },
