@@ -24,3 +24,5 @@ dist
 public/data/*
 *.tsbuildinfo
 stats.html
+dev
+vite.config.local.ts

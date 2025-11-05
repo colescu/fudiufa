@@ -72,6 +72,13 @@ const routes = [
   },
 ];
 
+if (__IS_DEV__) {
+  try {
+    const devRoutes = await import("../dev/dev-routes");
+    routes.push(...(devRoutes.default as any));
+  } catch {}
+}
+
 const routerOptions = {
   history: (typeof window !== "undefined"
     ? createWebHistory

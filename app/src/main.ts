@@ -15,11 +15,11 @@ import { charactersCache } from "./views/Vocabulary/Character/cache";
 
 await Promise.all([
   initShared(),
-  dictionaryCache.load("FG"),
   rhymeTableCache.load(),
   commentsCache.load(),
   charactersCache.load(),
 ]);
+await dictionaryCache.load("FG");
 
 let appInstance: VueApp<Element> | null = null;
 let router = createRouterInstance();

@@ -205,7 +205,7 @@ const characterMap = computed<
             >
               <template v-if="Object.keys(characters).length > 0">
                 <div>
-                  <MCInfo :mc-entry="mcIndex" 反切 trigger="click" />
+                  <MCInfo :mc-entry="mcIndex" trigger="click" />
                 </div>
                 <div style="max-width: 8em">
                   <!-- characters sorted by frequency in fullLangIndexMap -->
