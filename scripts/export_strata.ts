@@ -1,3 +1,5 @@
+/* Updates FG in `strata.json` using `shared/typescript/fg/predict`. */
+
 import { readFileSync, writeFileSync } from "fs";
 import { getReflexesByEntry } from "../shared/typescript/fg/predict";
 import { MCEntry } from "../shared/typescript/mc";

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useUpdates } from "./composables/useUpdates";
 import { trackHasBoth, trackHasPhrase } from "./composables/useTrack";
@@ -18,6 +18,11 @@ import {
 
 const show = ref(true);
 const { currentUpdate, next: nextUpdate } = useUpdates();
+watch(currentUpdate, (value) => {
+  if (value != null) {
+    show.value = true;
+  }
+});
 onBeforeMount(async () => await nextUpdate());
 
 const route = useRoute();

@@ -1,4 +1,4 @@
-"""Defines Updater class as API for hanzi.sqlite3."""
+"""Defines Updater class as API for `hanzi.sqlite3`."""
 
 import sqlite3
 import json

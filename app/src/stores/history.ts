@@ -62,7 +62,7 @@ export const useHistoryStore = defineStore("history", {
       },
       includePredicted: true,
       variant: {
-        enable: true,
+        enable: false,
         settings: {
           ɥon: false,
           jau: false,

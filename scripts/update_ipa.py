@@ -1,4 +1,4 @@
-"""Updates parts parsed from pinyin in hanzi.sqlite3."""
+"""Updates parts parsed from pinyin in `hanzi.sqlite3`."""
 
 from updater import Updater
 from phonology import SYLLABLE_MAP
