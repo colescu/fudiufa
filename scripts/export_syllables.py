@@ -136,8 +136,7 @@ for lang_en, syllable_cls in SYLLABLE_MAP.items():
                     "tuple": [initial, "", "ə", "n"],
                     "ipaRaw": initial + "ən",
                     "ipaStrict": initial + "ən",
-                    "pinyin": ["z", "c", "s"][["ts", "tsʰ", "s"].index(initial)]
-                    + "iin",
+                    "pinyin": {"ts": "z", "tsʰ": "c", "s": "s"}[initial] + "iin",
                 }
             )
         for initial in ["p", "pʰ", "m", "f"]:
@@ -148,9 +147,7 @@ for lang_en, syllable_cls in SYLLABLE_MAP.items():
                         "tuple": [initial, "", "ɿ", coda],
                         "ipaRaw": initial + "ɿ" + coda,
                         "ipaStrict": initial + "ɨ" + coda_strict,
-                        "pinyin": ["b", "p", "m", "f"][
-                            ["p", "pʰ", "m", "f"].index(initial)
-                        ]
+                        "pinyin": {"p": "b", "pʰ": "p", "m": "m", "f": "f"}[initial]
                         + "ii"
                         + coda,
                     }

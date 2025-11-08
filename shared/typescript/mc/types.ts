@@ -18,10 +18,10 @@ export interface MCInfo {
   組: string; // 例：端
   攝: string; // 例：通
   韻系: string; // 例：東
-  等: string; // 例：一
+  等: "一" | "二" | "三" | "四";
   呼: "開" | "合" | "";
   重紐: "A" | "B" | null;
-  聲調: string; // 例：平
+  聲調: "平" | "上" | "去" | "入";
   拼音: Record<MCPinyinFormat, string>;
 }
 

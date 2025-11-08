@@ -105,9 +105,7 @@ class Updater:
         self.cursor.execute("SELECT * FROM 小韻全")
         updated = []
         for row in self.data:
-            expected_reflex = self.Syllable.parse_ipa(
-                Updater.show_syllable(self.get_reflex(row))
-            ).pinyin()
+            expected_reflex = self.Syllable.parse_ipa(self.get_reflex(row)).pinyin()
             self.cursor.execute(
                 f"UPDATE 小韻 SET 推導{self.lang_cn} = ? WHERE 小韻號 = ?",
                 (expected_reflex, row["小韻號"]),

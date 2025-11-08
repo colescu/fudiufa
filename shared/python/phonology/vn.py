@@ -301,7 +301,7 @@ class VNSyllable(TonedSyllable):
         if nucleus[:2] == "uy":
             medial, nucleus = "u", "i" + nucleus[2:]
         if coda == "" and nucleus in ["ia", "ưa", "ua"]:
-            nucleus = nucleus[0] + "êơô"["iưu".index(nucleus[0])]
+            nucleus = nucleus[0] + {"i": "ê", "ư": "ơ", "u": "ô"}[nucleus[0]]
 
         match nucleus:
             case _ if nucleus[-2:] in map_["rhyme"]:
