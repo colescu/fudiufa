@@ -3,9 +3,8 @@
 from updater import Updater
 
 
-for lang_en in ["FG", "MH"]:
+for lang_en in ["FG", "MH", "JP"]:
     session = Updater(lang_en=lang_en)
     session.update_reflex()
-    if lang_en == "FG":
-        session.compare_inventories()
+    # session.compare_inventories()
     del session

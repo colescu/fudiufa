@@ -182,7 +182,7 @@ def 推導韻腹(攝, 韻系, 等, 呼, 組, 聲母, 聲調):
         case "通":
             return "u"
         case "止":
-            if 呼 == "開" and 組 == "日":  # 二類字
+            if 呼 == "開" and 組 == "日":  # 二 類字
                 return "ɛ"
             if 呼 == "開" and 組 in "精莊":
                 return "ɿ"
@@ -194,7 +194,7 @@ def 推導韻腹(攝, 韻系, 等, 呼, 組, 聲母, 聲調):
                 case "一":
                     return "u"
                 case "三":
-                    if 聲母 == "日":  # 如類字
+                    if 聲母 == "日":  # 如 類字
                         return "ɛ"
                     if 組 in "幫知章莊" and 聲母 != "娘":
                         return "u"

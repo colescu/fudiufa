@@ -63,6 +63,7 @@ const STRATA_LABEL_MAP = {
   文: "文讀",
   新: "新派",
   老: "老派",
+  吳: "吳音",
 } as const;
 </script>
 

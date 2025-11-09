@@ -36,7 +36,7 @@ class Updater:
         return [dict(row) for row in self.cursor.fetchall()]
 
     @cached_property
-    def mc_entry_map(self) -> dict[int, dict[str, Any]]:
+    def mc_entries_map(self) -> dict[int, dict[str, Any]]:
         """廣韻小韻數據"""
         self.cursor.execute("SELECT * FROM 小韻全")
         syllables = {}
@@ -105,18 +105,27 @@ class Updater:
         self.cursor.execute("SELECT * FROM 小韻全")
         updated = []
         for row in self.data:
-            expected_reflex = self.Syllable.parse_ipa(self.get_reflex(row)).pinyin()
+            raw = self.get_reflex(row)
+            match self.lang_en:
+                case "JP":
+                    expected_reflex = self.Syllable.parse_pinyin(
+                        raw, format="NR"
+                    ).pinyin(show_small_kana=False)
+                case _:
+                    expected_reflex = self.Syllable.parse_ipa(raw).pinyin()
             self.cursor.execute(
                 f"UPDATE 小韻 SET 推導{self.lang_cn} = ? WHERE 小韻號 = ?",
                 (expected_reflex, row["小韻號"]),
             )
             if expected_reflex != row[f"推導{self.lang_cn}"]:
                 updated.append(
-                    f"{row['小韻號']} {row['字']}: {row[f'推導{self.lang_cn}']} -> {expected_reflex}"
+                    f"{row['小韻號']:5d} {row['音韻地位']} {row['字']}: {row[f'推導{self.lang_cn}']} -> {expected_reflex}"
                 )
-        print(f"推導{self.lang_cn}完成！共更新 {len(updated)} 個小韻。")
+        print(
+            f"推導{self.lang_cn}{'' if self.lang_en != 'JP' else '漢音'}完成！共更新 {len(updated)} 個小韻。"
+        )
         for item in updated:
-            print("  " + item)
+            print(item)
         self.__dict__.pop("dictionary", None)  # dictionary needs update
 
     def compare_inventories(self) -> None:
@@ -172,7 +181,7 @@ class Updater:
         entries = [
             entry
             for entry in self.mc_dictionary[字]
-            if entry["小韻號"] in self.mc_entry_map
+            if entry["小韻號"] in self.mc_entries_map
         ]
         if len(entries) == 1:
             return entries

@@ -22,7 +22,9 @@ export function separate(
           (language === "PM" || (language === "SW" && i === 0))
         )) ||
       ("jw".includes(current) && format !== "pinyin") ||
-      (current === "w" && format === "pinyin" && language === "GC")
+      (current === "w" &&
+        format === "pinyin" &&
+        ["GC", "JP"].includes(language))
     ) {
       break;
     }

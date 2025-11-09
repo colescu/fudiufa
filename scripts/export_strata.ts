@@ -23,20 +23,20 @@ const MC_ENTRIES_MAP: Record<number, MCEntry> = JSON.parse(
   readFileSync("./data/generated/MC.json", { encoding: "utf-8" })
 );
 
-const FG_REFLEXES = Object.fromEntries(
+const strata_data = Object.fromEntries(
   Object.entries(MC_ENTRIES_MAP)
     .map(([index, entry]) => [index, getReflexes(entry)])
     .filter(([index, strata]) => strata.length > 0)
 );
 
-const STRATA: Record<string, any> = JSON.parse(
+const data: Record<string, any> = JSON.parse(
   readFileSync("./data/generated/strata.json", { encoding: "utf-8" })
 );
 
-STRATA["FG"] = FG_REFLEXES;
+data["FG"] = strata_data;
 
-writeFileSync("./data/generated/strata.json", JSON.stringify(STRATA), {
+writeFileSync("./data/generated/strata.json", JSON.stringify(data), {
   encoding: "utf8",
 });
 
-console.log("推導撫州話其他層次完成！");
+console.log("推導撫州話層次完成！");
