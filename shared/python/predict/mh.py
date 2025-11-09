@@ -1,5 +1,5 @@
 """
-最後更新：2025 年 11 月 8 日
+最後更新：2025 年 11 月 9 日
 """
 
 from .predictor import Predictor
@@ -152,7 +152,7 @@ def 推導韻腹(攝: str, 韻系: str, 等: str, 呼: str, 組: str, 聲母: st
                         case "開":
                             if 組 == "幫":
                                 return "i"
-                            if 組 in "見影" or 韻系 == "咍":  # 分咍泰
+                            if 組 in "見影":
                                 return "o"
                             return "a"
                         case "合":

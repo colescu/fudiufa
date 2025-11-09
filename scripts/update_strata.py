@@ -19,8 +19,9 @@ for lang_en, get_strata in STRATA_GETTER_MAP.items():
     strata_data = data.get(lang_en, {})
     updated = []
     for index, row in session.mc_entries_map.items():
+        index = str(index)
         strata = get_strata(row)
-        saved_strata = strata_data.get(str(index), [])
+        saved_strata = strata_data.get(index, [])
         strata_data[index] = strata
         if len(strata) == 0:
             del strata_data[index]

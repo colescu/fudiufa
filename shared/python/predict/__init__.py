@@ -4,6 +4,7 @@ from .jp_kan import 推導日本語漢音
 from .jp_go import 推導日本語吳音, 推導日本語層次
 from .pm_strata import 推導普通話層次
 from .gc_strata import 推導廣州話層次
+from .mh_strata import 推導梅縣話層次
 
 REFLEX_GETTER_MAP = {
     "FG": 推導撫州話,
@@ -13,6 +14,7 @@ REFLEX_GETTER_MAP = {
 STRATA_GETTER_MAP = {
     "PM": 推導普通話層次,
     "GC": 推導廣州話層次,
+    "MH": 推導梅縣話層次,
     "JP": 推導日本語層次,
 }
 
