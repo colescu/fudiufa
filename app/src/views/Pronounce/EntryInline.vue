@@ -13,7 +13,12 @@ const { entry, ...rest } = defineProps<
   <span>
     <span class="char no-simplify">{{ entry.字頭 || "□" }}</span>
     <span
-      >&nbsp;<template v-if="!entry.記錄讀音">*</template>
+      :class="{
+        hyounai: entry.常用度 === '表內',
+        'hyougai-rare': entry.常用度 === '表外罕',
+      }"
+    >
+      &nbsp;<template v-if="!entry.記錄讀音">*</template>
       <DoublePronunciation
         v-if="!rest.proto || language !== 'FG'"
         :pronunciation="entry.讀音"
@@ -42,4 +47,11 @@ const { entry, ...rest } = defineProps<
   </span>
 </template>
 
-<style scoped></style>
+<style scoped>
+.hyounai :deep(.pinyin-jkv) {
+  font-weight: bold !important;
+}
+.hyougai-rare :deep(.pinyin-jkv) {
+  color: var(--gray-text) !important;
+}
+</style>

@@ -38,7 +38,7 @@ for lang_en in SYLLABLE_MAP:
 
         return {
             key: row.get(key)
-            for key in COLUMNS + (["常見度"] if lang_en == "JP" else [])
+            for key in COLUMNS + (["常用度"] if lang_en == "JP" else [])
         }
 
     session.cursor.execute(f"SELECT * FROM {lang_cn}")

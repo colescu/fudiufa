@@ -7,6 +7,7 @@ import { characterComparer } from "@shared/cjk";
 import { entriesConst } from "@shared/common/object";
 
 import RhymeTable from "@/modules/RhymeTable/RhymeTable.vue";
+import DiachronicTable from "@/modules/DiachronicTable/DiachronicTable.vue";
 import EntryBlock from "./EntryBlock.vue";
 import {
   NSpace,
@@ -64,6 +65,10 @@ const resultCharacters = computed<string[]>(() => [
 ]);
 
 const showRhymeTable = ref<boolean>(false);
+const showDiachronicTable = ref<boolean>(false);
+const mcIndices = computed<number[]>(() =>
+  results.value.map((entry) => entry.小韻號).filter((v) => v != null)
+);
 
 const hook = ref<HTMLElement | null>(null);
 defineExpose({ hook });
@@ -80,6 +85,8 @@ defineExpose({ hook });
           }}
           個字條（<n-button @click.stop="showRhymeTable = true" text>
             查看韻圖</n-button
+          >、<n-button @click.stop="showDiachronicTable = true" text>
+            查看古今圖</n-button
           >）
         </template>
       </p>
@@ -98,8 +105,20 @@ defineExpose({ hook });
         v-model:is-fullscreen="showRhymeTable"
         :filter="(_, index) => indices!.includes(index)"
         :language="language"
-        no-redundant
         show-count
+        no-redundant
+      />
+
+      <DiachronicTable
+        v-if="indices != null && showDiachronicTable"
+        v-model:is-fullscreen="showDiachronicTable"
+        :mc-indices="mcIndices"
+        :lang-indices="indices"
+        show-count
+        no-redundant
+        :language="language"
+        :blacklist="['.rhyme-table', '.rhyme-table__popover']"
+        :fullscreen-z-index="3000"
       />
 
       <n-grid v-if="results.length > 0" cols="1 600:2" style="margin-top: 2em">

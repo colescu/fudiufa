@@ -17,15 +17,19 @@ export const s2tCache = createCache(
     return text;
   },
   (text: string) =>
-    Object.fromEntries(
-      text
-        .trim()
-        .split(/\r?\n/)
-        .map((row) => {
-          const [s, ts, _] = row.split("\t");
-          return [s, ts!.split(" ")];
-        })
-    )
+    ({
+      ...Object.fromEntries(
+        text
+          .trim()
+          .split(/\r?\n/)
+          .map((row) => {
+            const [s, ts, _] = row.split("\t");
+            return [s, ts!.split(" ")];
+          })
+      ),
+      // manually add traditional variants not in OpenCC
+      ...{ 炸: ["炸", "煠"] },
+    } as Record<string, string[]>)
 );
 
 export const commonCharactersCache = createCache(() =>

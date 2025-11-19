@@ -54,6 +54,7 @@ const displayedPronunciation = computed<string>(
         /([⁰¹²³⁴⁵⁶⁷⁸⁹])ˀ/g,
         "$1<sup style='transform: translateY(-0.3em)'>ˀ</sup>"
       ) // ˀ in sup
+      .replace("g", displayedFormat.value === "pinyin" ? "g" : "ɡ") // ɡ in IPA
 );
 
 const parts = computed(() =>

@@ -241,7 +241,6 @@ const { diachronicTableState } = useProvideDiachronicTableState();
       :lang-indices="diachronicTableState.langIndices"
       show-count
       no-redundant
-      hide-pronunciation
       :test-exception="testException"
       :language="language"
       :blacklist="['.rhyme-table', '.rhyme-table__popover']"

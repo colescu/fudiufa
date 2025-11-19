@@ -1,5 +1,7 @@
 """
 最後更新：2025 年 11 月 9 日（草稿版）
+
+output format: NR, show_long_vowel=False
 """
 
 from .predictor import Predictor

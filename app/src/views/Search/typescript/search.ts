@@ -9,6 +9,8 @@ import { getComparer, precomposeComparer } from "@shared/common/sort";
 const langEntryComparer = getComparer((entry: LangEntry): number[] => {
   return [
     entry.訓作 != null && entry.訓作 !== "？" ? -1 : 1,
+    // for JP
+    [undefined, "表内", "表外", "表外罕"].indexOf(entry.常用度),
     [
       "老",
       null,

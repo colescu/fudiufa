@@ -30,7 +30,8 @@ class Predictor:
         filtered = {k: v for k, v in params.items() if k in sig.parameters}
         return func(**filtered)
 
-    def predict(self, 小韻: dict[str, str]) -> str:  # in raw IPA
+    def predict(self, 小韻: dict[str, str]) -> str:
+        # default output format: ipa_raw
         try:
             for part in self.parts:
                 小韻[part] = self._call_by_dict(self.utils[part], 小韻)

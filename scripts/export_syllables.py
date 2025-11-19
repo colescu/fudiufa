@@ -30,6 +30,12 @@ for lang_en, syllable_cls in SYLLABLE_MAP.items():
                 print(f"Error parsing {lang_cn} {pron}")
 
     if lang_en == "JP":
+        # nonexistent go reflexes
+        with open("data/generated/strata.json", "r", encoding="utf-8") as f:
+            for strata in json.load(f)["JP"].values():
+                for stratum, pron in strata:
+                    syllables.add(syllable_cls.parse_pinyin(pron))
+
         modern_syllables = set()
         for syl in syllables:
             modern_syl = syllable_cls.historical_to_modern(syl)

@@ -41,7 +41,7 @@ import Weixin from "@/assets/weixin.jpg";
   </ruby>
 </div>
 
-筆者在此誠摯邀請讀者探索本站内容！
+筆者在此誠摯邀請讀者探索本站内容！關於本站主要功能的說明，見[知乎文章](https://zhuanlan.zhihu.com/p/1970302244818756192)。
 
 # 記音分層
 
@@ -73,10 +73,12 @@ import Weixin from "@/assets/weixin.jpg";
 
 該功能依賴於從《廣韻》小韻到目標方言現代音的映射（有多個層次時可能一對多）。本站目前收錄了以下數據：
 
-- 推導撫州話的數據爲筆者本人整理，規則見 <a href="https://github.com/colescu/fudiufa/blob/master/shared/python/predict/fg.py" target="\_blank" rel="noopener noreferrer">Python 脚本</a>。
-- 推導普通話、廣州話的數據來自 <a href="https://en.wiktionary.org/wiki/Module:ltc-pron/predict" target="_blank" rel="noopener noreferrer">Wiktionary</a>，筆者在此基礎上補充了一些文白異讀的數據。
-- 推導上海話的數據來自 <a href="https://zhuanlan.zhihu.com/p/386456940" target="_blank" rel="noopener noreferrer">Nyoeghau</a>。
-- 推導南京話的數據來自 <a href="https://zhuanlan.zhihu.com/p/391166351" target="_blank" rel="noopener noreferrer">uliloewi</a>。
+- 推導**撫州話**的數據爲筆者本人整理，規則見 <a href="https://github.com/colescu/fudiufa/blob/master/shared/python/predict/fg.py" target="\_blank" rel="noopener noreferrer">Python 脚本</a>。默認層次爲老文讀。
+- 推導**普通話**、**廣州話**的數據來自 <a href="https://en.wiktionary.org/wiki/Module:ltc-pron/predict" target="_blank" rel="noopener noreferrer">Wiktionary</a>，筆者在此基礎上補充了一些文白異讀的數據。默認層次爲文讀。
+- 推導**上海話**的數據來自 <a href="https://zhuanlan.zhihu.com/p/386456940" target="_blank" rel="noopener noreferrer">Nyoeghau</a>。默認層次爲主流層。
+- 推導**南京話**的數據來自 <a href="https://zhuanlan.zhihu.com/p/391166351" target="_blank" rel="noopener noreferrer">uliloewi</a>。
+<!-- - 推導**梅縣話**的數據爲筆者本人整理，腳本見 <a href="https://github.com/colescu/fudiufa/tree/master/shared/python/predict" target="_blank" rel="noopener noreferrer">GitHub 倉庫</a>。默認層次爲文讀。
+- 推導**日本語漢音**、**吳音**的數據爲筆者本人整理，腳本見 <a href="https://github.com/colescu/fudiufa/tree/master/shared/python/predict" target="_blank" rel="noopener noreferrer">GitHub 倉庫</a>。默認層次爲漢音。 -->
 
 筆者希望至少收錄所有漢語一級方言的代表點，歡迎讀者補充。
 
