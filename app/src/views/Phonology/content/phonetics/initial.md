@@ -6,7 +6,7 @@
 | 脣  | :p(b)  | :i(p)   | [巴] {ba1}D     |
 | ^^  | :p(p)  | :i(pʰ)  | [婆] {po2}D     |
 | ^^  | :p(m)  | :i(m)   | [米] {mi3}D     |
-| ^^  | :p(f)  | :i(f)   | [負] {fu5}D     |
+| ^^  | :p(f)  | :i(f)   | [付] {fu5}D     |
 | 舌  | :p(d)  | :i(t)   | [多] {do1}D     |
 | ^^  | :p(t)  | :i(tʰ)  | [特] {teh8}D    |
 | ^^  | :p(n)  | &nbsp;:i(ɲ)<Tooltip>單字中只接細音（即高前元音 :&(i=i) 或 :&(y=y) ，無論韻腹或介音），見<Reference to="characteristics#泥來不分">泥來不分</Reference>。</Tooltip>   | [你:ni3] {ni3}D |

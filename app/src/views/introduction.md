@@ -77,8 +77,8 @@ import Weixin from "@/assets/weixin.jpg";
 - 推導**普通話**、**廣州話**的數據來自 <a href="https://en.wiktionary.org/wiki/Module:ltc-pron/predict" target="_blank" rel="noopener noreferrer">Wiktionary</a>，筆者在此基礎上補充了一些文白異讀的數據。默認層次爲文讀。
 - 推導**上海話**的數據來自 <a href="https://zhuanlan.zhihu.com/p/386456940" target="_blank" rel="noopener noreferrer">Nyoeghau</a>。默認層次爲主流層。
 - 推導**南京話**的數據來自 <a href="https://zhuanlan.zhihu.com/p/391166351" target="_blank" rel="noopener noreferrer">uliloewi</a>。
-<!-- - 推導**梅縣話**的數據爲筆者本人整理，腳本見 <a href="https://github.com/colescu/fudiufa/tree/master/shared/python/predict" target="_blank" rel="noopener noreferrer">GitHub 倉庫</a>。默認層次爲文讀。
-- 推導**日本語漢音**、**吳音**的數據爲筆者本人整理，腳本見 <a href="https://github.com/colescu/fudiufa/tree/master/shared/python/predict" target="_blank" rel="noopener noreferrer">GitHub 倉庫</a>。默認層次爲漢音。 -->
+- 推導**梅縣話**的數據爲筆者本人整理，腳本見 <a href="https://github.com/colescu/fudiufa/tree/master/shared/python/predict" target="_blank" rel="noopener noreferrer">GitHub 倉庫</a>。默認層次爲文讀。
+- 推導**日本語漢音**、**吳音**的數據爲筆者本人整理，腳本見 <a href="https://github.com/colescu/fudiufa/tree/master/shared/python/predict" target="_blank" rel="noopener noreferrer">GitHub 倉庫</a>。默認層次爲漢音。
 
 筆者希望至少收錄所有漢語一級方言的代表點，歡迎讀者補充。
 

@@ -7,7 +7,7 @@ import Weixin from "@/assets/weixin.jpg";
   <div id="footer">
     <div>贛 ICP 備 2025071588 號</div>
     <div>
-      © 2025 苦芋頭 —
+      © 2025–2026 苦芋頭 —
       <n-popover trigger="hover">
         <template #trigger>
           <span>聯繫作者</span>

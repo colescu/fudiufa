@@ -3,7 +3,7 @@ import { EXTERNAL_URL } from "../config";
 
 export const variantsCache = createCache(
   () => fetchFile("variants", "txt"),
-  (text: string) => text.split(/\r?\n/)
+  (text: string) => text.split(/\r?\n/),
 );
 
 export const s2tCache = createCache(
@@ -11,7 +11,7 @@ export const s2tCache = createCache(
     const response = await fetch(
       (EXTERNAL_URL ??
         "https://raw.githubusercontent.com/BYVoid/OpenCC/refs/heads/master/data/dictionary") +
-        "/STCharacters.txt"
+        "/STCharacters.txt",
     );
     const text = await response.text();
     return text;
@@ -22,18 +22,22 @@ export const s2tCache = createCache(
         text
           .trim()
           .split(/\r?\n/)
+          .filter((line) => {
+            const content = line.trim();
+            return !(content.length === 0 || content[0] === "#");
+          })
           .map((row) => {
             const [s, ts, _] = row.split("\t");
             return [s, ts!.split(" ")];
-          })
+          }),
       ),
       // manually add traditional variants not in OpenCC
       ...{ 炸: ["炸", "煠"] },
-    } as Record<string, string[]>)
+    } as Record<string, string[]>),
 );
 
 export const commonCharactersCache = createCache(() =>
-  fetchFile("通用字", "txt")
+  fetchFile("通用字", "txt"),
 );
 
 export async function loadCJKData() {

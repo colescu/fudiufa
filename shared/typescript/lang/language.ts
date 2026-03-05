@@ -16,4 +16,4 @@ export const LANGUAGES = Object.keys(LANGUAGE_MAP) as readonly Language[];
 export const PARTIAL_LANGUAGES =
   localStorage.getItem("user") === "colescu"
     ? LANGUAGES
-    : (["FG", "PM", "NM", "GC", "SW"] as readonly Language[]);
+    : (["FG", "PM", "NM", "GC", "SW", "MH", "JP"] as readonly Language[]);
