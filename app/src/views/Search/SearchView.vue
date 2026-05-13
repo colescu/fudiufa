@@ -56,7 +56,7 @@ watch(
   ({ i }) => {
     if (
       typeof i === "string" &&
-      ["ci", "fudiufa", "dungguin", "putungfa", "guongdungfa"].includes(i)
+      ["ci", "fudiufa", "dungguin", "putungfa", "guongdiufa"].includes(i)
     ) {
       tab.value = i;
     }

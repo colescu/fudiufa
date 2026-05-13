@@ -6,6 +6,8 @@ import {
   toRefs,
   watch,
   computed,
+  onMounted,
+  onUnmounted,
   type Component,
 } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -62,17 +64,20 @@ const router = useRouter();
 const history = useHistoryStore();
 
 const showPopover = ref<boolean>(false);
-document.addEventListener(
-  "click",
-  (e) => {
-    const target = e.target as HTMLElement;
-    if (!!!target.closest("#bigau-select")) {
-      showPopover.value = false;
-    } else if (route.params.subtab === "bigau") {
-      showPopover.value = !showPopover.value;
-    }
-  },
-  { capture: true }
+function handleDocumentClick(e: MouseEvent) {
+  const target = e.target as HTMLElement;
+  if (!!!target.closest("#bigau-select")) {
+    showPopover.value = false;
+  } else if (route.params.subtab === "bigau") {
+    showPopover.value = !showPopover.value;
+  }
+}
+
+onMounted(() =>
+  document.addEventListener("click", handleDocumentClick, { capture: true })
+);
+onUnmounted(() =>
+  document.removeEventListener("click", handleDocumentClick, { capture: true })
 );
 
 // bind tab and query with url

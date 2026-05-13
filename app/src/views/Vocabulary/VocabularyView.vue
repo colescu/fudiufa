@@ -44,6 +44,8 @@ watch(
   ([params, query]) => {
     if (!params || !query) return;
 
+    syncingFromRoute.value = true;
+
     const newTab = params.tab as string | undefined;
     if (newTab && ["fongnienci", "tehsehcifi", "diun"].includes(newTab)) {
       tab.value = newTab;

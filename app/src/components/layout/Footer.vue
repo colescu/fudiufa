@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NPopover } from "naive-ui";
-import Weixin from "@/assets/weixin.jpg";
+import Weixin from "@/assets/Weixin.jpg";
 </script>
 
 <template>

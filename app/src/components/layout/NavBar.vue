@@ -7,8 +7,14 @@ import FuIcon from "@/assets/撫.svg";
 <template>
   <div id="navbar">
     <div class="icon">
-      <RouterLink to="/">
-        <n-button :focusable="false" text icon>
+      <RouterLink to="/" aria-label="返回首頁" title="返回首頁">
+        <n-button
+          :focusable="false"
+          text
+          icon
+          aria-label="返回首頁"
+          title="返回首頁"
+        >
           <FuIcon width="42" />
         </n-button>
       </RouterLink>
@@ -21,7 +27,7 @@ import FuIcon from "@/assets/撫.svg";
       <RouterLink to="/inyn">
         <n-button :focusable="false" text>音韻</n-button>
       </RouterLink>
-      <RouterLink to="/ifi">
+      <RouterLink to="/nifi">
         <n-button :focusable="false" text>語彙</n-button>
       </RouterLink>
       <RouterLink to="/caci">
@@ -41,6 +47,8 @@ import FuIcon from "@/assets/撫.svg";
         :focusable="false"
         text
         icon
+        aria-label="在 GitHub 查看源碼"
+        title="在 GitHub 查看源碼"
       >
         <n-icon :component="LogoGithub" size="2.1em" />
       </n-button>

@@ -139,6 +139,8 @@ const isDev = __IS_DEV__;
         v-if="input"
         @click="input = ''"
         text
+        aria-label="清空輸入"
+        title="清空輸入"
       >
         <n-icon :component="CloseCircle" class="clear-icon" />
       </n-button>
@@ -167,6 +169,8 @@ const isDev = __IS_DEV__;
         style="top: 1em; right: 1em"
         @click="copyToClipboard"
         text
+        aria-label="複製注音標記"
+        title="複製注音標記"
       >
         <n-icon :component="CopyOutline" />
       </n-button>
@@ -176,6 +180,8 @@ const isDev = __IS_DEV__;
         style="bottom: 0.85em; right: 0.85em"
         @click="toggleAudio"
         text
+        :aria-label="isPlaying ? '停止播放' : '播放注音'"
+        :title="isPlaying ? '停止播放' : '播放注音'"
       >
         <n-icon
           :component="isPlaying ? StopCircleOutline : PlayCircleOutline"

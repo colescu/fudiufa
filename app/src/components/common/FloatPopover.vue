@@ -6,10 +6,11 @@ import { NPopover, NFloatButton, NIcon } from "naive-ui";
 
 // Ad hoc
 
-const { icon, right, bottom, onUpdateShow } = defineProps<{
+const { icon, right, bottom, label, onUpdateShow } = defineProps<{
   icon: Component;
   right: number;
   bottom: number;
+  label?: string;
   onUpdateShow?: () => void;
 }>();
 
@@ -44,7 +45,12 @@ const { popoverId } = usePopoverZIndex(showPopover, 10000);
     class="fixed-popover"
   >
     <template #trigger>
-      <n-float-button :right="right" :bottom="bottom">
+      <n-float-button
+        :right="right"
+        :bottom="bottom"
+        :aria-label="label"
+        :title="label"
+      >
         <n-icon :component="icon" />
       </n-float-button>
     </template>

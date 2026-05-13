@@ -61,6 +61,8 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
       :right="66"
       :bottom="66"
       @click="scrollToTop"
+      aria-label="返回頁首"
+      title="返回頁首"
     >
       <n-icon :component="ArrowBarToUp" />
     </n-float-button>
@@ -69,6 +71,8 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
       :right="66"
       :bottom="16"
       @click="settings.isSimplified = !settings.isSimplified"
+      :aria-label="settings.isSimplified ? '切換爲繁體' : '切換爲簡體'"
+      :title="settings.isSimplified ? '切換爲繁體' : '切換爲簡體'"
     >
       {{ settings.isSimplified ? "简" : "繁" }}
     </n-float-button>
@@ -79,6 +83,7 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
       :icon-size="40"
       :right="16"
       :bottom="66"
+      label="查看說明"
       :on-update-show="getHelpHtml"
     >
       <div v-html="helpHtml" />
@@ -89,6 +94,7 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
       :icon-size="40"
       :right="16"
       :bottom="16"
+      label="打開設置"
       style="min-width: 19.1em"
     >
       <n-space vertical style="margin: 0.5em 0">

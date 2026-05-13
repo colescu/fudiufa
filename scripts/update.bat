@@ -3,7 +3,7 @@ python "%~dp0update_date.py"
 echo -----
 python "%~dp0update_reflex.py"
 echo -----
-call npx tsx "%~dp0export_strata.ts"
+call pnpm exec tsx "%~dp0export_strata.ts"
 python "%~dp0update_strata.py"
 echo -----
 python "%~dp0update_ipa.py"

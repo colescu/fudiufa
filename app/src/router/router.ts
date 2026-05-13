@@ -12,8 +12,9 @@ import Vocabulary from "@/views/Vocabulary/VocabularyView.vue";
 import LangWrapper from "@/components/wrapper/LangWrapper.vue";
 import Search from "@/views/Search/SearchView.vue";
 import Pronounce from "@/views/Pronounce/PronounceView.vue";
-import RhymeTable from "@/modules/RhymeTable/RhymeTable.vue";
-import DiachronicTable from "@/modules/DiachronicTable/DiachronicTable.vue";
+const RhymeTable = () => import("@/modules/RhymeTable/RhymeTable.vue");
+const DiachronicTable = () =>
+  import("@/modules/DiachronicTable/DiachronicTable.vue");
 import MCTable from "@/views/MCTable/MCTableView.vue";
 import MoreSettings from "@/views/Settings/SettingsView.vue";
 
@@ -30,7 +31,7 @@ const routes = [
     component: Phonology,
   },
   {
-    path: "/ifi/:tab?/:subtab?",
+    path: "/nifi/:tab?/:subtab?",
     name: "Vocabulary",
     component: Vocabulary,
   },
@@ -92,7 +93,7 @@ const routerOptions = {
     if (savedPosition) return savedPosition;
 
     if (to.hash) {
-      return new Promise(() => {
+      return new Promise((resolve) => {
         setTimeout(() => {
           const id = decodeURIComponent(to.hash.slice(1));
           const el = document.getElementById(id);
@@ -114,7 +115,10 @@ const routerOptions = {
               navbarHeight -
               emInPx;
             window.scrollTo({ top, behavior: "smooth" });
+            resolve(false);
+            return;
           }
+          resolve(false);
         }, 500); // wait for rendering
       });
     }
