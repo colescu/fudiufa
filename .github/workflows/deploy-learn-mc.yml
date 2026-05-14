@@ -1,0 +1,70 @@
+name: Deploy learn-mc
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - ".github/workflows/deploy-learn-mc.yml"
+      - "data/generated/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "shared/**"
+      - "tools/learn-mc/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.18.2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build learn-mc
+        run: pnpm build:learn-mc
+        env:
+          VITE_BASE: /fudiufa/learn-mc/
+          VITE_DATA_URL: /fudiufa/learn-mc/data
+
+      - name: Stage Pages artifact
+        run: |
+          rm -rf pages-dist
+          mkdir -p pages-dist/learn-mc/data
+          cp -R tools/learn-mc/dist/. pages-dist/learn-mc/
+          cp -R data/generated/. pages-dist/learn-mc/data/
+          touch pages-dist/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages-dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

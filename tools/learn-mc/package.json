@@ -1,0 +1,24 @@
+{
+  "name": "learn-mc",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --host",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview --host"
+  },
+  "dependencies": {
+    "@vicons/ionicons5": "^0.13.0",
+    "idb": "^8.0.3",
+    "opencc-js": "^1.0.5",
+    "vue": "^3.5.19"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.9",
+    "vue-tsc": "^3.1.0"
+  }
+}

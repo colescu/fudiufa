@@ -6,7 +6,9 @@
   "description": "Colescu's Fuzhou Gan website",
   "scripts": {
     "dev": "pnpm --filter fuzhou-gan run dev",
+    "dev:learn-mc": "pnpm --filter learn-mc run dev",
     "build": "pnpm --filter fuzhou-gan run build",
+    "build:learn-mc": "pnpm --filter learn-mc run build",
     "build-v": "pnpm run build && pnpm --filter fuzhou-gan version patch --no-git-tag-version",
     "preview": "pnpm --filter fuzhou-gan run preview",
     "update": "call scripts/update.bat",

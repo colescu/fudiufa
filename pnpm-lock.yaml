@@ -161,6 +161,37 @@ importers:
         specifier: ^3.1.0
         version: 3.1.1(typescript@5.9.3)
 
+  tools/learn-mc:
+    dependencies:
+      '@vicons/ionicons5':
+        specifier: ^0.13.0
+        version: 0.13.0
+      idb:
+        specifier: ^8.0.3
+        version: 8.0.3
+      opencc-js:
+        specifier: ^1.0.5
+        version: 1.0.5
+      vue:
+        specifier: ^3.5.19
+        version: 3.5.22(typescript@5.9.3)
+    devDependencies:
+      '@types/node':
+        specifier: ^24.3.0
+        version: 24.7.1
+      '@vitejs/plugin-vue':
+        specifier: ^6.0.1
+        version: 6.0.1(vite@7.1.9(@types/node@24.7.1)(sass-embedded@1.93.2)(sass@1.93.2)(terser@5.44.0)(tsx@4.21.0))(vue@3.5.22(typescript@5.9.3))
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.3
+      vite:
+        specifier: ^7.1.9
+        version: 7.1.9(@types/node@24.7.1)(sass-embedded@1.93.2)(sass@1.93.2)(terser@5.44.0)(tsx@4.21.0)
+      vue-tsc:
+        specifier: ^3.1.0
+        version: 3.1.1(typescript@5.9.3)
+
 packages:
 
   '@asamuzakjp/css-color@4.0.5':
