@@ -13,6 +13,35 @@ import { rhymeTableCache } from "./modules/RhymeTable/cache";
 import { commentsCache } from "./modules/ReflexTable/cache";
 import { charactersCache } from "./views/Vocabulary/Character/cache";
 
+declare global {
+  interface Window {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
+function loadGoogleAnalytics() {
+  const googleTagId = import.meta.env.VITE_GOOGLE_ANALYTICS_ID;
+
+  if (!import.meta.env.PROD || !googleTagId) {
+    return;
+  }
+
+  const script = document.createElement("script");
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${googleTagId}`;
+  document.head.append(script);
+
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function gtag() {
+    window.dataLayer?.push(arguments);
+  };
+  window.gtag("js", new Date());
+  window.gtag("config", googleTagId);
+}
+
+loadGoogleAnalytics();
+
 await Promise.all([
   initShared(),
   rhymeTableCache.load(),
