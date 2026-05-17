@@ -4,12 +4,6 @@ on:
   push:
     branches: [master]
     paths:
-      - ".github/workflows/deploy-learn-mc.yml"
-      - "data/generated/**"
-      - "package.json"
-      - "pnpm-lock.yaml"
-      - "pnpm-workspace.yaml"
-      - "shared/**"
       - "tools/learn-mc/**"
   workflow_dispatch:
 
